@@ -1,12 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
+import time
 
 # Create your views here.
 
 def home(request):
-    response_text = """
-    <html><h1>Welcome to the Quotes Home Page!</h1></html>
-    """
+    template_name = "quotes/home.html"
 
-    return HttpResponse(response_text)
+    return render(request, template_name)
 
