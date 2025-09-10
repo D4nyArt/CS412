@@ -1,0 +1,34 @@
+<!--
+File: show_all.html
+Author: Dany Art (d4nyart@bu.edu), 9/10/2025
+Description: Page that displays all Alan Turing quotes and images; lists are
+             provided by the show_all view and iterated below.
+-->
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <!-- Quotes list card, iterate over all quotes supplied by the view -->
+    <section class="card">
+        <h2 class="card-title">All quotes by Alan Turing</h2>
+
+        <!-- Loop over quotes to render each as a styled paragraph. -->        <div class="quotes-list">
+            {% for quote in quotes %}
+                <p class="quote">{{ quote }}</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Images card, show all available images supplied by the view -->
+    <section class="card">
+        <h2 class="card-title">All images of Alan Turing</h2>
+
+        <!-- Iterate images to render image tiles. -->
+        <div class="images-grid">
+            {% for image in images %}
+                <div class="image-wrap">
+                    <img src="{{ image }}" alt="Alan Turing photograph">
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

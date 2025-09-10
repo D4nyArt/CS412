@@ -1,0 +1,30 @@
+<!--
+File: about.html
+Author: Dany Art (d4nyart@bu.edu), 9/10/2025
+Description: Static about page for the Quote of the Day app; short
+             description of Alan Turing and a reference link.
+-->
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <!-- App description card, explains purpose of the app -->
+    <section class="card">
+        <h2 class="card-title">Quote of the day app</h2>
+
+        <!-- Brief intro and external URL reference to Turing's biography -->
+        <p>
+            Hi there, this application displays quotes by and images of
+            <a href="https://en.wikipedia.org/wiki/Alan_Turing"
+               target="_blank" rel="noopener">Alan M. Turing</a>
+        </p>
+
+        <!-- Short context note -->
+        <p>
+            Alan Turing was a pioneering computer scientist and mathematician,
+            widely considered to be the father of theoretical computer science
+            and artificial intelligence. He made significant contributions to
+            the development of early computers and played a crucial role in
+            breaking the German Enigma code during World War II.
+        </p>
+    </section>
+{% endblock %}

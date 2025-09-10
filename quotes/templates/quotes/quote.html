@@ -1,0 +1,24 @@
+<!--
+File: quote.html
+Author: Dany Art (d4nyart@bu.edu), 9/10/2025
+Description: Template for a single random quote page; shows a semantic
+             blockquote and a related image in a vertical (stacked) layout.
+-->
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <!-- Card, stacked quote above image -->
+    <section class="card card-quote">
+        <h2 class="card-title">Quote of the day</h2>
+
+        <!-- Quote block for styling -->
+        <figure class="quote-figure">
+            <blockquote class="quote">{{ quote }}</blockquote>
+        </figure>
+
+        <!-- Image shown below the quote -->
+        <div class="image-wrap">
+            <img src="{{ image }}" alt="Image for the quote">
+        </div>
+    </section>
+{% endblock %}
