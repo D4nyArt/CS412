@@ -1,5 +1,5 @@
 # File: views.py
-# Author: Dany Art (d4nyart@bu.edu), 9/10/2025
+# Author: Daniel Arteaga (d4nyart@bu.edu), 9/10/2025
 # Description: Django view functions for the quotes app. Selects a random
 # quote and image and renders templates for single-quote, all-quotes, and about.
 
