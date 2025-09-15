@@ -1,31 +1,40 @@
 {% extends "restaurant/base.html" %}
 
 {% block content %}
+<div class="container">
+    <div class="card">
+        <h1 class="card-title">Order Confirmation</h1>
 
-<div>
-    <h1>Order Confirmation</h1>
+        <div class="card">
+            <h2 class="card-title">Customer Information</h2>
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Phone:</strong> {{ phone }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+        </div>
 
-    <h2>Customer Information</h2>
-    <p><strong>Name:</strong> {{ name }}</p>
-    <p><strong>Phone:</strong> {{ phone }}</p>
-    <p><strong>Email:</strong> {{ email }}</p>
+        <div class="card">
+            <h2 class="card-title">Ordered Items</h2>
+            <ul>
+                {% for item in ordered_items %}
+                    <li class="quote">{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <h2>Ordered Items</h2>
-    <ul>
-        {% for item in ordered_items %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
+        <div class="card">
+            <h2 class="card-title">Total Price</h2>
+            <p class="quote">${{ total_price }}</p>
+        </div>
 
-    <h2>Total Price</h2>
-    <p>${{ total_price }}</p>
+        <div class="card">
+            <h2 class="card-title">Ready Time</h2>
+            <p class="quote">Your order will be ready at {{ ready_time }}</p>
+        </div>
 
-    <h2>Ready Time</h2>
-    <p>Your order will be ready at {{ ready_time }}</p>
-
-    <h2>Special Instructions</h2>
-    <p>{{ special_instructions }}</p>
-
+        <div class="card">
+            <h2 class="card-title">Special Instructions</h2>
+            <p class="quote">{{ special_instructions }}</p>
+        </div>
+    </div>
 </div>
-
 {% endblock %}

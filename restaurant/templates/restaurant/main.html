@@ -1,17 +1,24 @@
 {% extends 'restaurant/base.html' %}
 
 {% block content %}
-<h1>Welcome to the Best Mexican Restaurant Webpage</h1>
+<div class="container">
+    <h1 class="card-title">Welcome to the Best Mexican Restaurant Webpage</h1>
 
-<h2>Location</h2>
-<p>300 Riverway, Boston, MA</p>
+    <div class="card">
+        <h2 class="card-title">Location</h2>
+        <p class="quote">300 Riverway, Boston, MA</p>
+    </div>
 
-<h2>Hours of Operation</h2>
-<ul>
-    <li>Monday-Friday: 9:00 AM - 9:00 PM</li>
-    <li>Saturday-Sunday: 10:00 AM - 10:00 PM</li>
-</ul>
-<div>
-    <img src="{{ restaurant_img }}" alt="Restaurant Image" style="width:600px;height:auto;">
+    <div class="card">
+        <h2 class="card-title">Hours of Operation</h2>
+        <ul class="quotes-list">
+            <li>Monday-Friday: 9:00 AM - 9:00 PM</li>
+            <li>Saturday-Sunday: 10:00 AM - 10:00 PM</li>
+        </ul>
+    </div>
+
+    <div class="image-wrap">
+        <img src="{{ restaurant_img }}" alt="Restaurant Image">
+    </div>
 </div>
 {% endblock %}

@@ -1,14 +1,22 @@
+{% load static %}
+
 <html>
     <head>
         <title>Restaurant Base</title>
-        <link rel="stylesheet" type="text/css" href="/static/styles.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     </head>
     <body>
-        <nav>
-            <a href="{% url 'main' %}">Home</a> |
-            <a href="{% url 'order' %}">Order</a>
+        <nav class="site-header">
+            <div class="container">
+                <div class="header-inner">
+                    <h1 class="site-title">Aztec Cuisine Restaurant</h1>
+                    <div class="main-nav">
+                        <a href="{% url 'main' %}">Home</a>
+                        <a href="{% url 'order' %}">Order</a>
+                    </div>
+                </div>
+            </div>
         </nav>
-        <hr>
         {% block content %}
         {% endblock %}
     </body>

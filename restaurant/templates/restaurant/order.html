@@ -1,36 +1,42 @@
 {% extends "restaurant/base.html" %}
 
 {% block content %}
+<div class="container">
+    <div>
+        <h1 class="card-title">Order</h1>
 
-<div>
-    <h1>Order</h1>
+        <form action="{% url 'confirmation' %}" method="POST" class="card">
+            {% csrf_token %}
 
-    <form action="{% url 'confirmation' %}" method="POST">
-        {% csrf_token %}
+            <div class="card">
+                <h2 class="card-title">Menu</h2>
+                <label><input type="checkbox" name="Tacos"> Tacos al Pastor - $5.00</label><br>
+                <label><input type="checkbox" name="Burrito"> Supreme Burrito - $7.50</label><br>
+                <label><input type="checkbox" name="Enchiladas"> Enchiladas Verdes - $6.00</label><br>
+                <label><input type="checkbox" name="Nachos"> Nachos - $3.00</label><br>
+                <h3>Daily Special</h3>
+                <label>
+                    <input type="checkbox" name="daily_special">
+                    {{ daily_special.name }} - ${{ daily_special.price }}
+                </label>
+                <input type="hidden" name="daily_special_name" value="{{ daily_special.name }}">
+                <input type="hidden" name="daily_special_price" value="{{ daily_special.price }}">
+            </div>
 
-        <h2>Menu</h2>
-        <label><input type="checkbox" name="Tacos"> Tacos al Pastor - $5.00</label><br>
-        <label><input type="checkbox" name="Burrito"> Supreme Burrito - $7.50</label><br>
-        <label><input type="checkbox" name="Enchiladas"> Enchiladas Verdes - $6.00</label><br>
-        <label><input type="checkbox" name="Nachos"> Nachos - $3.00</label><br>
-        <h3>Daily Special</h3>
-            <input type="checkbox" name="daily_special">
-            {{ daily_special.name }} - ${{ daily_special.price }}
-        </label>
-        <input type="hidden" name="daily_special_name" value="{{ daily_special.name }}">
-        <input type="hidden" name="daily_special_price" value="{{ daily_special.price }}">
+            <div class="card">
+                <h2 class="card-title">Customer Information</h2>
+                <label>Name: <input type="text" name="name" required></label><br>
+                <label>Phone: <input type="text" name="phone" required></label><br>
+                <label>Email: <input type="email" name="email" required></label><br>
+            </div>
 
-        <h2>Customer Information</h2>
-        Name: <input type="text" name="name" required><br>
-        Phone: <input type="text" name="phone" required><br>
-        Email: <input type="email" name="email" required><br>
+            <div class="card">
+                <h2 class="card-title">Special Instructions</h2>
+                <textarea name="special_instructions" rows="4" cols="50" class="quote"></textarea><br>
+            </div>
 
-        <h2>Special Instructions</h2>
-        <textarea name="special_instructions" rows="4" cols="50"></textarea><br>
-
-        <input type="submit" value="Submit">
-    </form>
-
+            <input type="submit" value="Submit" class="card">
+        </form>
+    </div>
 </div>
-
 {% endblock %}
