@@ -5,7 +5,7 @@
     Displays customer info, ordered items, total price, ready time, 
     and special instructions info that was collected with the order view.
 -->
-{% extends "restaurant/base.html" %}
+{% extends 'restaurant/base.html' %}
 
 {% block content %}
 <!-- Main container for confirmation details -->
@@ -25,7 +25,6 @@
         <div class="card">
             <h2 class="card-title">Ordered Items</h2>
             <!-- Loop through ordered items to display each one -->
-            {% comment %} This for loop displays each item the customer ordered. {% endcomment %}
             <ul>
                 {% for item in ordered_items %}
                     <li class="quote">{{ item }}</li>
