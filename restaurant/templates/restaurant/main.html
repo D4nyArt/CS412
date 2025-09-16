@@ -1,14 +1,23 @@
+<!--
+    File: main.html
+    Author: Daniel Arteaga (dany@bu.edu), 9/12/2025
+    Description: Main landing page for the Django app. 
+    Shows welcome message, location, hours, and restaurant image.
+-->
 {% extends 'restaurant/base.html' %}
 
 {% block content %}
+<!-- Main container for the landing page content -->
 <div class="container">
     <h1 class="card-title">Welcome to the Best Mexican Restaurant Webpage</h1>
 
+    <!-- Location section -->
     <div class="card">
         <h2 class="card-title">Location</h2>
         <p class="quote">300 Riverway, Boston, MA</p>
     </div>
 
+    <!-- Hours of operation section -->
     <div class="card">
         <h2 class="card-title">Hours of Operation</h2>
         <ul class="quotes-list">
@@ -17,6 +26,7 @@
         </ul>
     </div>
 
+    <!-- Restaurant image section -->
     <div class="image-wrap">
         <img src="{{ restaurant_img }}" alt="Restaurant Image">
     </div>

@@ -1,13 +1,22 @@
+<!--
+    File: order.html
+    Author: Daniel Arteaga (dany@bu.edu), 9/15/2025
+    Description: Order form page for Restaurant Django app.
+    Allows customers to select menu items, enter info, and submit an order.
+-->
 {% extends "restaurant/base.html" %}
 
 {% block content %}
+<!-- Main container for the order form -->
 <div class="container">
     <div>
         <h1 class="card-title">Order</h1>
 
+        <!-- Order form section: collects menu selections and customer info -->
         <form action="{% url 'confirmation' %}" method="POST" class="card">
             {% csrf_token %}
 
+            <!-- Menu section: checkboxes for each menu item -->
             <div class="card">
                 <h2 class="card-title">Menu</h2>
                 <label><input type="checkbox" name="Tacos"> Tacos al Pastor - $5.00</label><br>
@@ -23,6 +32,7 @@
                 <input type="hidden" name="daily_special_price" value="{{ daily_special.price }}">
             </div>
 
+            <!-- Customer information section -->
             <div class="card">
                 <h2 class="card-title">Customer Information</h2>
                 <label>Name: <input type="text" name="name" required></label><br>
@@ -30,11 +40,13 @@
                 <label>Email: <input type="email" name="email" required></label><br>
             </div>
 
+            <!-- Special instructions section -->
             <div class="card">
                 <h2 class="card-title">Special Instructions</h2>
                 <textarea name="special_instructions" rows="4" cols="50" class="quote"></textarea><br>
             </div>
 
+            <!-- Submit button for the order form -->
             <input type="submit" value="Submit" class="card">
         </form>
     </div>

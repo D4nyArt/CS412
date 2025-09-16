@@ -1,3 +1,9 @@
+<!--
+    File: base.html
+    Author: Daniel Arteaga (dany@bu.edu), 9/12/2025
+    Description: Base template for the Restaurant Django app. 
+    Defines the main layout, navigation bar, and content block for all pages.
+-->
 {% load static %}
 
 <html>
@@ -6,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
     </head>
     <body>
+        <!-- Navigation bar: provides site title and links to main sections -->
         <nav class="site-header">
             <div class="container">
                 <div class="header-inner">
@@ -17,6 +24,7 @@
                 </div>
             </div>
         </nav>
+        <!-- Main content block that will be replaced by child templates -->
         {% block content %}
         {% endblock %}
     </body>

@@ -1,9 +1,16 @@
+# File: urls.py
+# Author: Daniel Arteaga (dany@bu.edu), 9/12/2025
+# Description: URL patterns for the restaurant Django app, 
+# mapping URLs to view functions.
+
 from django.urls import path
-from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path(r'', views.main, name="main"),
-    path(r'order/', views.order, name="order"),
-    path(r'confirmation/', views.confirmation, name="confirmation")
-]  
+    # Main page
+    path('', views.main, name="main"),
+    # Order form page
+    path('order/', views.order, name="order"),
+    # Order confirmation page
+    path('confirmation/', views.confirmation, name="confirmation"),
+]

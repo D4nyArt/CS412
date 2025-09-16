@@ -1,10 +1,19 @@
+<!--
+    File: confirmation.html
+    Author: Daniel Arteaga (dany@bu.edu), 9/12/2025
+    Description: Order confirmation page for the Restaurant Django app. 
+    Displays customer info, ordered items, total price, ready time, 
+    and special instructions info that was collected with the order view.
+-->
 {% extends "restaurant/base.html" %}
 
 {% block content %}
+<!-- Main container for confirmation details -->
 <div class="container">
     <div class="card">
         <h1 class="card-title">Order Confirmation</h1>
 
+        <!-- Customer information section -->
         <div class="card">
             <h2 class="card-title">Customer Information</h2>
             <p><strong>Name:</strong> {{ name }}</p>
@@ -12,8 +21,11 @@
             <p><strong>Email:</strong> {{ email }}</p>
         </div>
 
+        <!-- Ordered items section -->
         <div class="card">
             <h2 class="card-title">Ordered Items</h2>
+            <!-- Loop through ordered items to display each one -->
+            {% comment %} This for loop displays each item the customer ordered. {% endcomment %}
             <ul>
                 {% for item in ordered_items %}
                     <li class="quote">{{ item }}</li>
@@ -21,16 +33,19 @@
             </ul>
         </div>
 
+        <!-- Total price section -->
         <div class="card">
             <h2 class="card-title">Total Price</h2>
             <p class="quote">${{ total_price }}</p>
         </div>
 
+        <!-- Ready time section -->
         <div class="card">
             <h2 class="card-title">Ready Time</h2>
             <p class="quote">Your order will be ready at {{ ready_time }}</p>
         </div>
 
+        <!-- Special instructions section -->
         <div class="card">
             <h2 class="card-title">Special Instructions</h2>
             <p class="quote">{{ special_instructions }}</p>
