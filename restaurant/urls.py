@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     # Main page
     path('', views.main, name="main"),
+    path('main/', views.main, name="main"),
     # Order form page
     path('order/', views.order, name="order"),
     # Order confirmation page
