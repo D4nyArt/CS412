@@ -1,11 +1,43 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-<h1>Showing the profile with id: {{ profile.id }}</h1>
-<div>
-    <h2>{{ profile.username }}</h2>
-    <p>{{ profile.bio_text }}</p>
-    <p>I registered:  {{profile.join_date}}</p>
-    <img src= "{{profile.profile_image_url}}" width="100" height="100">
+<div class="profile-detail">
+    <div class="profile-header">
+        <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
+        <div class="profile-username">@{{ profile.username }}</div>
+        <div class="profile-display-name">{{ profile.display_name }}</div>
+    </div>
+    
+    <div class="profile-info">
+        <h3>About</h3>
+        <div class="profile-bio">{{ profile.bio_text }}</div>
+    </div>
+    
+    <div class="profile-stats">
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Posts</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Following</div>
+        </div>
+    </div>
+    
+    <div class="profile-info">
+        <h3>Posts</h3>
+        <div class="profile-bio">No posts yet. Check back later!</div>
+    </div>
+    
+    <div class="join-date">
+        Member since {{ profile.join_date|date:"F d, Y g:i A" }}
+    </div>
 </div>
+<footer class="footer">
+    <p><a href="{% url 'show_all_profiles' %}">Back to All Profiles</a></p>
+</footer>
 {% endblock %}
