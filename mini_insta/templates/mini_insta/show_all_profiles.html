@@ -1,17 +1,32 @@
 
+<!--
+File: show_all_profiles.html
+# Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
+Description: Template for displaying all user profiles in a grid layout.
+             Shows profile cards with username, profile image, and display name.
+             Users can click on any profile image to view detailed information.
+-->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <center><h1>    Showing all profiles of Mini Insta</h1></center>
+
+<!-- Grid container for displaying all profile cards -->
 <div class="profiles-grid">
-{% for profile in profiles %}
-    <div class="profile-card">
-        <div class="username">{{ profile.username }}</div>
-        <a href="{% url 'show_profile' profile.pk %}">
-            <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
-        </a>
-        <div class="display-name">{{ profile.display_name }}</div>
-    </div>
-{% endfor %}
+    <!-- Loop through each profile provided by the ProfileListView -->
+    {% for profile in profiles %}
+        <div class="profile-card">
+            <!-- Username at the top of each card -->
+            <div class="username">{{ profile.username }}</div>
+            
+            <!-- Clickable profile image that links to detailed profile view -->
+            <a href="{% url 'show_profile' profile.pk %}">
+                <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
+            </a>
+            
+            <!-- Name shown below the image -->
+            <div class="display-name">{{ profile.display_name }}</div>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

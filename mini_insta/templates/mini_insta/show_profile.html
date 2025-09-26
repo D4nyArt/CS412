@@ -1,18 +1,28 @@
+<!--
+File: show_profile.html
+# Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
+Description: Template for displaying detailed information about a single user profile.
+             Shows profile image, username, display name, bio, join date, and
+             placeholder statistics for posts, followers, and following counts.
+-->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="profile-detail">
+    <!-- Profile header section with image and basic info -->
     <div class="profile-header">
         <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
         <div class="profile-username">@{{ profile.username }}</div>
         <div class="profile-display-name">{{ profile.display_name }}</div>
     </div>
     
+    <!-- About section displaying user's bio text -->
     <div class="profile-info">
         <h3>About</h3>
         <div class="profile-bio">{{ profile.bio_text }}</div>
     </div>
     
+    <!-- Statistics section showing posts, followers, and following counts -->
     <div class="profile-stats">
         <div class="stat-box">
             <div class="stat-number">0</div>
@@ -28,16 +38,15 @@
         </div>
     </div>
     
+    <!-- Posts section placeholder for future implementation -->
     <div class="profile-info">
         <h3>Posts</h3>
         <div class="profile-bio">No posts yet. Check back later!</div>
     </div>
     
+    <!-- Display when the user joined the platform -->
     <div class="join-date">
         Member since {{ profile.join_date|date:"F d, Y g:i A" }}
     </div>
 </div>
-<footer class="footer">
-    <p><a href="{% url 'show_all_profiles' %}">Back to All Profiles</a></p>
-</footer>
 {% endblock %}

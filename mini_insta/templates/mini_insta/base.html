@@ -1,3 +1,10 @@
+<!--
+File: base.html
+# Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
+Description: Base template for the Mini Instagram application.
+             Provides common HTML structure, CSS imports, and footer
+             that will be inherited by all other templates in the app.
+-->
 {% load static %}
 
 <html>
@@ -9,5 +16,10 @@
         <!-- Main content block that will be replaced by child templates -->
         {% block content %}
         {% endblock %}
+        
+        <!-- Footer with navigation link that appears on all pages -->
+        <footer class="footer">
+            <p><a href="{% url 'show_all_profiles' %}">← Back to All Profiles</a></p>
+        </footer>
     </body>
 </html>
