@@ -41,7 +41,13 @@ Description: Template for displaying detailed information about a single user pr
     <!-- Posts section placeholder for future implementation -->
     <div class="profile-info">
         <h3>Posts</h3>
-        <div class="profile-bio">No posts yet. Check back later!</div>
+        <div class="profile-bio">
+            {% for post in profile.get_all_posts %}
+                <p>{{post.caption}}</p> 
+                <p>{{post.timestamp}}</p>
+                <img src="{{post.get_first_photo.image_url}}" width="50%" height="25%">
+            {% endfor %}
+        </div>
     </div>
     
     <!-- Display when the user joined the platform -->
