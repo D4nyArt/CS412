@@ -1,0 +1,15 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+
+<h1>Create a post</h1>
+
+<form action="{% url 'create_post' %}" method="POST">
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table>
+    <input type="submit" value="Publish!">
+</form>
+
+{% endblock %}

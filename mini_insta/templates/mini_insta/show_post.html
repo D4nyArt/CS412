@@ -1,0 +1,13 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div>
+    {{ post.profile }}
+    {{ post.timestamp }}
+    {{ post.caption }}
+    {# Loop through all photos related to this post and display each image #}
+    {% for photo in post.get_all_photos %}
+        <img src="{{ photo.image_url }}" alt="Post photo" height="25%">
+    {% endfor %}
+</div>
+{% endblock %}

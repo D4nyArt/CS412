@@ -38,14 +38,18 @@ Description: Template for displaying detailed information about a single user pr
         </div>
     </div>
     
-    <!-- Posts section placeholder for future implementation -->
+    <!-- Posts section where post's images and caption are displayed -->
     <div class="profile-info">
         <h3>Posts</h3>
         <div class="profile-bio">
             {% for post in profile.get_all_posts %}
                 <p>{{post.caption}}</p> 
                 <p>{{post.timestamp}}</p>
-                <img src="{{post.get_first_photo.image_url}}" width="50%" height="25%">
+                {% if post.get_first_photo %}
+                    <img src="{{ post.get_first_photo.image_url }}" width="50%" height="25%">
+                {% else %}
+                    <img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" width="50%" height="25%">
+                {% endif %}
             {% endfor %}
         </div>
     </div>

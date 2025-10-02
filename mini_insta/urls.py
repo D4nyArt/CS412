@@ -5,7 +5,7 @@
 # user profiles in both list and individual detail formats.
 
 from django.urls import path
-from .views import ProfileListView, ProfileDetailView
+from .views import *
 
 # URL patterns for the mini_insta application
 urlpatterns = [
@@ -16,5 +16,9 @@ urlpatterns = [
     # Profile detail path that displays individual profile information
     # Takes an integer primary key (pk) parameter to identify which profile to show
     # Maps to ProfileDetailView which shows detailed profile information
-    path(r'profile/<int:pk>', ProfileDetailView.as_view(), name="show_profile")
+    path(r'profile/<int:pk>', ProfileDetailView.as_view(), name="show_profile"),
+
+    path(r'post/<int:pk>', PostDetailView.as_view(), name="show_post"),
+
+    path(r'post/create', CreatePostView.as_view(), name="create_post")
 ]

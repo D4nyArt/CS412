@@ -5,8 +5,9 @@
 # in both list and individual detail formats.
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from .models import Profile
+from django.views.generic import ListView, DetailView, CreateView
+from .models import Profile, Post
+from .forms import CreatePostForm
 
 # Create your views here.
 
@@ -40,3 +41,20 @@ class ProfileDetailView(DetailView):
     
     # Context variable name to use in template
     context_object_name = "profile"
+
+class PostDetailView(DetailView):
+    """Display detailed information for a single Post """
+    # Model to query for data
+    model = Post
+    
+    # Template file to render the response
+    template_name = "mini_insta/show_post.html"
+    
+    # Context variable name to use in template
+    context_object_name = "post"
+
+class CreatePostView(CreateView):
+
+    form_class = CreatePostForm
+    template_name = "mini_insta/create_post_form.html"
+    
