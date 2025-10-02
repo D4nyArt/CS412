@@ -16,6 +16,11 @@ Description: Template for displaying detailed information about a single user pr
         <div class="profile-display-name">{{ profile.display_name }}</div>
     </div>
     
+    <!-- Create post button -->
+    <div class="create-post-button">
+        <a href="{% url 'create_post' pk=profile.pk %}"><button>Create Post</button></a>
+    </div>
+    
     <!-- About section displaying user's bio text -->
     <div class="profile-info">
         <h3>About</h3>
@@ -43,12 +48,10 @@ Description: Template for displaying detailed information about a single user pr
         <h3>Posts</h3>
         <div class="profile-bio">
             {% for post in profile.get_all_posts %}
-                <p>{{post.caption}}</p> 
-                <p>{{post.timestamp}}</p>
                 {% if post.get_first_photo %}
-                    <img src="{{ post.get_first_photo.image_url }}" width="50%" height="25%">
+                    <a href="{% url 'show_post' pk=post.pk%}"><img src="{{ post.get_first_photo.image_url }}" width="50%" height="25%"></a>
                 {% else %}
-                    <img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" width="50%" height="25%">
+                    <a href="{% url 'show_post' pk=post.pk%}"><img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" width="50%" height="25%"></a>
                 {% endif %}
             {% endfor %}
         </div>

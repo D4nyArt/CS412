@@ -2,14 +2,15 @@
 
 {% block content %}
 
-<h1>Create a post</h1>
+<h1>Create a post for @{{profile.username}}</h1>
 
-<form action="{% url 'create_post' %}" method="POST">
+<form action="{% url 'create_post' pk=profile.pk %}" method="POST">
     {% csrf_token %}
     <table>
         {{form.as_table}}
     </table>
     <input type="submit" value="Publish!">
 </form>
+<a href="{% url 'show_profile' pk=profile.pk %}"><p>Cancel post creation</p></a>
 
 {% endblock %}

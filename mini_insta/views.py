@@ -5,8 +5,9 @@
 # in both list and individual detail formats.
 
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Profile, Post
+from .models import Profile, Post, Photo
 from .forms import CreatePostForm
 
 # Create your views here.
@@ -57,4 +58,37 @@ class CreatePostView(CreateView):
 
     form_class = CreatePostForm
     template_name = "mini_insta/create_post_form.html"
+
+    def get_success_url(self):
+        '''Provide a URL to redirect to after creating a new Post.'''
+
+        pk = self.kwargs['pk']
+        return reverse('show_profile', kwargs={'pk':pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Fetch the Profile object using the pk from URL kwargs
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        context['profile'] = profile
+        return context
     
+    
+    def form_valid(self, form):
+        
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        form.instance.profile = profile
+
+        result = super().form_valid(form)
+        post = self.object  # The saved post instance
+
+        # Create a Photo if image_url is provided
+        if form.cleaned_data.get('image_url'):
+            Photo.objects.create(post=post, image_url=form.cleaned_data['image_url'])
+
+        return result
+
+        
+
+
+
