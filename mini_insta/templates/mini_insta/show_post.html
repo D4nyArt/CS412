@@ -1,13 +1,16 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-<div>
-    {{ post.profile }}
-    {{ post.timestamp }}
-    {{ post.caption }}
-    {# Loop through all photos related to this post and display each image #}
-    {% for photo in post.get_all_photos %}
-        <img src="{{ photo.image_url }}" alt="Post photo" height="25%">
-    {% endfor %}
+<div class="post-detail">
+    <div class="post-header">
+        <div class="post-profile">Post {{post.pk}} by @{{ post.profile.username }}</div>
+        <div class="post-timestamp">on {{ post.timestamp|date:"F d, Y g:i A" }}</div>
+    </div>
+    <div class="post-caption">{{ post.caption }}</div> 
+    <div class="post-content">
+        {% for photo in post.get_all_photos %}
+            <img src="{{ photo.image_url }}" alt="Post photo" class="post-image">
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

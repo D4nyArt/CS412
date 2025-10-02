@@ -9,57 +9,57 @@ Description: Template for displaying detailed information about a single user pr
 
 {% block content %}
 <div class="profile-detail">
-    <!-- Profile header section with image and basic info -->
-    <div class="profile-header">
-        <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
-        <div class="profile-username">@{{ profile.username }}</div>
-        <div class="profile-display-name">{{ profile.display_name }}</div>
-    </div>
-    
-    <!-- Create post button -->
-    <div class="create-post-button">
-        <a href="{% url 'create_post' pk=profile.pk %}"><button>Create Post</button></a>
-    </div>
-    
-    <!-- About section displaying user's bio text -->
-    <div class="profile-info">
-        <h3>About</h3>
-        <div class="profile-bio">{{ profile.bio_text }}</div>
-    </div>
-    
-    <!-- Statistics section showing posts, followers, and following counts -->
-    <div class="profile-stats">
-        <div class="stat-box">
-            <div class="stat-number">0</div>
-            <div class="stat-label">Posts</div>
+    <div class="profile-main">
+        <!-- Profile header section with image and basic info -->
+        <div class="profile-header">
+            <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
+            <div class="profile-username">@{{ profile.username }}</div>
+            <div class="profile-display-name">{{ profile.display_name }}</div>
         </div>
-        <div class="stat-box">
-            <div class="stat-number">0</div>
-            <div class="stat-label">Followers</div>
+        
+        <!-- About section displaying user's bio text -->
+        <div class="profile-info">
+            <h3>About</h3>
+            <div class="profile-bio">{{ profile.bio_text }}</div>
         </div>
-        <div class="stat-box">
-            <div class="stat-number">0</div>
-            <div class="stat-label">Following</div>
+        
+        <!-- Statistics section showing posts, followers, and following counts -->
+        <div class="profile-stats">
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Posts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Following</div>
+            </div>
+        </div>
+        
+        <!-- Display when the user joined the platform -->
+        <div class="join-date">
+            Member since {{ profile.join_date|date:"F d, Y g:i A" }}
         </div>
     </div>
     
-    <!-- Posts section where post's images and caption are displayed -->
-    <div class="profile-info">
-        <h3>Posts</h3>
-        <div class="profile-bio">
+    <div class="profile-posts">
+        <!-- Posts section where post's images and caption are displayed -->
+        <div class="profile-info">
+            <h3>Posts</h3>
             {% for post in profile.get_all_posts %}
-                {% if post.get_first_photo %}
-                    <a href="{% url 'show_post' pk=post.pk%}"><img src="{{ post.get_first_photo.image_url }}" width="50%" height="25%"></a>
-                {% else %}
-                    <a href="{% url 'show_post' pk=post.pk%}"><img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" width="50%" height="25%"></a>
-                {% endif %}
+            <div class="profile-bio">
+                    <b>Post {{post.pk}}</b>   
+                    {% if post.get_first_photo %}
+                        <a href="{% url 'show_post' pk=post.pk%}"><img src="{{ post.get_first_photo.image_url }}" height="20%"></a>
+                    {% else %}
+                        <a href="{% url 'show_post' pk=post.pk%}"><img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" height="20%"></a>
+                    {% endif %}
+            </div>
             {% endfor %}
         </div>
-    </div>
-    
-    <!-- Display when the user joined the platform -->
-    <div class="join-date">
-        Member since {{ profile.join_date|date:"F d, Y g:i A" }}
     </div>
 </div>
 {% endblock %}

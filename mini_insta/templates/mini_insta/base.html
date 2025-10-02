@@ -17,12 +17,12 @@ Description: Base template for the Mini Instagram application.
         {% block content %}
         {% endblock %}
         
-        <!-- Footer with navigation link that appears on all pages -->
-        <footer class="footer">
-            <p><a href="{% url 'show_all_profiles' %}">← Back to All Profiles</a></p>
-                {% if profile %}
-                    <a href="{% url 'create_post' pk=profile.pk %}">Create Post</a>
-                {% endif %}
-        </footer>
+        <!-- Navbar with navigation links -->
+        <nav class="navbar">
+            <a href="{% url 'show_all_profiles' %}">Home</a>
+            {% if profile %}
+                <a href="{% url 'create_post' pk=profile.pk %}">Create Post</a>
+            {% endif %}
+        </nav>
     </body>
 </html>

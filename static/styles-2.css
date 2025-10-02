@@ -1,3 +1,12 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
 .profiles-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -46,12 +55,18 @@
 
 /* Profile Detail Styles */
 .profile-detail {
-    max-width: 600px;
+    max-width: 1200px;
     margin: 20px auto;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.profile-main, .profile-posts {
     background-color: #f9f9f9;
     border-radius: 8px;
     border: 1px solid #ddd;
+    padding: 20px;
 }
 
 .profile-header {
@@ -146,4 +161,161 @@
     color: white;
     text-decoration: none;
     font-weight: bold;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #2c5aa0;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    background: #4a6fa5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.navbar a:hover {
+    background: #5a7fb5;
+}
+
+/* Post Detail Styles */
+.post-detail {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.post-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.post-profile {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c5aa0;
+    margin-bottom: 5px;
+}
+
+.post-timestamp {
+    color: #666;
+    font-size: 14px;
+}
+
+.post-content {
+    text-align: center;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+}
+
+.post-caption {
+    background-color: white;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #2c5aa0;
+    text-align: left;
+    margin-top: 10px;
+}
+
+/* Create Post Form Styles */
+.create-post-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.create-post-container h1 {
+    text-align: center;
+    color: #2c5aa0;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.create-post-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #2c5aa0;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    background: #4a6fa5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #5a7fb5;
+}
+
+.cancel-link {
+    display: inline-block;
+    margin-left: 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.cancel-link:hover {
+    text-decoration: underline;
 }
