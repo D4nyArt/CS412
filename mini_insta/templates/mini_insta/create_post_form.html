@@ -1,9 +1,16 @@
+<!--
+File: create_post_form.html
+# Author: Daniel Arteaga (d4nyart@bu.edu), 10/01/2025
+Description: Template for creating a new post for a profile.
+             Contains a form to submit caption and image URL.
+-->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="create-post-container">
     <h1>Create a post for @{{profile.username}}</h1>
     
+    <!-- Form to submit new post data to the server -->
     <form action="{% url 'create_post' pk=profile.pk %}" method="POST" class="create-post-form">
         {% csrf_token %}
         <div class="form-group">
@@ -11,12 +18,13 @@
             {{ form.caption }}
         </div>
         <div class="form-group">
-            <label for="{{ form.image_url.id_for_label }}">Image URL (optional):</label>
+            <label for="{{ form.image_url.id_for_label }}">Image URL:</label>
             {{ form.image_url }}
         </div>
         <div class="form-actions">
             <button type="submit" class="submit-btn">Publish!</button>
-            <a href="{% url 'show_profile' pk=profile.pk %}" class="cancel-link">Cancel</a>
+            <!-- Link back to profile without submitting -->
+            <a href="{% url 'show_profile' pk=profile.pk %}" class="cancel-link">Cancel</a> 
         </div>
     </form>
 </div>

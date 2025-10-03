@@ -1,3 +1,9 @@
+<!--
+File: show_post.html
+# Author: Daniel Arteaga (d4nyart@bu.edu), 10//2025
+Description: Template for displaying detailed information about a single post.
+             Shows post profile, timestamp, caption, and associated photos.
+-->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
@@ -6,10 +12,11 @@
         <div class="post-profile">Post {{post.pk}} by @{{ post.profile.username }}</div>
         <div class="post-timestamp">on {{ post.timestamp|date:"F d, Y g:i A" }}</div>
     </div>
-    <div class="post-caption">{{ post.caption }}</div> 
+    <div class="post-caption">{{ post.caption }}</div><br>
     <div class="post-content">
-        {% for photo in post.get_all_photos %}
-            <img src="{{ photo.image_url }}" alt="Post photo" class="post-image">
+        <!-- Loop through all photos of the post -->
+        {% for photo in post.get_all_photos %} 
+            <img src="{{ photo.image_url }}" class="post-image">
         {% endfor %}
     </div>
 </div>

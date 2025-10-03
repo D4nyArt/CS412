@@ -46,16 +46,23 @@ Description: Template for displaying detailed information about a single user pr
     </div>
     
     <div class="profile-posts">
-        <!-- Posts section where post's images and caption are displayed -->
+        <!-- Posts section where post's first images are displayed -->
         <div class="profile-info">
             <h3>Posts</h3>
-            {% for post in profile.get_all_posts %}
-            <div class="profile-bio">
-                    <b>Post {{post.pk}}</b>   
-                    {% if post.get_first_photo %}
-                        <a href="{% url 'show_post' pk=post.pk%}"><img src="{{ post.get_first_photo.image_url }}" height="20%"></a>
+            <!-- Loop through all posts of the profile -->
+            {% for post in profile.get_all_posts %} 
+            <div class="post-container">
+                    <b>Post {{post.pk}}</b><br>
+                    <!-- Check if post has a photo, if not, show default photo of "Img not available"-->   
+                    {% if post.get_first_photo %} 
+                        <!-- Link to detailed post view -->
+                        <a href="{% url 'show_post' pk=post.pk%}"> 
+                            <img src="{{ post.get_first_photo.image_url }}" height="200px">
+                        </a>
                     {% else %}
-                        <a href="{% url 'show_post' pk=post.pk%}"><img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" height="20%"></a>
+                        <a href="{% url 'show_post' pk=post.pk%}"> 
+                            <img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" height="200px">
+                        </a>
                     {% endif %}
             </div>
             {% endfor %}

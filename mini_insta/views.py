@@ -1,8 +1,8 @@
 # File: views.py
 # Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
 # Description: Django views for the Mini Instagram application.
-# Contains ListView and DetailView for displaying user profiles
-# in both list and individual detail formats.
+# Contains ListView, DetailView, and CreateView for displaying user profiles,
+# posts, and creating new posts.
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -13,12 +13,9 @@ from .forms import CreatePostForm
 # Create your views here.
 
 class ProfileListView(ListView):
-    """Display a list of all user profiles.
-    
-    This view renders all Profile objects in a grid layout,
-    showing username, display name, and profile image for each user.
-    Users can click on any profile to view detailed information.
-    """
+    """Display a list of all user profiles showing username, 
+    display name, and profile image for each user"""
+
     # Model to query for data
     model = Profile
     
@@ -29,43 +26,36 @@ class ProfileListView(ListView):
     context_object_name = "profiles" 
 
 class ProfileDetailView(DetailView):
-    """Display detailed information for a single user profile.
-    
-    This view shows all the information of the current profile 
-    that is being displayed.
-    """
-    # Model to query for data
+    """Displays detailed information for a single user profile"""
+
     model = Profile
     
-    # Template file to render the response
     template_name = "mini_insta/show_profile.html"
     
-    # Context variable name to use in template
     context_object_name = "profile"
 
 class PostDetailView(DetailView):
-    """Display detailed information for a single Post """
-    # Model to query for data
+    """Display detailed information for a single Post."""
+
     model = Post
     
-    # Template file to render the response
     template_name = "mini_insta/show_post.html"
     
-    # Context variable name to use in template
     context_object_name = "post"
 
 class CreatePostView(CreateView):
+    """Handle the creation of a new post for a profile."""
 
     form_class = CreatePostForm
     template_name = "mini_insta/create_post_form.html"
 
     def get_success_url(self):
-        '''Provide a URL to redirect to after creating a new Post.'''
-
-        pk = self.kwargs['pk']
-        return reverse('show_profile', kwargs={'pk':pk})
+        """Provide a URL to redirect to after creating a new Post."""
+        pk = self.kwargs['pk']  # Primary key of the profile from URL
+        return reverse('show_profile', kwargs={'pk': pk})
 
     def get_context_data(self, **kwargs):
+        """Add profile to context for template rendering."""
         context = super().get_context_data(**kwargs)
 
         # Fetch the Profile object using the pk from URL kwargs
@@ -73,8 +63,8 @@ class CreatePostView(CreateView):
         context['profile'] = profile
         return context
     
-    
     def form_valid(self, form):
+        """Validate and save the form, associating with profile and creating photo if provided."""
         
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         form.instance.profile = profile

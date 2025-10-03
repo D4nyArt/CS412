@@ -9,12 +9,14 @@ Description: Template for displaying all user profiles in a grid layout.
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-<center><h1>    Showing all profiles of Mini Insta</h1></center>
+<center><h1>Showing all profiles of Mini Insta</h1></center>
 <!-- Grid container for displaying all profile cards -->
 <div class="profiles-grid">
+
     <!-- Loop through each profile provided by the ProfileListView -->
     {% for profile in profiles %}
         <div class="profile-card">
+
             <!-- Username at the top of each card -->
             <div class="username">{{ profile.username }}</div>
             

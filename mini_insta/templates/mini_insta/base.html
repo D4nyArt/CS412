@@ -21,7 +21,7 @@ Description: Base template for the Mini Instagram application.
         <nav class="navbar">
             <a href="{% url 'show_all_profiles' %}">Home</a>
             {% if profile %}
-                <a href="{% url 'create_post' pk=profile.pk %}">Create Post</a>
+                <a href="{% url 'create_post' pk=profile.pk %}">Create Post for this Profile</a>
             {% endif %}
         </nav>
     </body>
