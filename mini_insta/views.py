@@ -51,8 +51,8 @@ class CreatePostView(CreateView):
 
     def get_success_url(self):
         """Provide a URL to redirect to after creating a new Post."""
-        pk = self.kwargs['pk']  # Primary key of the profile from URL
-        return reverse('show_profile', kwargs={'pk': pk})
+        post_pk = self.object.pk  # Primary key of the profile from URL
+        return reverse('show_post', kwargs={'pk': post_pk})
 
     def get_context_data(self, **kwargs):
         """Add profile to context for template rendering."""
