@@ -16,7 +16,7 @@ Description: Template for displaying detailed information about a single post.
     <div class="post-content">
         <!-- Loop through all photos of the post -->
         {% for photo in post.get_all_photos %} 
-            <img src="{{ photo.image_url }}" class="post-image">
+            <img src="{{ photo.get_image_url }}" class="post-image">
         {% endfor %}
     </div>
 </div>

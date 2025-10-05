@@ -8,9 +8,10 @@ from .models import *
 
 class CreatePostForm(forms.ModelForm):
     """Form for creating a new post with caption and image URL"""
-    
-    image_url = forms.URLField(required=False)  #extra URL field for the post's image
-    
+
+    #extra URL field for the post's image (No longer required, cause user is now uploading actual img)
+    #image_url = forms.URLField(required=False) 
+        
     class Meta:
         model = Post 
         fields = ['caption']

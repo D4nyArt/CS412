@@ -11,15 +11,15 @@ Description: Template for creating a new post for a profile.
     <h1>Create a post for @{{profile.username}}</h1>
     
     <!-- Form to submit new post data to the server -->
-    <form action="{% url 'create_post' pk=profile.pk %}" method="POST" class="create-post-form">
+    <form action="{% url 'create_post' pk=profile.pk %}" method="POST" enctype="multipart/form-data" class="create-post-form">
         {% csrf_token %}
         <div class="form-group">
             <label for="{{ form.caption.id_for_label }}">Caption:</label>
             {{ form.caption }}
         </div>
         <div class="form-group">
-            <label for="{{ form.image_url.id_for_label }}">Image URL:</label>
-            {{ form.image_url }}
+            <label for="image_files">Upload Images:</label>
+            <input type="file" name="image_files" id="image_files" multiple accept="image/*">
         </div>
         <div class="form-actions">
             <button type="submit" class="submit-btn">Publish!</button>

@@ -53,13 +53,29 @@ class Post(models.Model):
         return photos.first()
     
 class Photo(models.Model):
-    """Model representing a photo attached to a post encapsulating its da"""
+    """Model representing a photo attached to a post encapsulating its data"""
     
     post = models.ForeignKey(Post, on_delete=models.CASCADE)  # The post this photo belongs to
     image_url = models.URLField(blank=True) 
     timestamp = models.DateTimeField(auto_now=True)
 
+    image_file = models.ImageField(blank=True)
+
     def __str__(self):
-        """Return string representation of the photo"""
-        return f"Photo {self.pk}"
+        """Return string representation of the photo based on how the image is stored"""
+        if self.image_url:
+            return f"Photo {self.pk} (URL: {self.image_url})"
+        elif self.image_file:
+            return f"Photo {self.pk} (File: {self.image_file.name})"
+        else:
+            return f"Photo {self.pk} (No image)"
+    
+    def get_image_url(self):
+        """Return the URL to the image, either from image_url or image_file"""
+        if self.image_url:
+            return self.image_url
+        elif self.image_file:
+            return self.image_file.url
+        else:
+            return None
     
