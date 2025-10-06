@@ -1,0 +1,27 @@
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="post-detail">
+    <div class="post-header">
+        <div class="post-profile">Are you sure you want to delete <i>Post {{post.pk}}</i> by <i>@{{ post.profile.username }}</i>?</div>
+    </div>
+    
+    <form action="{% url 'delete_post' pk=post.pk %}" method="POST" class="create-post-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Delete!</button>
+            <!-- Link back to post without deleting -->
+            <a href="{% url 'show_profile' pk=profile.pk %}" class="cancel-link">Cancel</a> 
+        </div>
+    </form>
+
+    <div class="post-caption">{{ post.caption }}</div><br>
+    <div class="post-content">
+        <!-- Loop through all photos of the post -->
+        {% for photo in post.get_all_photos %} 
+            <img src="{{ photo.get_image_url }}" class="post-image">
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

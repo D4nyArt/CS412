@@ -12,6 +12,11 @@ Description: Template for displaying detailed information about a single post.
         <div class="post-profile">Post {{post.pk}} by @{{ post.profile.username }}</div>
         <div class="post-timestamp">on {{ post.timestamp|date:"F d, Y g:i A" }}</div>
     </div>
+    <!-- Update profile button -->
+    <div class="form-actions">
+        <a href="{% url 'delete_post' pk=post.pk %}" class="submit-btn">Delete Post</a>
+    </div>
+    <br>
     <div class="post-caption">{{ post.caption }}</div><br>
     <div class="post-content">
         <!-- Loop through all photos of the post -->

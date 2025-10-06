@@ -25,5 +25,9 @@ urlpatterns = [
     # Takes an integer primary key (pk) parameter for the profile
     path(r'profile/<int:pk>/create_post', CreatePostView.as_view(), name="create_post"),
 
-    path(r'profile/<int:pk>/update_profile', UpdateProfileView.as_view(), name="update_profile")
+    path(r'profile/<int:pk>/update_profile', UpdateProfileView.as_view(), name="update_profile"),
+
+    # Delete post path for a specific post
+    # Takes an integer primary key (pk) parameter for the post to delete
+    path(r'post/<int:pk>/delete', DeletePostView.as_view(), name="delete_post")
 ]

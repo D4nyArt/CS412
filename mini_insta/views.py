@@ -6,7 +6,7 @@
 
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
 from .forms import CreatePostForm, UpdateProfileForm
 
@@ -92,6 +92,33 @@ class UpdateProfileView(UpdateView):
     form_class = UpdateProfileForm
 
     template_name = "mini_insta/update_profile_form.html"
+
+class DeletePostView(DeleteView):
+
+    model = Post
+
+    template_name="mini_insta/delete_post_form.html"
+
+    def get_context_data(self, **kwargs):
+        """Add post and profile to context for template rendering."""
+        context = super().get_context_data(**kwargs)
+        
+        # Get the post object (already available as self.object)
+        post = self.object
+        context['post'] = post
+        
+        # Get the profile associated with the post
+        profile = post.profile
+        context['profile'] = profile
+        
+        return context
+    
+    def get_success_url(self):
+        """Redirect to the profile page of the user whose post was deleted."""
+        profile_pk = self.object.profile.pk  # Get the profile pk from the post being deleted
+        return reverse('show_profile', kwargs={'pk': profile_pk})
+
+
 
 
         
