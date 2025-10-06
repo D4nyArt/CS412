@@ -5,6 +5,7 @@
 # posts, and associated photos.
 
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -25,6 +26,9 @@ class Profile(models.Model):
     def __str__(self):
         """Return string representation of the profile."""
         return f"{self.username}"
+    
+    def get_absolute_url(self):
+        return reverse('show_profile', kwargs={'pk':self.pk})
     
     def get_all_posts(self):
         """Return all posts associated with this profile."""

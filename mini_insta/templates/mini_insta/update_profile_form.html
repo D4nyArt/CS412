@@ -1,0 +1,35 @@
+<!--
+File: create_post_form.html
+# Author: Daniel Arteaga (d4nyart@bu.edu), 10/01/2025
+Description: Template for creating a new post for a profile.
+             Contains a form to submit caption and image URL.
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="create-post-container">
+    <h1>Update profile of @{{profile.username}}</h1>
+    
+    <!-- Form to submit new post data to the server -->
+    <form action="{% url 'update_profile' pk=profile.pk %}" method="POST" class="create-post-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.display_name_for_label }}">Display name:</label>
+            {{ form.display_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.profile_image_url.id_for_label }}">Profile img URL:</label>
+            {{ form.profile_image_url }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.bio_text.id_for_label }}">Bio Text:</label>
+            {{ form.bio_text }}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Update!</button>
+            <!-- Link back to profile without submitting -->
+            <a href="{% url 'show_profile' pk=profile.pk %}" class="cancel-link">Cancel</a> 
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -17,6 +17,11 @@ Description: Template for displaying detailed information about a single user pr
             <div class="profile-display-name">{{ profile.display_name }}</div>
         </div>
         
+        <!-- Update profile button -->
+        <div class="form-actions">
+            <a href="{% url 'update_profile' pk=profile.pk %}" class="submit-btn">Update Profile</a>
+        </div>
+        
         <!-- About section displaying user's bio text -->
         <div class="profile-info">
             <h3>About</h3>

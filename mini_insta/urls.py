@@ -23,5 +23,7 @@ urlpatterns = [
 
     # Create post path for a specific profile
     # Takes an integer primary key (pk) parameter for the profile
-    path(r'profile/<int:pk>/create_post', CreatePostView.as_view(), name="create_post")
+    path(r'profile/<int:pk>/create_post', CreatePostView.as_view(), name="create_post"),
+
+    path(r'profile/<int:pk>/update_profile', UpdateProfileView.as_view(), name="update_profile")
 ]
