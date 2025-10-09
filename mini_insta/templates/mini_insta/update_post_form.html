@@ -1,0 +1,21 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="create-post-container">
+    <h1>Update {{post}}</h1>
+    
+    <!-- Form to submit new post data to the server -->
+    <form action="{% url 'update_post' pk=post.pk %}" method="POST" class="create-post-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.display_name_for_label }}">Display name:</label>
+            {{form.caption}}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Update!</button>
+            <!-- Link back to profile without submitting -->
+            <a href="{% url 'show_post' pk=post.pk %}" class="cancel-link">Cancel</a> 
+        </div>
+    </form>
+</div>
+{% endblock %}

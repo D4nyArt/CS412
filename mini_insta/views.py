@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
-from .forms import CreatePostForm, UpdateProfileForm
+from .forms import *
 
 # Create your views here.
 
@@ -117,6 +117,14 @@ class DeletePostView(DeleteView):
         """Redirect to the profile page of the user whose post was deleted."""
         profile_pk = self.object.profile.pk  # Get the profile pk from the post being deleted
         return reverse('show_profile', kwargs={'pk': profile_pk})
+    
+class UpdatePostView(UpdateView):
+
+    model = Post
+    
+    form_class = UpdatePostForm
+
+    template_name = "mini_insta/update_post_form.html"
 
 
 

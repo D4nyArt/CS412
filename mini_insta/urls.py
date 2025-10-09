@@ -29,5 +29,9 @@ urlpatterns = [
 
     # Delete post path for a specific post
     # Takes an integer primary key (pk) parameter for the post to delete
-    path(r'post/<int:pk>/delete', DeletePostView.as_view(), name="delete_post")
+    path(r'post/<int:pk>/delete', DeletePostView.as_view(), name="delete_post"),
+        
+    path(r'post/<int:pk>/update', UpdatePostView.as_view(), name="update_post"),
+
+
 ]

@@ -59,10 +59,10 @@ Description: Template for displaying detailed information about a single user pr
             <div class="post-container">
                     <b>Post {{post.pk}}</b><br>
                     <!-- Check if post has a photo, if not, show default photo of "Img not available"-->   
-                    {% if post.get_first_photo %} 
+                    {% if post.get_first_photo.get_image_url %} 
                         <!-- Link to detailed post view -->
                         <a href="{% url 'show_post' pk=post.pk%}"> 
-                            <img src="{{ post.get_first_photo.image_url }}" height="200px">
+                            <img src="{{ post.get_first_photo.get_image_url }}" height="200px">
                         </a>
                     {% else %}
                         <a href="{% url 'show_post' pk=post.pk%}"> 

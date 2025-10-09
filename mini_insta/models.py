@@ -46,6 +46,9 @@ class Post(models.Model):
         """Return string representation of the post"""
         return f"Post {self.pk}"
     
+    def get_absolute_url(self):
+        return reverse('show_post', kwargs={'pk':self.pk})
+    
     def get_all_photos(self):
         """Return all photos objects associated with this post"""
         photos = Photo.objects.filter(post=self)
