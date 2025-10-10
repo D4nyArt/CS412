@@ -1,19 +1,28 @@
+<!--
+File: update_post_form.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/10/2025
+Description: Template for updating an existing post's caption.
+             Provides a form interface for users to edit their post content
+             with options to save changes or cancel the operation.
+-->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="create-post-container">
     <h1>Update {{post}}</h1>
     
-    <!-- Form to submit new post data to the server -->
+    <!-- Form to submit updated post data to the server -->
     <form action="{% url 'update_post' pk=post.pk %}" method="POST" class="create-post-form">
         {% csrf_token %}
+        
         <div class="form-group">
-            <label for="{{ form.display_name_for_label }}">Display name:</label>
+            <label for="{{ form.caption.id_for_label }}">Caption:</label>
             {{form.caption}}
         </div>
+        
         <div class="form-actions">
             <button type="submit" class="submit-btn">Update!</button>
-            <!-- Link back to profile without submitting -->
+            <!-- Link back to post detail without submitting changes -->
             <a href="{% url 'show_post' pk=post.pk %}" class="cancel-link">Cancel</a> 
         </div>
     </form>

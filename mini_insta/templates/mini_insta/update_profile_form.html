@@ -1,27 +1,39 @@
+<!--
+File: update_profile_form.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/10/2025
+Description: Template for updating user profile information.
+             Provides form fields for editing display name, profile image URL,
+             and bio text with options to save changes or cancel.
+-->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="create-post-container">
     <h1>Update profile of @{{profile.username}}</h1>
     
-    <!-- Form to submit new post data to the server -->
+    <!-- Form to submit updated profile data to the server -->
     <form action="{% url 'update_profile' pk=profile.pk %}" method="POST" class="create-post-form">
         {% csrf_token %}
+        
         <div class="form-group">
-            <label for="{{ form.display_name_for_label }}">Display name:</label>
+            <label for="{{ form.display_name.id_for_label }}">Display name:</label>
             {{ form.display_name }}
         </div>
+        
         <div class="form-group">
             <label for="{{ form.profile_image_url.id_for_label }}">Profile img URL:</label>
             {{ form.profile_image_url }}
         </div>
+        
         <div class="form-group">
             <label for="{{ form.bio_text.id_for_label }}">Bio Text:</label>
             {{ form.bio_text }}
         </div>
+        
+        <!-- Form action buttons for submit and cancel -->
         <div class="form-actions">
             <button type="submit" class="submit-btn">Update!</button>
-            <!-- Link back to profile without submitting -->
+            <!-- Link back to profile page without submitting changes -->
             <a href="{% url 'show_profile' pk=profile.pk %}" class="cancel-link">Cancel</a> 
         </div>
     </form>

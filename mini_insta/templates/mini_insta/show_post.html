@@ -1,27 +1,34 @@
 <!--
 File: show_post.html
-# Author: Daniel Arteaga (d4nyart@bu.edu), 10//2025
+Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
 Description: Template for displaying detailed information about a single post.
              Shows post profile, timestamp, caption, and associated photos.
+             Includes update and delete buttons for post management.
 -->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="post-detail">
+    <!-- Post header section showing post ID, author, and timestamp -->
     <div class="post-header">
         <div class="post-profile">Post {{post.pk}} by @{{ post.profile.username }}</div>
         <div class="post-timestamp">on {{ post.timestamp|date:"F d, Y g:i A" }}</div>
     </div>
-    <!-- Update profile button -->
+    
+    <!-- Action buttons for post management -->
     <div class="form-actions">
+        <a href="{% url 'update_post' pk=post.pk %}" class="submit-btn">Update Post</a> 
         <a href="{% url 'delete_post' pk=post.pk %}" class="submit-btn">Delete Post</a>
-        <a href="{% url 'update_post' pk=post.pk %}" class="submit-btn">Update Post</a>
     </div>
 
     <br>
+    
+    <!-- Post caption text content -->
     <div class="post-caption">{{ post.caption }}</div><br>
+    
+    <!-- Post images section - displays all photos associated with this post -->
     <div class="post-content">
-        <!-- Loop through all photos of the post -->
+        <!-- Loop through all photos of the post to display each image -->
         {% for photo in post.get_all_photos %} 
             <img src="{{ photo.get_image_url }}" class="post-image">
         {% endfor %}

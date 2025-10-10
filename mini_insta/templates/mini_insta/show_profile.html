@@ -1,34 +1,33 @@
 <!--
 File: show_profile.html
-# Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
+Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
 Description: Template for displaying detailed information about a single user profile.
-             Shows profile image, username, display name, bio, join date, and
-             placeholder statistics for posts, followers, and following counts.
+             Shows profile image, username, display name, bio, join date, stats,
+             and all posts created by the user with navigation to individual posts.
 -->
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
 <div class="profile-detail">
     <div class="profile-main">
-        <!-- Profile header section with image and basic info -->
+        <!-- Profile header section with image and basic user information -->
         <div class="profile-header">
             <img src="{{ profile.profile_image_url }}" alt="{{ profile.username }}">
             <div class="profile-username">@{{ profile.username }}</div>
             <div class="profile-display-name">{{ profile.display_name }}</div>
         </div>
         
-        <!-- Update profile button -->
+        <!-- Update profile button for profile management -->
         <div class="form-actions">
             <a href="{% url 'update_profile' pk=profile.pk %}" class="submit-btn">Update Profile</a>
         </div>
         
-        <!-- About section displaying user's bio text -->
         <div class="profile-info">
             <h3>About</h3>
             <div class="profile-bio">{{ profile.bio_text }}</div>
         </div>
         
-        <!-- Statistics section showing posts, followers, and following counts -->
+        <!-- Statistics section -->
         <div class="profile-stats">
             <div class="stat-box">
                 <div class="stat-number">0</div>
@@ -44,27 +43,27 @@ Description: Template for displaying detailed information about a single user pr
             </div>
         </div>
         
-        <!-- Display when the user joined the platform -->
         <div class="join-date">
             Member since {{ profile.join_date|date:"F d, Y g:i A" }}
         </div>
     </div>
     
+    <!-- Posts section displaying all posts created by this user -->
     <div class="profile-posts">
-        <!-- Posts section where post's first images are displayed -->
         <div class="profile-info">
             <h3>Posts</h3>
-            <!-- Loop through all posts of the profile -->
+            <!-- Loop through all posts of the profile to display thumbnails -->
             {% for post in profile.get_all_posts %} 
             <div class="post-container">
                     <b>Post {{post.pk}}</b><br>
-                    <!-- Check if post has a photo, if not, show default photo of "Img not available"-->   
+                    <!-- Conditional image display, show first photo or default image -->   
                     {% if post.get_first_photo.get_image_url %} 
-                        <!-- Link to detailed post view -->
+                        <!-- Link to detailed post view using actual post image -->
                         <a href="{% url 'show_post' pk=post.pk%}"> 
                             <img src="{{ post.get_first_photo.get_image_url }}" height="200px">
                         </a>
                     {% else %}
+                        <!-- Link to detailed post view using placeholder image when no photo available -->
                         <a href="{% url 'show_post' pk=post.pk%}"> 
                             <img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" height="200px">
                         </a>

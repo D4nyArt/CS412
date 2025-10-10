@@ -1,8 +1,8 @@
 # File: views.py
 # Author: Daniel Arteaga (d4nyart@bu.edu), 09/24/2025 
 # Description: Django views for the Mini Instagram application.
-# Contains ListView, DetailView, and CreateView for displaying user profiles,
-# posts, and creating new posts.
+# Contains ListView, DetailView, CreateView, UpdateView, and DeleteView for displaying user profiles,
+# posts, and handling post creation, updates, and deletion functionality.
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -35,7 +35,7 @@ class ProfileDetailView(DetailView):
     context_object_name = "profile"
 
 class PostDetailView(DetailView):
-    """Display detailed information for a single Post."""
+    """Display detailed information for a single Post"""
 
     model = Post
     
@@ -44,18 +44,21 @@ class PostDetailView(DetailView):
     context_object_name = "post"
 
 class CreatePostView(CreateView):
-    """Handle the creation of a new post for a profile."""
+    """Handle the creation of a new post for a specific profile"""
 
+    # Form class for post creation - handles caption input
     form_class = CreatePostForm
+    
+    # Template for rendering the post creation form
     template_name = "mini_insta/create_post_form.html"
 
     def get_success_url(self):
-        """Provide a URL to redirect to after creating a new Post."""
+        """Provide a URL to redirect to after creating a new Post"""
         post_pk = self.object.pk  # Primary key of the profile from URL
         return reverse('show_post', kwargs={'pk': post_pk})
 
     def get_context_data(self, **kwargs):
-        """Add profile to context for template rendering."""
+        """Add profile to context for template rendering"""
         context = super().get_context_data(**kwargs)
 
         # Fetch the Profile object using the pk from URL kwargs
@@ -64,28 +67,31 @@ class CreatePostView(CreateView):
         return context
     
     def form_valid(self, form):
-        """Validate and save the form, associating with profile and creating photo if provided."""
+        """Process valid form submission and create associated photos.
         
+        Associates the post with the correct profile and creates Photo objects
+        for any uploaded image files.
+        """
+        
+        # Get the profile from URL parameter to associate with this post
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         form.instance.profile = profile
 
         result = super().form_valid(form)
         post = self.object  # The saved post instance
         
-        """ # Create a Photo if image_url is provided
-        if form.cleaned_data.get('image_url'):
-            Photo.objects.create(post=post, image_url=form.cleaned_data['image_url'])"""
-
+        # Handle uploaded image files (create Photo objects for each file)
         files = self.request.FILES.getlist('image_files')
 
+        # If files were uploaded, create Photo objects for each one
         if files:
             for file in files:
                 Photo.objects.create(post=post, image_file=file)
 
-
         return result
 
 class UpdateProfileView(UpdateView):
+    """Handle updating profile information for an existing user profile"""
 
     model = Profile
 
@@ -94,31 +100,42 @@ class UpdateProfileView(UpdateView):
     template_name = "mini_insta/update_profile_form.html"
 
 class DeletePostView(DeleteView):
+    """Handle deletion of a specific post.
+    
+    Provides confirmation page and handles the actual deletion of posts
+    along with their associated photos
+    """
 
     model = Post
 
-    template_name="mini_insta/delete_post_form.html"
+    template_name = "mini_insta/delete_post_form.html"
 
     def get_context_data(self, **kwargs):
-        """Add post and profile to context for template rendering."""
+        """Add post and profile information to template context.
+        
+        Provides both the post being deleted and its associated profile
+        for display in the confirmation template.
+        """
         context = super().get_context_data(**kwargs)
         
-        # Get the post object (already available as self.object)
+        # Get the post object
         post = self.object
         context['post'] = post
         
-        # Get the profile associated with the post
+        # Get the profile associated with the post for navigation purposes
         profile = post.profile
         context['profile'] = profile
         
         return context
     
     def get_success_url(self):
-        """Redirect to the profile page of the user whose post was deleted."""
-        profile_pk = self.object.profile.pk  # Get the profile pk from the post being deleted
+        """Redirect to profile page after successful post deletion"""
+        # Get the profile pk from the post being deleted
+        profile_pk = self.object.profile.pk  
         return reverse('show_profile', kwargs={'pk': profile_pk})
     
 class UpdatePostView(UpdateView):
+    """Handle updating caption text for an existing post.    """
 
     model = Post
     

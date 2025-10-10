@@ -1,8 +1,9 @@
 <!--
 File: create_post_form.html
-# Author: Daniel Arteaga (d4nyart@bu.edu), 10/01/2025
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/01/2025
 Description: Template for creating a new post for a profile.
-             Contains a form to submit caption and image URL.
+             Contains a form to submit caption and multiple image files.
+             Uses multipart form encoding to handle file uploads.
 -->
 {% extends 'mini_insta/base.html' %}
 
@@ -10,20 +11,24 @@ Description: Template for creating a new post for a profile.
 <div class="create-post-container">
     <h1>Create a post for @{{profile.username}}</h1>
     
-    <!-- Form to submit new post data to the server -->
+    <!-- Form to submit new post data to the server with file upload support -->
     <form action="{% url 'create_post' pk=profile.pk %}" method="POST" enctype="multipart/form-data" class="create-post-form">
         {% csrf_token %}
+        
         <div class="form-group">
             <label for="{{ form.caption.id_for_label }}">Caption:</label>
             {{ form.caption }}
         </div>
+        
         <div class="form-group">
             <label for="image_files">Upload Images:</label>
             <input type="file" name="image_files" id="image_files" multiple accept="image/*">
         </div>
+        
+        <!-- Form action buttons for submit and cancel -->
         <div class="form-actions">
             <button type="submit" class="submit-btn">Publish!</button>
-            <!-- Link back to profile without submitting -->
+            <!-- Link back to profile without submitting the post -->
             <a href="{% url 'show_profile' pk=profile.pk %}" class="cancel-link">Cancel</a> 
         </div>
     </form>
