@@ -1,0 +1,41 @@
+<!--
+File: show_followers.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/14/2025
+Description: Template for displaying all followers of a specific profile.
+             Shows a list of profile cards for users who follow the given profile,
+             using the profile.get_followers() method to retrieve the data.
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<center><h1>Followers of @{{ profile.username }}</h1></center>
+
+<!-- Check if the profile has any followers -->
+{% if profile.get_followers %}
+    <div class="profiles-grid">
+        {% for follower in profile.get_followers %}
+            <div class="profile-card">
+                <div class="username">{{ follower.username }}</div>
+                
+                <a href="{% url 'show_profile' follower.pk %}">
+                    <img src="{{ follower.profile_image_url }}" alt="{{ follower.username }}">
+                </a>
+                
+                <div class="display-name">{{ follower.display_name }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <!-- Message displayed when the profile has no followers -->
+        <div class="profile-info">
+            <p>@{{ profile.username }} has no followers yet.</p>
+        </div>
+{% endif %}
+
+<!-- Navigation link back to the profile page -->
+<center>
+    <div class="form-actions">
+        <a href="{% url 'show_profile' pk=profile.pk %}" class="submit-btn">Back to @{{ profile.username }}'s Profile</a>
+    </div>
+</center>
+{% endblock %}

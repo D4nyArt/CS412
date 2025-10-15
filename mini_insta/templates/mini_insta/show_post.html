@@ -33,5 +33,14 @@ Description: Template for displaying detailed information about a single post.
             <img src="{{ photo.get_image_url }}" class="post-image">
         {% endfor %}
     </div>
+
+    <h3>Post liked by {{post.get_num_likes}} profile(s) </h3>
+    <div class="post-content">
+        <h1>Comment Section</h1>
+        {% for comment in post.get_all_comments %} 
+            <h2>{{comment.profile}}: {{comment.text}}</h2>
+            <p>on {{comment.timestamp}}</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

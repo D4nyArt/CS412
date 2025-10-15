@@ -29,17 +29,26 @@ Description: Template for displaying detailed information about a single user pr
         
         <!-- Statistics section -->
         <div class="profile-stats">
+            <!-- Posts count -->
             <div class="stat-box">
-                <div class="stat-number">0</div>
+                <div class="stat-number">{{profile.get_num_posts}}</div>
                 <div class="stat-label">Posts</div>
             </div>
+            
+            <!-- Followers count  -->
             <div class="stat-box">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Followers</div>
+                <a href="{% url 'show_followers' pk=profile.pk %}">
+                    <div class="stat-number">{{profile.get_num_followers}}</div>
+                    <div class="stat-label">Followers</div>
+                </a>
             </div>
+            
+            <!-- Following count -->
             <div class="stat-box">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Following</div>
+                <a href="{% url 'show_following' pk=profile.pk %}">
+                    <div class="stat-number">{{profile.get_num_following}}</div>
+                    <div class="stat-label">Following</div>
+                </a>
             </div>
         </div>
         

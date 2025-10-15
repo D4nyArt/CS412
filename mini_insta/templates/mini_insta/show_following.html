@@ -1,0 +1,41 @@
+<!--
+File: show_following.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/14/2025
+Description: Template for displaying all profiles that a specific profile follows.
+             Shows a list of profile cards for users that the given profile follows,
+             using the profile.get_following() method to retrieve the data.
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<center><h1>@{{ profile.username }} is Following</h1></center>
+
+<!-- Check if the profile is following anyone -->
+{% if profile.get_following %}
+    <div class="profiles-grid">
+        {% for followed_profile in profile.get_following %}
+            <div class="profile-card">
+                <div class="username">{{ followed_profile.username }}</div>
+                
+                <a href="{% url 'show_profile' followed_profile.pk %}">
+                    <img src="{{ followed_profile.profile_image_url }}" alt="{{ followed_profile.username }}">
+                </a>
+                
+                <div class="display-name">{{ followed_profile.display_name }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <!-- Message displayed when the profile is not following anyone -->
+        <div class="profile-info">
+            <p>@{{ profile.username }} is not following anyone yet.</p>
+        </div>
+{% endif %}
+
+<!-- Navigation link back to the profile page -->
+<center>
+    <div class="form-actions">
+        <a href="{% url 'show_profile' pk=profile.pk %}" class="submit-btn">Back to @{{ profile.username }}'s Profile</a>
+    </div>
+</center>
+{% endblock %}
