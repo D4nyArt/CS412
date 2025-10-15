@@ -77,6 +77,19 @@ class Profile(models.Model):
         print(Post.objects.filter(profile=self).count())
         return Post.objects.filter(profile=self).count()
     
+    def get_post_feed(self):
+
+        profiles_followed = self.get_following()
+
+        post_of_followed = []
+
+        for profile in profiles_followed:
+            posts =  Post.objects.filter(profile=profile)
+            post_of_followed.extend(posts)
+
+        return post_of_followed 
+    
+    
 class Post(models.Model):
     """Represent a post created by a user profile
 
@@ -116,7 +129,9 @@ class Post(models.Model):
     def get_likes(self):
         likes = Like.objects.filter(post=self)
         return likes
-    
+
+
+    #Extra
     def get_num_likes(self):
         return Like.objects.filter(post=self).count()
 

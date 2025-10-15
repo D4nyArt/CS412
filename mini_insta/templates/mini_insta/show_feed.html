@@ -1,0 +1,98 @@
+<!--
+File: show_feed.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/15/2025
+Description: Template for displaying the post feed for a specific profile.
+             Shows all posts from profiles that the user follows, including
+             profile information, photos, captions, likes, and comments.
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<center><h1>@{{ profile.username }}'s Feed</h1></center>
+
+<!-- Check if there are any posts in the feed -->
+{% if post_feed %}
+    <div class="feed-container">
+        <!-- Loop through each post in the feed -->
+        {% for post in post_feed %}
+            <div class="post-detail">
+                <div class="post-header">
+                    <div class="post-author">
+                        <!-- Profile image of the post author -->
+                        <img src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.username }}" class="author-profile-image">
+                        
+                        <div class="post-profile">
+                            <a href="{% url 'show_profile' pk=post.profile.pk %}">@{{ post.profile.username }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post content section -->
+                <div class="post-content">
+                    <!-- Display first photo if it exists -->
+                    {% if post.get_first_photo %}
+                        <a href="{% url 'show_post' pk=post.pk %}">
+                            <img src="{{ post.get_first_photo.get_image_url }}" class="post-image" alt="Post image">
+                        </a>
+                    {% else %}
+                        <!-- Show placeholder if no photo exists -->
+                        <a href="{% url 'show_post' pk=post.pk %}">
+                            <img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" class="post-image" alt="No image available">
+                        </a>
+                    {% endif %}
+                </div>
+                
+                <!-- Post caption -->
+                {% if post.caption %}
+                    <div class="post-caption">{{ post.caption }}</div>
+                {% endif %}
+                
+                <div class="post-engagement">
+                    <!-- Likes section -->
+                    <div class="engagement-item">
+                        <strong>{{ post.get_num_likes }}</strong> 
+                        {% if post.get_num_likes == 1 %}
+                            like
+                        {% else %}
+                            likes
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Comments section -->
+                    <div class="engagement-item">
+                        <strong>{{ post.get_all_comments.count }}</strong> 
+                        {% if post.get_all_comments.count == 1 %}
+                            comment
+                        {% else %}
+                            comments
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Show recent comments if any exist -->
+                {% if post.get_all_comments %}
+                    <div class="recent-comments">
+                        <h4>Recent Comments:</h4>
+                        <!-- Show most recent comments -->
+                        {% for comment in post.get_all_comments%}
+                            <div class="comment-preview">
+                                <strong>@{{ comment.profile.username }}:</strong> {{ comment.text }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <!-- Message displayed when there are no posts in the feed -->
+    <center>
+        <div class="profile-info">
+            <p>No posts in your feed yet. Follow some profiles to see their posts here!</p>
+        </div>
+    </center>
+{% endif %}
+
+<!-- Navigation link back to the profile page -->
+
+{% endblock %}

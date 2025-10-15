@@ -230,11 +230,6 @@ body {
     margin-bottom: 5px;
 }
 
-.post-timestamp {
-    color: #666;
-    font-size: 14px;
-}
-
 .post-content {
     text-align: center;
 }
@@ -319,6 +314,102 @@ body {
     margin-left: 20px;
     color: #666;
     font-size: 16px;
+}
+
+/* Feed Styles */
+.feed-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.feed-container .post-detail {
+    margin-bottom: 40px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.author-profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #2c5aa0;
+}
+
+
+.post-profile a {
+    color: #2c5aa0;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.post-profile a:hover {
+    text-decoration: underline;
+}
+
+.post-engagement {
+    display: flex;
+    gap: 20px;
+    margin: 15px 0;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+}
+
+.view-post-link {
+    color: #2c5aa0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.view-post-link:hover {
+    text-decoration: underline;
+}
+
+.recent-comments {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.recent-comments h4 {
+    margin: 0 0 10px 0;
+    color: #2c5aa0;
+    font-size: 14px;
+}
+
+.comment-preview {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.comment-preview strong {
+    color: #2c5aa0;
+}
+
+.view-all-comments {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.view-all-comments a {
+    color: #2c5aa0;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.view-all-comments a:hover {
+    text-decoration: underline;
 }
 
 .profile-stats a {

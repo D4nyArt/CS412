@@ -159,5 +159,36 @@ class ShowFollowingDetailView(DetailView):
     
     context_object_name = "profile"
 
+class PostFeedListView(DetailView):
+    """Display the post feed for a specific profile.
+    
+    Shows all posts from profiles that the given profile follows,
+    including post details, photos, likes, and comments.
+    """
+    
+    model = Profile
+    
+    template_name = "mini_insta/show_feed.html"
+    
+    context_object_name = "profile"
+    
+    def get_context_data(self, **kwargs):
+        """Add the post feed to the template context.
+        
+        Uses the profile's get_post_feed() method to retrieve posts
+        from all profiles that this profile follows.
+        """
+        context = super().get_context_data(**kwargs)
+        
+        # Get the profile whose feed we're showing
+        profile = self.object
+        
+        # Get all posts from profiles that this profile follows
+        post_feed = profile.get_post_feed()
+                
+        context['post_feed'] = post_feed
+        return context
+
+
 
 
