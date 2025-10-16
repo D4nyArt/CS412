@@ -34,13 +34,39 @@ Description: Template for displaying detailed information about a single post.
         {% endfor %}
     </div>
 
-    <h3>Post liked by {{post.get_num_likes}} profile(s) </h3>
-    <div class="post-content">
-        <h1>Comment Section</h1>
-        {% for comment in post.get_all_comments %} 
-            <h2>{{comment.profile}}: {{comment.text}}</h2>
-            <p>on {{comment.timestamp}}</p>
-        {% endfor %}
+    <div class="post-engagement">
+        <!-- Likes section -->
+        <div class="engagement-item">
+            <strong>{{ post.get_num_likes }}</strong> 
+            {% if post.get_num_likes == 1 %}
+                like
+            {% else %}
+                likes
+            {% endif %}
+        </div>
+                    
+        <!-- Comments section -->
+        <div class="engagement-item">
+            <strong>{{ post.get_all_comments.count }}</strong> 
+            {% if post.get_all_comments.count == 1 %}
+                comment
+            {% else %}
+                comments
+            {% endif %}
+        </div>
     </div>
+                
+    <!-- Show recent comments if any exist -->
+    {% if post.get_all_comments %}
+        <div class="recent-comments">
+            <h4>Recent Comments:</h4>
+            <!-- Show most recent comments -->
+            {% for comment in post.get_all_comments%}
+                <div class="comment-preview">
+                    <strong>@{{ comment.profile.username }}:</strong> {{ comment.text }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

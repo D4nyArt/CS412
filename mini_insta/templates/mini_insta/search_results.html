@@ -1,0 +1,80 @@
+
+<!--
+File: search_results.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/15/2025
+Description: Template for displaying search results for both profiles and posts.
+             Shows matching profiles and posts based on the user's search query.
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<!-- Page title with search query -->
+<center><h1>Search Results</h1></center>
+
+<!-- Check if there was a search performed -->
+{% if search_query %}
+    <!-- Profile Results Section -->
+    <h2>Profile Results</h2>
+    {% if profile_query_results %}
+        <div class="profiles-grid">
+            <!-- Loop through matching profiles -->
+            {% for profile_result in profile_query_results %}
+                <div class="profile-card">
+                    <div class="username">{{ profile_result.username }}</div>
+                        <a href="{% url 'show_profile' profile_result.pk %}">
+                        <img src="{{ profile_result.profile_image_url }}" alt="{{ profile_result.username }}">
+                    </a>
+                    <div class="display-name">{{ profile_result.display_name }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No profiles found matching "{{ search_query }}"</p>
+    {% endif %}
+
+    <!-- Post Results Section -->
+    <h2>Post Results</h2>
+    {% if post_query_result %}
+        <div class="feed-container">
+            <!-- Loop through matching posts -->
+            {% for post in post_query_result %}
+                <div class="post-detail">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <img src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.username }}" class="author-profile-image">
+                            <div class="post-profile">
+                                <a href="{% url 'show_profile' pk=post.profile.pk %}">@{{ post.profile.username }}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post content section -->
+                    <div class="post-content">
+                        {% if post.get_first_photo %}
+                            <a href="{% url 'show_post' pk=post.pk %}">
+                                <img src="{{ post.get_first_photo.get_image_url }}" class="post-image" alt="Post image">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'show_post' pk=post.pk %}">
+                                <img src="https://as1.ftcdn.net/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg" class="post-image" alt="No image available">
+                            </a>
+                        {% endif %}
+                    </div>
+                    <!-- Post caption -->
+                    {% if post.caption %}
+                        <div class="post-caption">{{ post.caption }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No posts found matching "{{ search_query }}"</p>
+    {% endif %}
+{% else %}
+    <!-- Message when no search was performed -->
+    <center>
+        <p>No search query provided.</p>
+    </center>
+{% endif %}
+
+{% endblock %}

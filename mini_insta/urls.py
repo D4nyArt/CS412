@@ -37,6 +37,8 @@ urlpatterns = [
 
     path(r'profile/<int:pk>/following', ShowFollowingDetailView.as_view(), name="show_following"),
 
-    path(r'profile/<int:pk>/feed', PostFeedListView.as_view(), name="show_feed") 
+    path(r'profile/<int:pk>/feed', PostFeedListView.as_view(), name="show_feed"),
+
+    path(r'profile/<int:pk>/search', SearchView.as_view(), name="search"),
 
 ]

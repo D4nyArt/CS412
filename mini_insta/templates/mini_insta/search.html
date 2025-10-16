@@ -1,0 +1,26 @@
+<!--
+File: search.html
+Author: Daniel Arteaga (d4nyart@bu.edu), 10/15/2025
+Description: Template for search form where users can input search queries.
+             Provides a form to search for profiles and posts based on text input.
+-->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="create-post-container">
+    <h1>Search</h1>
+    
+    <!-- Form to submit search query to the server -->
+    <form action="{% url 'search' pk=profile.pk %}" method="GET" class="create-post-form">
+        
+        <div class="form-group">
+            <label for="search_query">Search for text, tags, or people:</label>
+            <input type="text" name="search_query" id="search_query" placeholder="Enter your search query...">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Search!</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

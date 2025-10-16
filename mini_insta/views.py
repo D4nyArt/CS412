@@ -176,7 +176,7 @@ class PostFeedListView(DetailView):
         """Add the post feed to the template context.
         
         Uses the profile's get_post_feed() method to retrieve posts
-        from all profiles that this profile follows.
+        from all profiles that this profile follows
         """
         context = super().get_context_data(**kwargs)
         
@@ -188,6 +188,79 @@ class PostFeedListView(DetailView):
                 
         context['post_feed'] = post_feed
         return context
+
+class SearchView(ListView):
+    """Search view to find profiles and posts based on text query.
+    
+    Displays search form when no query is present, and search results
+    when a query is provided. Searches both profiles and posts.
+    """
+
+    model = Post  
+    template_name = "mini_insta/search_results.html"
+    context_object_name = "post_query_result"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Handle request dispatching, show search form or process search results.
+        
+        If no search query is present, render the search form.
+        Otherwise, proceed with normal ListView processing"""
+        
+        # Check if search query is present in GET parameters
+        if 'search_query' not in request.GET:
+            # Get the profile from URL parameter for template context
+            profile_pk = kwargs.get('pk')
+            profile = Profile.objects.get(pk=profile_pk)
+            
+            return render(request, "mini_insta/search.html", {'profile': profile})
+        else:
+            # Search query is present, proceed with normal ListView processing
+            return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        """Return a QuerySet of Posts that match the search query"""
+        # Get the search query from GET parameters
+        search_query = self.request.GET.get('search_query', '')
+    
+        if search_query:
+            # Search for posts whose caption contains the search query
+            post_query_result = Post.objects.filter(caption__icontains=search_query)
+            return post_query_result
+        else:
+            # Return empty QuerySet if no search query provided
+            return Post.objects.none()
+    
+    def get_context_data(self, **kwargs):
+        """Add search related data to template context.
+        
+        Includes the profile, search query, post results, and profile results"""
+        context = super().get_context_data(**kwargs)
+
+        # Add the profile for whom we are doing this search
+        profile_pk = self.kwargs.get('pk')
+        profile = Profile.objects.get(pk=profile_pk)
+        context['profile'] = profile
+
+        # Add the search query if present
+        search_query = self.request.GET.get('search_query', '')
+
+        if search_query:
+            context['search_query'] = search_query
+            context['post_query_result'] = self.get_queryset()
+            
+            profiles_query1 = Profile.objects.filter(username__icontains=search_query)
+            profiles_query2 = Profile.objects.filter(display_name__icontains=search_query) 
+            profiles_query3 = Profile.objects.filter(bio_text__icontains=search_query)
+            
+            # Union removes duplicates automatically
+            context['profile_query_results'] = profiles_query1.union(profiles_query2, profiles_query3)
+        else:
+            context['post_query_result'] = Post.objects.none()
+            context['profile_query_results'] = Profile.objects.none()
+    
+        return context
+
+
 
 
 
