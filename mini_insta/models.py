@@ -91,11 +91,8 @@ class Profile(models.Model):
     
     
 class Post(models.Model):
-    """Represent a post created by a user profile
-
-    Contains the post's content, timestamp, and association with the
-    profile that created it. Can have multiple photos attached.
-    """
+    """Represent a post created by a user profile.
+    Can have multiple photos attached"""
     
     # Foreign key linking this post to the profile that created it
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)  
@@ -185,7 +182,6 @@ class Follow(models.Model):
     # Foreign key to the profile that is doing the following
     follower_profile = models.ForeignKey(Profile, related_name="following", on_delete=models.CASCADE)
 
-    # Timestamp when the follow relationship was created
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -201,10 +197,8 @@ class Comment(models.Model):
     # Foreign key to the profile that made this comment
     profile = models.ForeignKey(Profile, related_name="user_comments", on_delete=models.CASCADE)
 
-    # Timestamp when the comment was created
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    # The actual comment text content
     text = models.TextField(blank=True)
 
     def __str__(self):
@@ -221,7 +215,6 @@ class Like(models.Model):
     # Foreign key to the profile that liked the post
     profile = models.ForeignKey(Profile, related_name="user_likes", on_delete=models.CASCADE)
 
-    # Timestamp when the like was created
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

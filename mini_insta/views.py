@@ -190,21 +190,17 @@ class PostFeedListView(DetailView):
         return context
 
 class SearchView(ListView):
-    """Search view to find profiles and posts based on text query.
+    """Search view to find profiles and posts based on text query
     
     Displays search form when no query is present, and search results
-    when a query is provided. Searches both profiles and posts.
-    """
+    when a query is provided. Searches both profiles and posts"""
 
     model = Post  
     template_name = "mini_insta/search_results.html"
     context_object_name = "post_query_result"
 
     def dispatch(self, request, *args, **kwargs):
-        """Handle request dispatching, show search form or process search results.
-        
-        If no search query is present, render the search form.
-        Otherwise, proceed with normal ListView processing"""
+        """Handle request dispatching; show search form or process search results"""
         
         # Check if search query is present in GET parameters
         if 'search_query' not in request.GET:
@@ -219,6 +215,7 @@ class SearchView(ListView):
     
     def get_queryset(self):
         """Return a QuerySet of Posts that match the search query"""
+
         # Get the search query from GET parameters
         search_query = self.request.GET.get('search_query', '')
     
@@ -231,8 +228,7 @@ class SearchView(ListView):
             return Post.objects.none()
     
     def get_context_data(self, **kwargs):
-        """Add search related data to template context.
-        
+        """Add search related data to template context
         Includes the profile, search query, post results, and profile results"""
         context = super().get_context_data(**kwargs)
 
@@ -248,6 +244,7 @@ class SearchView(ListView):
             context['search_query'] = search_query
             context['post_query_result'] = self.get_queryset()
             
+            # Search for profiles whose username, display_name or bio_text contains the search query
             profiles_query1 = Profile.objects.filter(username__icontains=search_query)
             profiles_query2 = Profile.objects.filter(display_name__icontains=search_query) 
             profiles_query3 = Profile.objects.filter(bio_text__icontains=search_query)
@@ -255,13 +252,8 @@ class SearchView(ListView):
             # Union removes duplicates automatically
             context['profile_query_results'] = profiles_query1.union(profiles_query2, profiles_query3)
         else:
+            #Return empty context because query has not been provided
             context['post_query_result'] = Post.objects.none()
             context['profile_query_results'] = Profile.objects.none()
     
         return context
-
-
-
-
-
-
