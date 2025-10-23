@@ -42,6 +42,7 @@ Description: Base template for the Mini Instagram application.
             {% else %}
                 <!-- Link for non-authenticated users -->
                 <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'create_profile' %}">Sign In</a>
             {% endif %}
         </nav>
     </body>

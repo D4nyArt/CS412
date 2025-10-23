@@ -9,7 +9,9 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Profile, Post, Photo
 from .forms import *
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login
 
 
 class LoginRequiredMixinMiniInsta(LoginRequiredMixin):
@@ -283,3 +285,39 @@ class LogoutConfirmationView(TemplateView):
     """Display logout confirmation page"""
     
     template_name = "mini_insta/logged_out.html"
+
+class CreateProfileView(CreateView):
+
+    form_class = CreateProfileForm
+
+    template_name  = "mini_insta/create_profile_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['auth_mini_insta'] = UserCreationForm() 
+        return context
+    
+    def form_valid(self, form):
+        """
+        Creates a new User from UserCreationForm, logs them in,
+        and associates the User with the new Profile
+        """
+
+        print(self.request.POST)
+        
+        # Reconstruct the UserCreationForm instance from POST data
+        user_form = UserCreationForm(self.request.POST)
+        
+        if user_form.is_valid():
+            # Save the user form and get the newly created User object
+            user = user_form.save()
+            
+            login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+            
+            # Attach the User to the Profile instance before saving
+            form.instance.user = user
+            
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+    

@@ -1,0 +1,46 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="create-post-container">
+    <h1>Create profile</h1>
+    
+    <!-- Form to submit updated profile data to the server -->
+    <form action="{% url 'create_profile' %}" method="POST" class="create-post-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.display_name.id_for_label }}">Display name:</label>
+            {{ form.display_name }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.profile_image_url.id_for_label }}">Profile img URL:</label>
+            {{ form.profile_image_url }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.bio_text.id_for_label }}">Bio Text:</label>
+            {{ form.bio_text }}
+        </div>
+
+        <!-- Form for creating a user  -->
+        <!--<div class="form-group">
+            <label for="{{ auth_mini_insta.username.id_for_label }}">Username:</label>
+            {{ auth_mini_insta.username }}
+        </div>-->
+        {{ auth_mini_insta.as_p }}
+        <!-- Form action buttons for submit and cancel -->
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Sign In</button>
+        </div>
+
+
+        </div>
+    </form>
+</div>
+{% endblock %}
