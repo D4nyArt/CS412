@@ -12,7 +12,7 @@ Description: Template for updating user profile information.
     <h1>Update profile of @{{profile.username}}</h1>
     
     <!-- Form to submit updated profile data to the server -->
-    <form action="{% url 'update_profile' pk=profile.pk %}" method="POST" class="create-post-form">
+    <form action="{% url 'update_profile' %}" method="POST" class="create-post-form">
         {% csrf_token %}
         
         <div class="form-group">

@@ -11,7 +11,7 @@ Description: Template for search form where users can input search queries.
     <h1>Search</h1>
     
     <!-- Form to submit search query to the server -->
-    <form action="{% url 'search' pk=profile.pk %}" method="GET" class="create-post-form">
+    <form action="{% url 'search' %}" method="GET" class="create-post-form">
         
         <div class="form-group">
             <label for="search_query">Search for text, tags, or people:</label>

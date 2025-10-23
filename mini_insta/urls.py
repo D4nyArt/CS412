@@ -23,11 +23,11 @@ urlpatterns = [
     # Takes an integer primary key (pk) parameter to identify which post to show
     path(r'post/<int:pk>', PostDetailView.as_view(), name="show_post"),
 
-    # Create post path for a specific profile
-    # Takes an integer primary key (pk) parameter for the profile
-    path(r'profile/<int:pk>/create_post', CreatePostView.as_view(), name="create_post"),
+    # Create post path for the logged-in user's profile
+    path(r'profile/create_post', CreatePostView.as_view(), name="create_post"),
 
-    path(r'profile/<int:pk>/update_profile', UpdateProfileView.as_view(), name="update_profile"),
+    # Update profile path for the logged-in user
+    path(r'profile/update', UpdateProfileView.as_view(), name="update_profile"),
 
     # Delete post path for a specific post
     # Takes an integer primary key (pk) parameter for the post to delete
@@ -39,9 +39,11 @@ urlpatterns = [
 
     path(r'profile/<int:pk>/following', ShowFollowingDetailView.as_view(), name="show_following"),
 
-    path(r'profile/<int:pk>/feed', PostFeedListView.as_view(), name="show_feed"),
+    # Feed path for the logged-in user's profile
+    path(r'profile/feed', PostFeedListView.as_view(), name="show_feed"),
 
-    path(r'profile/<int:pk>/search', SearchView.as_view(), name="search"),
+    # Search path for the logged-in user
+    path(r'profile/search', SearchView.as_view(), name="search"),
 
     #Auth
     path(r'login/', auth_views.LoginView.as_view(template_name='mini_insta/login.html'), name="login"),

@@ -12,7 +12,7 @@ Description: Template for creating a new post for a profile.
     <h1>Create a post for @{{profile.username}}</h1>
     
     <!-- Form to submit new post data to the server with file upload support -->
-    <form action="{% url 'create_post' pk=profile.pk %}" method="POST" enctype="multipart/form-data" class="create-post-form">
+    <form action="{% url 'create_post' %}" method="POST" enctype="multipart/form-data" class="create-post-form">
         {% csrf_token %}
         
         <div class="form-group">

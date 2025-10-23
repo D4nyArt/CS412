@@ -23,9 +23,9 @@ Description: Base template for the Mini Instagram application.
             {% if profile %}
                 <!-- Links only available to the user who owns this profile -->
                 {% if request.user.is_authenticated and profile.user == request.user %}
-                    <a href="{% url 'show_feed' pk=profile.pk %}">Home (Profile feed)</a>
-                    <a href="{% url 'search' pk=profile.pk %}">Search</a>
-                    <a href="{% url 'create_post' pk=profile.pk %}">Create Post for this Profile</a>
+                    <a href="{% url 'show_feed' %}">Home (Profile feed)</a>
+                    <a href="{% url 'search' %}">Search</a>
+                    <a href="{% url 'create_post' %}">Create Post for this Profile</a>
                 {% endif %}
                 <a href="{% url 'show_profile' pk=profile.pk %}">Back to profile</a>
             {% else %}

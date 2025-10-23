@@ -62,7 +62,7 @@ class PostDetailView(DetailView):
     context_object_name = "post"
 
 class CreatePostView(LoginRequiredMixinMiniInsta, CreateView):
-    """Handle the creation of a new post for a specific profile"""
+    """Handle the creation of a new post for the logged-in user's profile"""
 
     # Form class for post creation - handles caption input
     form_class = CreatePostForm
@@ -72,15 +72,15 @@ class CreatePostView(LoginRequiredMixinMiniInsta, CreateView):
 
     def get_success_url(self):
         """Provide a URL to redirect to after creating a new Post"""
-        post_pk = self.object.pk  # Primary key of the profile from URL
+        post_pk = self.object.pk  # Primary key of the created post
         return reverse('show_post', kwargs={'pk': post_pk})
 
     def get_context_data(self, **kwargs):
         """Add profile to context for template rendering"""
         context = super().get_context_data(**kwargs)
 
-        # Fetch the Profile object using the pk from URL kwargs
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        # Get the profile of the logged-in user
+        profile = self.get_logged_in_profile()
         context['profile'] = profile
         return context
     
@@ -91,8 +91,8 @@ class CreatePostView(LoginRequiredMixinMiniInsta, CreateView):
         for any uploaded image files.
         """
         
-        # Get the profile from URL parameter to associate with this post
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        # Get the profile of the logged-in user to associate with this post
+        profile = self.get_logged_in_profile()
         form.instance.profile = profile
 
         result = super().form_valid(form)
@@ -109,13 +109,17 @@ class CreatePostView(LoginRequiredMixinMiniInsta, CreateView):
         return result
 
 class UpdateProfileView(LoginRequiredMixinMiniInsta, UpdateView):
-    """Handle updating profile information for an existing user profile"""
+    """Handle updating profile information for the logged-in user's profile"""
 
     model = Profile
 
     form_class = UpdateProfileForm
 
     template_name = "mini_insta/update_profile_form.html"
+
+    def get_object(self, queryset=None):
+        """Return the Profile object for the logged-in user"""
+        return Profile.objects.get(user=self.request.user)
 
 class DeletePostView(LoginRequiredMixinMiniInsta, DeleteView):
     """Handle deletion of a specific post.
@@ -178,9 +182,9 @@ class ShowFollowingDetailView(DetailView):
     context_object_name = "profile"
 
 class PostFeedListView(LoginRequiredMixinMiniInsta, DetailView):
-    """Display the post feed for a specific profile.
+    """Display the post feed for the logged-in user's profile.
     
-    Shows all posts from profiles that the given profile follows,
+    Shows all posts from profiles that the logged-in user follows,
     including post details, photos, likes, and comments.
     """
     
@@ -189,6 +193,10 @@ class PostFeedListView(LoginRequiredMixinMiniInsta, DetailView):
     template_name = "mini_insta/show_feed.html"
     
     context_object_name = "profile"
+    
+    def get_object(self, queryset=None):
+        """Return the Profile object for the logged-in user"""
+        return Profile.objects.get(user=self.request.user)
     
     def get_context_data(self, **kwargs):
         """Add the post feed to the template context.
@@ -221,8 +229,8 @@ class SearchView(LoginRequiredMixinMiniInsta, ListView):
         """Handle GET requests; show search form or process search results"""
 
         if 'search_query' not in request.GET:
-            profile_pk = kwargs.get('pk')
-            profile = Profile.objects.get(pk=profile_pk)
+            # Get the profile of the logged-in user
+            profile = Profile.objects.get(user=request.user)
             return render(request, "mini_insta/search.html", {'profile': profile})
 
         return super().get(request, *args, **kwargs)
@@ -246,9 +254,8 @@ class SearchView(LoginRequiredMixinMiniInsta, ListView):
         Includes the profile, search query, post results, and profile results"""
         context = super().get_context_data(**kwargs)
 
-        # Add the profile for whom we are doing this search
-        profile_pk = self.kwargs.get('pk')
-        profile = Profile.objects.get(pk=profile_pk)
+        # Add the profile of the logged-in user
+        profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile
 
         # Add the search query if present

@@ -20,7 +20,7 @@ Description: Template for displaying detailed information about a single user pr
         <!-- Update profile button for profile management - only shown to the profile owner -->
         {% if request.user.is_authenticated and profile.user == request.user %}
             <div class="form-actions">
-                <a href="{% url 'update_profile' pk=profile.pk %}" class="submit-btn">Update Profile</a>
+                <a href="{% url 'update_profile' %}" class="submit-btn">Update Profile</a>
             </div>
         {% endif %}
         
