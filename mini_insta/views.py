@@ -9,6 +9,24 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
 from .forms import *
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class LoginRequiredMixinMiniInsta(LoginRequiredMixin):
+
+    redirect_field_name = "next"
+
+    def get_login_url(self):
+        return reverse("login")
+
+    def get_logged_in_profile(self):
+        """Return the Profile associated with the authenticated user, if any."""
+        if self.request.user.is_authenticated:
+            try:
+                return Profile.objects.get(user=self.request.user)
+            except Profile.DoesNotExist:
+                return None
+        return None
 
 # Create your views here.
 
@@ -43,7 +61,7 @@ class PostDetailView(DetailView):
     
     context_object_name = "post"
 
-class CreatePostView(CreateView):
+class CreatePostView(LoginRequiredMixinMiniInsta, CreateView):
     """Handle the creation of a new post for a specific profile"""
 
     # Form class for post creation - handles caption input
@@ -90,7 +108,7 @@ class CreatePostView(CreateView):
 
         return result
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixinMiniInsta, UpdateView):
     """Handle updating profile information for an existing user profile"""
 
     model = Profile
@@ -99,7 +117,7 @@ class UpdateProfileView(UpdateView):
 
     template_name = "mini_insta/update_profile_form.html"
 
-class DeletePostView(DeleteView):
+class DeletePostView(LoginRequiredMixinMiniInsta, DeleteView):
     """Handle deletion of a specific post.
     
     Provides confirmation page and handles the actual deletion of posts
@@ -134,7 +152,7 @@ class DeletePostView(DeleteView):
         profile_pk = self.object.profile.pk  
         return reverse('show_profile', kwargs={'pk': profile_pk})
     
-class UpdatePostView(UpdateView):
+class UpdatePostView(LoginRequiredMixinMiniInsta, UpdateView):
     """Handle updating caption text for an existing post.    """
 
     model = Post
@@ -159,7 +177,7 @@ class ShowFollowingDetailView(DetailView):
     
     context_object_name = "profile"
 
-class PostFeedListView(DetailView):
+class PostFeedListView(LoginRequiredMixinMiniInsta, DetailView):
     """Display the post feed for a specific profile.
     
     Shows all posts from profiles that the given profile follows,
@@ -189,7 +207,7 @@ class PostFeedListView(DetailView):
         context['post_feed'] = post_feed
         return context
 
-class SearchView(ListView):
+class SearchView(LoginRequiredMixinMiniInsta, ListView):
     """Search view to find profiles and posts based on text query
     
     Displays search form when no query is present, and search results
@@ -199,19 +217,15 @@ class SearchView(ListView):
     template_name = "mini_insta/search_results.html"
     context_object_name = "post_query_result"
 
-    def dispatch(self, request, *args, **kwargs):
-        """Handle request dispatching; show search form or process search results"""
-        
-        # Check if search query is present in GET parameters
+    def get(self, request, *args, **kwargs):
+        """Handle GET requests; show search form or process search results"""
+
         if 'search_query' not in request.GET:
-            # Get the profile from URL parameter for template context
             profile_pk = kwargs.get('pk')
             profile = Profile.objects.get(pk=profile_pk)
-            
             return render(request, "mini_insta/search.html", {'profile': profile})
-        else:
-            # Search query is present, proceed with normal ListView processing
-            return super().dispatch(request, *args, **kwargs)
+
+        return super().get(request, *args, **kwargs)
     
     def get_queryset(self):
         """Return a QuerySet of Posts that match the search query"""

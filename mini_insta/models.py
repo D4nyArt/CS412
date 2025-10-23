@@ -6,6 +6,7 @@
 
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -15,6 +16,9 @@ class Profile(models.Model):
     Encapsulates all user profile data including username, display name,
     profile image, bio text, and join date information.
     """
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     username = models.TextField(blank=True) 
     
     display_name = models.TextField(blank=True)

@@ -14,18 +14,32 @@ Description: Base template for the Mini Instagram application.
     </head>
     <body>       
         <!-- Main content block that will be replaced by child templates -->
+        <h1>Logged in as : {{request.user}}</h1>
         {% block content %}
         {% endblock %}
         
         <!-- Navbar with navigation links -->
         <nav class="navbar">
             {% if profile %}
-                <a href="{% url 'show_feed' pk=profile.pk %}">Home (Profile feed)</a>
-                <a href="{% url 'search' pk=profile.pk %}">Search</a>
-                <a href="{% url 'create_post' pk=profile.pk %}">Create Post for this Profile</a>
+                <!-- Links only available to the user who owns this profile -->
+                {% if request.user.is_authenticated and profile.user == request.user %}
+                    <a href="{% url 'show_feed' pk=profile.pk %}">Home (Profile feed)</a>
+                    <a href="{% url 'search' pk=profile.pk %}">Search</a>
+                    <a href="{% url 'create_post' pk=profile.pk %}">Create Post for this Profile</a>
+                {% endif %}
                 <a href="{% url 'show_profile' pk=profile.pk %}">Back to profile</a>
             {% else %}
                 <a href="{% url 'show_all_profiles' %}">Home (All profiles)</a>
+            {% endif %}
+            
+            <!-- Authentication links -->
+            {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
             {% endif %}
         </nav>
     </body>

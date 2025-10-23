@@ -15,11 +15,13 @@ Description: Template for displaying detailed information about a single post.
         <div class="post-timestamp">on {{ post.timestamp|date:"F d, Y g:i A" }}</div>
     </div>
     
-    <!-- Action buttons for post management -->
-    <div class="form-actions">
-        <a href="{% url 'update_post' pk=post.pk %}" class="submit-btn">Update Post</a> 
-        <a href="{% url 'delete_post' pk=post.pk %}" class="submit-btn">Delete Post</a>
-    </div>
+    <!-- Action buttons for post management - only shown to the post owner -->
+    {% if request.user.is_authenticated and post.profile.user == request.user %}
+        <div class="form-actions">
+            <a href="{% url 'update_post' pk=post.pk %}" class="submit-btn">Update Post</a> 
+            <a href="{% url 'delete_post' pk=post.pk %}" class="submit-btn">Delete Post</a>
+        </div>
+    {% endif %}
 
     <br>
     

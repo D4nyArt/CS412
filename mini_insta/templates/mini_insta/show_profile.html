@@ -17,10 +17,12 @@ Description: Template for displaying detailed information about a single user pr
             <div class="profile-display-name">{{ profile.display_name }}</div>
         </div>
         
-        <!-- Update profile button for profile management -->
-        <div class="form-actions">
-            <a href="{% url 'update_profile' pk=profile.pk %}" class="submit-btn">Update Profile</a>
-        </div>
+        <!-- Update profile button for profile management - only shown to the profile owner -->
+        {% if request.user.is_authenticated and profile.user == request.user %}
+            <div class="form-actions">
+                <a href="{% url 'update_profile' pk=profile.pk %}" class="submit-btn">Update Profile</a>
+            </div>
+        {% endif %}
         
         <div class="profile-info">
             <h3>About</h3>

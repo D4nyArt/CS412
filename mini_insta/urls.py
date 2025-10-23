@@ -7,6 +7,8 @@
 from django.urls import path
 from .views import *
 
+from django.contrib.auth import views as auth_views
+
 # URL patterns for the mini_insta application
 urlpatterns = [
     
@@ -41,4 +43,7 @@ urlpatterns = [
 
     path(r'profile/<int:pk>/search', SearchView.as_view(), name="search"),
 
+    #Auth
+    path(r'login/', auth_views.LoginView.as_view(template_name='mini_insta/login.html'), name="login"),
+    path(r'logout/', auth_views.LogoutView.as_view(next_page='show_all_profiles'), name="logout")
 ]
