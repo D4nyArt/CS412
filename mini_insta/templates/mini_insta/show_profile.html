@@ -16,11 +16,22 @@ Description: Template for displaying detailed information about a single user pr
             <div class="profile-username">@{{ profile.username }}</div>
             <div class="profile-display-name">{{ profile.display_name }}</div>
         </div>
-        
-        <!-- Update profile button for profile management - only shown to the profile owner -->
+
+        <!-- Update profile button for profile management, only shown to the profile owner -->
         {% if request.user.is_authenticated and profile.user == request.user %}
             <div class="form-actions">
                 <a href="{% url 'update_profile' %}" class="submit-btn">Update Profile</a>
+            </div>
+        {% endif %}
+                
+        <!-- Update profile button for profile managementm, only shown to the profile owner -->
+        {% if request.user.is_authenticated and profile.user != request.user %}
+            <div class="form-actions">
+                {% if is_following %}
+                    <a href="{% url 'delete_follow_profile' pk=profile.pk %}" class="submit-btn">Unfollow</a>
+                {% else %}
+                    <a href="{% url 'follow_profile' pk=profile.pk %}" class="submit-btn">Follow</a>
+                {% endif %}
             </div>
         {% endif %}
         

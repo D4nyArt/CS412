@@ -56,6 +56,16 @@ Description: Template for displaying detailed information about a single post.
                 comments
             {% endif %}
         </div>
+
+        {% if request.user.is_authenticated and post.profile.user != request.user %}
+            <div class="form-actions">
+                {% if is_liking %}
+                    <a href="{% url 'delete_like_post' pk=post.pk %}" class="submit-btn">Dislike</a>
+                {% else %}
+                    <a href="{% url 'like_post' pk=post.pk %}" class="submit-btn">Like</a>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
                 
     <!-- Show recent comments if any exist -->

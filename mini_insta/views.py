@@ -12,6 +12,7 @@ from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
+from django.shortcuts import render, redirect
 
 
 class LoginRequiredMixinMiniInsta(LoginRequiredMixin):
@@ -53,7 +54,26 @@ class ProfileDetailView(DetailView):
     template_name = "mini_insta/show_profile.html"
     
     context_object_name = "profile"
-
+    
+    def get_context_data(self, **kwargs):
+        """Add follow status to context"""
+        context = super().get_context_data(**kwargs)
+        
+        # Check if user is authenticated
+        if self.request.user.is_authenticated:
+            logged_in_profile = Profile.objects.get(user=self.request.user)
+            profile_being_viewed = self.object        
+            
+            # Check if logged-in user follows this profile
+            is_following = Follow.objects.filter(
+                follower_profile=logged_in_profile,
+                profile=profile_being_viewed
+            ).exists()
+            
+            context['is_following'] = is_following
+            context['logged_in_profile'] = logged_in_profile
+        
+        return context
 class PostDetailView(DetailView):
     """Display detailed information for a single Post"""
 
@@ -63,6 +83,25 @@ class PostDetailView(DetailView):
     
     context_object_name = "post"
 
+    def get_context_data(self, **kwargs):
+        """Add follow status to context"""
+        context = super().get_context_data(**kwargs)
+        
+        # Check if user is authenticated
+        if self.request.user.is_authenticated:
+            logged_in_profile = Profile.objects.get(user=self.request.user)
+            post_being_viewed = self.object        
+            
+            # Check if logged-in user follows this profile
+            is_liking = Like.objects.filter(
+                post=post_being_viewed,
+                profile=logged_in_profile
+            ).exists()
+            
+            context['is_liking'] = is_liking
+            context['logged_in_profile'] = logged_in_profile
+        
+        return context
 class CreatePostView(LoginRequiredMixinMiniInsta, CreateView):
     """Handle the creation of a new post for the logged-in user's profile"""
 
@@ -321,3 +360,102 @@ class CreateProfileView(CreateView):
         else:
             return self.form_invalid(form)
     
+class FollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
+    """Handle following a profile"""
+    
+    def dispatch(self, request, *args, **kwargs):
+        """Create a Follow relationship and redirect back to the profile"""
+        
+        # Get the profile to follow (from URL parameter)
+        profile_to_follow = Profile.objects.get(pk=kwargs['pk'])
+        
+        # Get the logged-in user's profile
+        logged_in_profile = self.get_logged_in_profile()
+        
+        # Don't allow following yourself
+        # Prevent manually type /profile/5/follow even if they are profile 5
+        if logged_in_profile != profile_to_follow:
+            # Check if already following
+            if not Follow.objects.filter(
+                follower_profile=logged_in_profile,
+                profile=profile_to_follow
+            ).exists():
+                # Create the Follow relationship
+                Follow.objects.create(
+                    follower_profile=logged_in_profile,
+                    profile=profile_to_follow
+                )
+        
+        # Redirect back to the profile page
+        return redirect('show_profile', pk=profile_to_follow.pk)
+
+class DeleteFollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
+    """Handle unfollowing a profile"""
+    
+    def dispatch(self, request, *args, **kwargs):
+        """Delete the Follow relationship and redirect back to the profile"""
+        
+        # Get the profile to unfollow (from URL parameter)
+        profile_to_unfollow = Profile.objects.get(pk=kwargs['pk'])
+        
+        # Get the logged-in user's profile
+        logged_in_profile = self.get_logged_in_profile()
+        
+        # Find and delete the Follow relationship if it exists
+        Follow.objects.filter(
+            follower_profile=logged_in_profile,
+            profile=profile_to_unfollow
+        ).delete()
+        
+        # Redirect back to the profile page
+        return redirect('show_profile', pk=profile_to_unfollow.pk)
+
+class LikePost(LoginRequiredMixinMiniInsta, TemplateView):
+    """Handle liking a post"""
+
+    def dispatch(self, request, *args, **kwargs):
+        """Create a Like relationship and redirect back to the post"""
+        
+        # Get the post to like (from URL parameter)
+        post_to_like = Post.objects.get(pk=kwargs['pk'])
+        
+        # Get the logged-in user's profile
+        logged_in_profile = self.get_logged_in_profile()
+        
+        # Don't allow liking your own post
+        if logged_in_profile != post_to_like.profile:
+            # Check if already liked
+            if not Like.objects.filter(
+                profile=logged_in_profile,
+                post=post_to_like
+            ).exists():
+                # Create the Like relationship
+                Like.objects.create(
+                    profile=logged_in_profile,
+                    post=post_to_like
+                )
+        
+        # Redirect back to the post page
+        return redirect('show_post', pk=post_to_like.pk)
+
+
+class DeleteLikePost(LoginRequiredMixinMiniInsta, TemplateView):
+    def dispatch(self, request, *args, **kwargs):
+        """Deletes a Like relationship and redirect back to the post"""
+        
+        # Get the post to dislike (from URL parameter)
+        post_to_dislike = Post.objects.get(pk=kwargs['pk'])
+        
+        # Get the logged-in user's profile
+        logged_in_profile = self.get_logged_in_profile()
+        
+        Like.objects.filter(
+            profile=logged_in_profile,
+            post=post_to_dislike
+        ).delete()
+        
+        # Redirect back to the post page
+        return redirect('show_post', pk=post_to_dislike.pk)
+
+
+

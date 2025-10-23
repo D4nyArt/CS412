@@ -50,5 +50,11 @@ urlpatterns = [
     path(r'logout/', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name="logout"),
     path(r'logout_confirmation/', LogoutConfirmationView.as_view(), name="logout_confirmation"),
 
-    path(r'create_profile', CreateProfileView.as_view(), name="create_profile")
+    #
+    path(r'create_profile', CreateProfileView.as_view(), name="create_profile"),
+
+    path(r'profile/<int:pk>/follow', FollowProfile.as_view(), name="follow_profile"),
+    path(r'profile/<int:pk>/delete_follow',DeleteFollowProfile.as_view(), name="delete_follow_profile"),
+    path(r'profile/<int:pk>/like', LikePost.as_view(), name="like_post"),
+    path(r'profile/<int:pk>/delete_like', DeleteLikePost.as_view(), name="delete_like_post"),
 ]
