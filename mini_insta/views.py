@@ -6,7 +6,7 @@
 
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Profile, Post, Photo
 from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -278,3 +278,8 @@ class SearchView(LoginRequiredMixinMiniInsta, ListView):
             context['profile_query_results'] = Profile.objects.none()
     
         return context
+
+class LogoutConfirmationView(TemplateView):
+    """Display logout confirmation page"""
+    
+    template_name = "mini_insta/logged_out.html"

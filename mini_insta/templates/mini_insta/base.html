@@ -20,25 +20,27 @@ Description: Base template for the Mini Instagram application.
         
         <!-- Navbar with navigation links -->
         <nav class="navbar">
-            {% if profile %}
-                <!-- Links only available to the user who owns this profile -->
-                {% if request.user.is_authenticated and profile.user == request.user %}
-                    <a href="{% url 'show_feed' %}">Home (Profile feed)</a>
-                    <a href="{% url 'search' %}">Search</a>
-                    <a href="{% url 'create_post' %}">Create Post for this Profile</a>
-                {% endif %}
-                <a href="{% url 'show_profile' pk=profile.pk %}">Back to profile</a>
-            {% else %}
-                <a href="{% url 'show_all_profiles' %}">Home (All profiles)</a>
-            {% endif %}
+            <!-- Always show link to all profiles -->
+            <a href="{% url 'show_all_profiles' %}">Home (All profiles)</a>
             
-            <!-- Authentication links -->
             {% if request.user.is_authenticated %}
-                <form method="post" action="{% url 'logout' %}">
+                <!-- Links for authenticated users -->
+                <!-- Get the first profile associated with this user -->
+                {% with user_profile=request.user.profile_set.first %}
+                    {% if user_profile %}
+                        <a href="{% url 'show_profile' pk=user_profile.pk %}">My Profile</a>
+                        <a href="{% url 'show_feed' %}">My Feed</a>
+                        <a href="{% url 'search' %}">Search</a>
+                        <a href="{% url 'create_post' %}">Create Post</a>
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit">Logout</button>
                 </form>
             {% else %}
+                <!-- Link for non-authenticated users -->
                 <a href="{% url 'login' %}">Login</a>
             {% endif %}
         </nav>
