@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 
-
+# Personalized subclass that auth required views extend from
 class LoginRequiredMixinMiniInsta(LoginRequiredMixin):
 
     redirect_field_name = "next"
@@ -31,8 +31,7 @@ class LoginRequiredMixinMiniInsta(LoginRequiredMixin):
                 return None
         return None
 
-# Create your views here.
-
+# Views
 class ProfileListView(ListView):
     """Display a list of all user profiles showing username, 
     display name, and profile image for each user"""
@@ -159,7 +158,7 @@ class UpdateProfileView(LoginRequiredMixinMiniInsta, UpdateView):
     template_name = "mini_insta/update_profile_form.html"
 
     def get_object(self, queryset=None):
-        """Return the Profile object for the logged-in user"""
+        """Return the Profile object for the logged in user"""
         return Profile.objects.get(user=self.request.user)
 
 class DeletePostView(LoginRequiredMixinMiniInsta, DeleteView):
@@ -236,7 +235,7 @@ class PostFeedListView(LoginRequiredMixinMiniInsta, DetailView):
     context_object_name = "profile"
     
     def get_object(self, queryset=None):
-        """Return the Profile object for the logged-in user"""
+        """Return the Profile object for the logged in user"""
         return Profile.objects.get(user=self.request.user)
     
     def get_context_data(self, **kwargs):
@@ -267,7 +266,7 @@ class SearchView(LoginRequiredMixinMiniInsta, ListView):
     context_object_name = "post_query_result"
 
     def get(self, request, *args, **kwargs):
-        """Handle GET requests; show search form or process search results"""
+        """Handle GET requests, show search form or process search results"""
 
         if 'search_query' not in request.GET:
             # Get the profile of the logged-in user
@@ -294,23 +293,25 @@ class SearchView(LoginRequiredMixinMiniInsta, ListView):
         """Add search related data to template context
         Includes the profile, search query, post results, and profile results"""
         context = super().get_context_data(**kwargs)
-
+    
         # Add the profile of the logged-in user
         profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile
-
+    
         # Add the search query if present
         search_query = self.request.GET.get('search_query', '')
-
+    
         if search_query:
             context['search_query'] = search_query
-            context['post_query_result'] = self.get_queryset()
             
-            # Search for profiles whose username, display_name or bio_text contains the search query
-            profiles_query1 = Profile.objects.filter(username__icontains=search_query)
-            profiles_query2 = Profile.objects.filter(display_name__icontains=search_query) 
-            profiles_query3 = Profile.objects.filter(bio_text__icontains=search_query)
+            # Exclude posts from the logged-in user's profile
+            context['post_query_result'] = self.get_queryset().exclude(profile=profile)
             
+            # Search for profiles whose username, display_name or bio_text contains the search query, exclude login profile
+            profiles_query1 = Profile.objects.filter(username__icontains=search_query).exclude(pk=profile.pk)
+            profiles_query2 = Profile.objects.filter(display_name__icontains=search_query).exclude(pk=profile.pk)
+            profiles_query3 = Profile.objects.filter(bio_text__icontains=search_query).exclude(pk=profile.pk)
+        
             # Union removes duplicates automatically
             context['profile_query_results'] = profiles_query1.union(profiles_query2, profiles_query3)
         else:
@@ -341,9 +342,7 @@ class CreateProfileView(CreateView):
         Creates a new User from UserCreationForm, logs them in,
         and associates the User with the new Profile
         """
-
-        print(self.request.POST)
-        
+                
         # Reconstruct the UserCreationForm instance from POST data
         user_form = UserCreationForm(self.request.POST)
         
@@ -361,7 +360,6 @@ class CreateProfileView(CreateView):
             return self.form_invalid(form)
     
 class FollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
-    """Handle following a profile"""
     
     def dispatch(self, request, *args, **kwargs):
         """Create a Follow relationship and redirect back to the profile"""
@@ -369,7 +367,7 @@ class FollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
         # Get the profile to follow (from URL parameter)
         profile_to_follow = Profile.objects.get(pk=kwargs['pk'])
         
-        # Get the logged-in user's profile
+        # Get the logged in user's profile
         logged_in_profile = self.get_logged_in_profile()
         
         # Don't allow following yourself
@@ -390,7 +388,6 @@ class FollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
         return redirect('show_profile', pk=profile_to_follow.pk)
 
 class DeleteFollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
-    """Handle unfollowing a profile"""
     
     def dispatch(self, request, *args, **kwargs):
         """Delete the Follow relationship and redirect back to the profile"""
@@ -411,15 +408,12 @@ class DeleteFollowProfile(LoginRequiredMixinMiniInsta, TemplateView):
         return redirect('show_profile', pk=profile_to_unfollow.pk)
 
 class LikePost(LoginRequiredMixinMiniInsta, TemplateView):
-    """Handle liking a post"""
 
     def dispatch(self, request, *args, **kwargs):
         """Create a Like relationship and redirect back to the post"""
         
-        # Get the post to like (from URL parameter)
         post_to_like = Post.objects.get(pk=kwargs['pk'])
         
-        # Get the logged-in user's profile
         logged_in_profile = self.get_logged_in_profile()
         
         # Don't allow liking your own post
@@ -440,13 +434,12 @@ class LikePost(LoginRequiredMixinMiniInsta, TemplateView):
 
 
 class DeleteLikePost(LoginRequiredMixinMiniInsta, TemplateView):
+
     def dispatch(self, request, *args, **kwargs):
         """Deletes a Like relationship and redirect back to the post"""
         
-        # Get the post to dislike (from URL parameter)
         post_to_dislike = Post.objects.get(pk=kwargs['pk'])
         
-        # Get the logged-in user's profile
         logged_in_profile = self.get_logged_in_profile()
         
         Like.objects.filter(
@@ -454,7 +447,6 @@ class DeleteLikePost(LoginRequiredMixinMiniInsta, TemplateView):
             post=post_to_dislike
         ).delete()
         
-        # Redirect back to the post page
         return redirect('show_post', pk=post_to_dislike.pk)
 
 

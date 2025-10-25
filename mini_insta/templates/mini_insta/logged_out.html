@@ -2,8 +2,7 @@
 File: logged_out.html
 Author: Daniel Arteaga (d4nyart@bu.edu), 10/23/2025
 Description: Template for logout confirmation page.
-             Displays a message confirming successful logout and provides
-             a link to log in again.
+             Displays a message confirming successful logout
 -->
 {% extends 'mini_insta/base.html' %}
 
@@ -15,9 +14,5 @@ Description: Template for logout confirmation page.
         <p>Thank you for using Mini Insta. You have been successfully logged out.</p>
     </div>
     
-    <div class="form-actions">
-        <a href="{% url 'login' %}" class="submit-btn">Log In Again</a>
-        <a href="{% url 'show_all_profiles' %}" class="submit-btn">Browse Profiles</a>
-    </div>
 </div>
 {% endblock %}
