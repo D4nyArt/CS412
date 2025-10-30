@@ -10,7 +10,8 @@ urlpatterns = [
     # Application URL
     path("quotes/", include("quotes.urls")),          
     path("restaurant/", include("restaurant.urls")),  
-    path("mini_insta/", include("mini_insta.urls")),  
+    path("mini_insta/", include("mini_insta.urls")),
+    path("voter_analytics/", include("voter_analytics.urls")),  
 ]
 
 # Serve static files (CSS, JavaScript, images) 

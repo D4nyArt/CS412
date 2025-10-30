@@ -1,0 +1,57 @@
+<!--
+File: show_voter.html
+# Author: Daniel Arteaga Mercado (d4nyart@bu.edu), 10/30/2025
+Description: Displays detailed information for a single voter including
+personal information, address with Google Maps link, and complete voting
+history across all tracked elections.
+-->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h1 class="card-title voter-detail-header">
+            {{ voter.first_name }} {{ voter.last_name }}
+        </h1>
+        
+        <div class="voter-section">
+            <h2 class="voter-section-title">Personal Information</h2>
+            <p><strong>Voter ID:</strong> {{ voter.voter_id }}</p>
+            <p><strong>Name:</strong> {{ voter.first_name }} {{ voter.last_name }}</p>
+            <p><strong>Date of birth:</strong> {{ voter.date_birth }}</p>
+            <p><strong>Registration date:</strong> {{ voter.date_registration }}</p>
+            <p><strong>Party affiliation:</strong> {{ voter.party }}</p>
+            <p><strong>Voter score:</strong> {{ voter.voter_score }}</p>
+        </div>
+        
+        <div class="voter-section">
+            <h2 class="voter-section-title">Address</h2>
+            <p><strong>Street:</strong> {{ voter.street_num }} {{ voter.street_name }} {{voter.apt_num }}, Apt {{ voter.apt_num }}</p>
+            <p><strong>Zip code:</strong> {{ voter.zip_code }}</p>
+            <p><strong>Precinct:</strong> {{ voter.precinct_num }}</p>
+            
+            <p>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ voter.street_num }}+{{ voter.street_name }}+Newton+MA+{{ voter.zip_code }}" 
+                   target="_blank" 
+                   class="map-button">
+                    View address on Google Maps
+                </a>
+            </p>
+        </div>
+        
+        <div class="voter-section">
+            <h2 class="voter-section-title">Voting history</h2>
+            <p><strong>v20state:</strong> {{voter.v20state}}</p>
+            <p><strong>v21town:</strong> {{voter.v21town}}</p>
+            <p><strong>v21primary:</strong> {{voter.v21primary}}</p>
+            <p><strong>v22general:</strong> {{voter.v22general}}</p>
+            <p><strong>v23town:</strong> {{voter.v23town}}</p>
+        </div>
+        
+        <a href="{% url 'voters' %}" class="back-link">
+        Back to Voter List
+        </a>
+    </div>
+</div>
+{% endblock %}

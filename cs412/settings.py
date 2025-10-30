@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "quotes",
     "restaurant",
     "mini_insta",
-    "django_cleanup.apps.CleanupConfig"
+    "voter_analytics",
+    #"django_cleanup.apps.CleanupConfig"
 ]
 
 MIDDLEWARE = [

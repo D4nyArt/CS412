@@ -1,0 +1,104 @@
+<!--
+File: graphs.html
+# Author: Daniel Arteaga Mercado (d4nyart@bu.edu), 10/30/2025
+Description: Displays three interactive Plotly visualizations: party
+distribution pie chart, birth year distribution bar chart, and election
+participation histogram. Includes filtering form to refine data displayed.
+-->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+<div>
+    <!-- Filter form -->
+    <div class="card filter-card">
+        <h2 class="card-title">Filter voters</h2>
+        <form method="GET" action="{% url 'graphs' %}">
+            <div class="filter-grid">
+                <!-- Party Affiliation -->
+                <div>
+                    <label for="party">Party affiliation:</label>
+                    <select name="party" id="party" class="filter-select">
+                        <option value="">All parties</option>
+                        {% for party in parties %}
+                            <option value="{{ party }}" {% if selected_party == party %}selected{% endif %}>{{ party }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Voter Score -->
+                <div>
+                    <label for="voter_score">Voter score:</label>
+                    <select name="voter_score" id="voter_score" class="filter-select">
+                        <option value="">All scores</option>
+                        {% for score in voter_scores %}
+                            <option value="{{ score }}" {% if selected_voter_score == score|stringformat:"s" %}selected{% endif %}>{{ score }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Minimum Birth Year -->
+                <div>
+                    <label for="min_birth_year">Minimum birth year:</label>
+                    <select name="min_birth_year" id="min_birth_year" class="filter-select">
+                        <option value="">No minimum</option>
+                        {% for year in birth_years %}
+                            <option value="{{ year }}" {% if selected_min_birth_year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Maximum Birth Year -->
+                <div>
+                    <label for="max_birth_year">Maximum birth year:</label>
+                    <select name="max_birth_year" id="max_birth_year" class="filter-select">
+                        <option value="">No maximum</option>
+                        {% for year in birth_years %}
+                            <option value="{{ year }}" {% if selected_max_birth_year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Election Participation Checkboxes -->
+            <div class="election-checkboxes">
+                <label>Voted in Elections:</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v20state" value="true" {% if selected_v20state == 'true' %}checked{% endif %}>
+                        v20state
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v21town" value="true" {% if selected_v21town == 'true' %}checked{% endif %}>
+                        v21town
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v21primary" value="true" {% if selected_v21primary == 'true' %}checked{% endif %}>
+                        v21primary
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v22general" value="true" {% if selected_v22general == 'true' %}checked{% endif %}>
+                        v22general
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v23town" value="true" {% if selected_v23town == 'true' %}checked{% endif %}>
+                        v23town
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Submit and Reset Buttons -->
+            <div class="button-group">
+                <input type="submit" value="Apply filters">
+                <a href="{% url 'graphs' %}" class="btn-secondary">Clear filters</a>
+            </div>
+        </form>
+    </div>
+    <!-- Plotly charts: birth year distribution, party distribution, election participation -->
+    <div class="row">
+        {{graph_distribution_div_splits|safe}}
+        {{graph_pie_div_splits|safe}}
+        {{graph_histogram_div_splits|safe}}
+    </div>
+</div>
+{% endblock %}

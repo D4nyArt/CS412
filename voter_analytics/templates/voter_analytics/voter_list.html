@@ -1,0 +1,146 @@
+
+
+<!--
+File: voter_list.html
+# Author: Daniel Arteaga Mercado (d4nyart@bu.edu), 10/30/2025
+Description: Displays paginated list of voters with filtering form.
+Allows filtering by party, voter score, birth year range, and election
+participation. Shows 100 voters per page.
+-->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Filter form -->
+    <div class="card filter-card">
+        <h2 class="card-title">Filter voters</h2>
+        <form method="GET" action="{% url 'voters' %}">
+            <div class="filter-grid">
+                <!-- Party Affiliation -->
+                <div>
+                    <label for="party">Party affiliation:</label>
+                    <select name="party" id="party" class="filter-select">
+                        <option value="">All parties</option>
+                        {% for party in parties %}
+                            <option value="{{ party }}" {% if selected_party == party %}selected{% endif %}>{{ party }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Voter Score -->
+                <div>
+                    <label for="voter_score">Voter score:</label>
+                    <select name="voter_score" id="voter_score" class="filter-select">
+                        <option value="">All scores</option>
+                        {% for score in voter_scores %}
+                            <option value="{{ score }}" {% if selected_voter_score == score|stringformat:"s" %}selected{% endif %}>{{ score }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Minimum Birth Year -->
+                <div>
+                    <label for="min_birth_year">Minimum birth year:</label>
+                    <select name="min_birth_year" id="min_birth_year" class="filter-select">
+                        <option value="">No minimum</option>
+                        {% for year in birth_years %}
+                            <option value="{{ year }}" {% if selected_min_birth_year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Maximum Birth Year -->
+                <div>
+                    <label for="max_birth_year">Maximum birth year:</label>
+                    <select name="max_birth_year" id="max_birth_year" class="filter-select">
+                        <option value="">No maximum</option>
+                        {% for year in birth_years %}
+                            <option value="{{ year }}" {% if selected_max_birth_year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Election Participation Checkboxes -->
+            <div class="election-checkboxes">
+                <label>Voted in elections:</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v20state" value="true" {% if selected_v20state == 'true' %}checked{% endif %}>
+                        v20state
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v21town" value="true" {% if selected_v21town == 'true' %}checked{% endif %}>
+                        v21town
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v21primary" value="true" {% if selected_v21primary == 'true' %}checked{% endif %}>
+                        v21primary
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v22general" value="true" {% if selected_v22general == 'true' %}checked{% endif %}>
+                        v22general
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="v23town" value="true" {% if selected_v23town == 'true' %}checked{% endif %}>
+                        v23town
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Submit and Reset Buttons -->
+            <div class="button-group">
+                <input type="submit" value="Apply filters">
+                <a href="{% url 'voters' %}" class="btn-secondary">Clear filters</a>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Voter results with pagination -->
+    <div class="card">
+        <h2 class="card-title">Voter results</h2>
+        <p class="results-summary">
+            <strong>{{ voter_count }}</strong> voter(s) matched the query
+        </p>
+        
+        <!-- Pagination controls -->
+        {% if is_paginated %}
+        <div class="pagination-wrapper">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                <li class="pagination-text">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </li>
+                {% if page_obj.has_next %}
+                    <li>
+                        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- List of voter cards -->
+        <div class="voter-list">
+            {% for voter in voters %}
+                <div class="voter-item">
+                    <a href="{% url 'show_voter' pk=voter.pk %}" class="voter-name">
+                        {{ voter.first_name }} {{ voter.last_name }}
+                    </a>
+                    <div class="voter-details">
+                        {{ voter.street_num }} {{ voter.street_name }} | 
+                        Born: {{ voter.date_birth }} | 
+                        Party: {{ voter.party }} | 
+                        Score: {{ voter.voter_score }}
+                    </div>
+                </div>  
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

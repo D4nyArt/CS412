@@ -268,12 +268,6 @@ input[type="submit"] {
     align-self: flex-start;
 }
 
-input[type="submit"]:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(37,99,235,0.3);
-}
-
 label {
     display: flex;
     align-items: center;
@@ -286,4 +280,182 @@ input[type="checkbox"] {
     width: 18px;
     height: 18px;
     accent-color: var(--accent);
+}
+
+/* Voter Analytics Styles */
+.filter-card {
+    margin-bottom: 30px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.election-checkboxes {
+    margin-bottom: 20px;
+}
+
+.election-checkboxes > label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 14px 28px;
+    background: var(--muted);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.results-summary {
+    margin-bottom: 20px;
+    color: var(--muted);
+}
+
+.pagination-wrapper {
+    margin-bottom: 20px;
+}
+
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    align-items: center;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.pagination-text {
+    color: var(--muted);
+}
+
+.voter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.voter-item {
+    padding: 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent);
+    transition: all 0.2s ease;
+}
+
+
+.voter-name {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+}
+
+
+.voter-details {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.voter-empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Show Voter Detail Page Styles */
+.voter-detail-header {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.voter-section {
+    margin-bottom: 30px;
+}
+
+.voter-section-title {
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.map-button {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-top: 15px;
+}
+
+
+.voting-status-voted {
+    color: #16a34a;
+}
+
+.voting-status-not-voted {
+    color: var(--muted);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 30px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
 }
