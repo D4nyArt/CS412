@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dad Jokes</title>
+    <style>
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            padding: 5px 10px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 3px;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .joke {
+            background-color: #fff9c4;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .picture {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .picture img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dad Jokes & Pictures</h1>
+        <nav>
+            <a href="{% url 'random_joke_picture' %}">Random</a>
+            <a href="{% url 'all_jokes' %}">All Jokes</a>
+            <a href="{% url 'all_pictures' %}">All Pictures</a>
+        </nav>
+    </header>
+    
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

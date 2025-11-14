@@ -1,0 +1,23 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h2>Random Joke & Picture</h2>
+
+<div class="joke">
+    <h2>{{ joke.text }}</h2>
+    <div class="meta">
+        Contributed by: {{ joke.contributor }}<br>
+        Posted: {{ joke.timestamp|date:"F j, Y, g:i a" }}
+    </div>
+</div>
+
+<div class="picture">
+    <img src="{{ picture.image_url }}" alt="Random picture">
+    <div class="meta">
+        Contributed by: {{ picture.contriubutor }}<br>
+        Posted: {{ picture.timestamp|date:"F j, Y, g:i a" }}
+    </div>
+</div>
+
+<p><a href="{% url 'random' %}">Show another random pair</a></p>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h2>Picture #{{ picture.pk }}</h2>
+
+<div class="picture">
+    <img src="{{ picture.image_url }}" alt="Picture {{ picture.pk }}">
+    <div class="meta">
+        Contributed by: {{ picture.contriubutor }}<br>
+        Posted: {{ picture.timestamp|date:"F j, Y, g:i a" }}
+    </div>
+</div>
+
+<p><a href="{% url 'all_pictures' %}">Back to all pictures</a></p>
+{% endblock %}
