@@ -1,3 +1,9 @@
+
+# File: api_views.py
+# Author: Daniel Arteaga (d4nyart@bu.edu), 11/14/2025
+# Description: Django REST API views for the dadjokes web
+# application, providing endpoints for jokes and pictures.
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,7 +20,7 @@ class RandomJokeAPIView(APIView):
         joke = random.choice(jokes)
         serializer = JokeSerializer(joke)
         return Response(serializer.data)
-    
+
 
 class JokeListCreateAPIView(generics.ListCreateAPIView):
     """API endpoint that allows listing all Jokes and creating new Jokes"""

@@ -1,6 +1,10 @@
-from django.db import models
 
-# Create your models here.
+# File: models.py
+# Author: Daniel Arteaga (d4nyart@bu.edu), 11/14/2025
+# Description: Django models for the dadjokes web application, 
+# including Joke and Picture models.
+
+from django.db import models
 
 class Joke(models.Model):
 
@@ -11,7 +15,7 @@ class Joke(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        """Return string representation of the like"""
+        """Return string representation of the joke"""
         return f"{self.text}"
     
 class Picture(models.Model):
@@ -23,4 +27,5 @@ class Picture(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """Return string representation of the joke"""
         return f"{self.id} image"

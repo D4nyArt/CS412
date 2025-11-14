@@ -1,3 +1,9 @@
+
+# File: serializers.py
+# Author: Daniel Arteaga (d4nyart@bu.edu), 11/14/2025
+# Description: Django REST Framework serializers for the 
+# dadjokes web application.
+
 from rest_framework import serializers
 from .models import Joke, Picture
 

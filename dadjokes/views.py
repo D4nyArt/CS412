@@ -1,3 +1,9 @@
+
+# File: views.py
+# Author: Daniel Arteaga (d4nyart@bu.edu), 11/14/2025
+# Description: Django views for the dadjokes web application, 
+# including joke and picture display logic.
+
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Joke, Picture
