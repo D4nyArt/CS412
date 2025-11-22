@@ -1,0 +1,260 @@
+/* --- Design System Variables --- */
+:root {
+  --bg-color: #F5F7FA;        /* Soft blue-grey background */
+  --card-bg: #FFFFFF;         /* Pure white cards */
+  --primary-color: #2D3436;   /* Dark Charcoal for text */
+  --accent-color: #0984E3;    /* Vibrant Blue for actions */
+  --text-secondary: #636E72;  /* Soft Grey for subtitles */
+  --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.08);
+  --radius: 12px;             /* Smooth rounded corners */
+  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* --- Global Resets --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: var(--font-main);
+  color: var(--primary-color);
+  -webkit-font-smoothing: antialiased; /* Makes text look crisp on Mac */
+}
+
+.app-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* --- Header Section --- */
+.app-header {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+/* --- Control Bar (Search) --- */
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  gap: 15px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 12px 20px;
+  border: 1px solid #dfe6e9;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background-color: var(--card-bg);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-soft);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+}
+
+.count-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: #dfe6e9;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* --- The Grid Layout --- */
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns */
+  gap: 20px;
+}
+
+/* --- The Exercise Card --- */
+.exercise-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.exercise-card:hover {
+  transform: translateY(-3px); /* Subtle lift effect */
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(9, 132, 227, 0.2);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exercise-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+/* --- Muscle Badges (Dynamic Colors) --- */
+.muscle-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+/* Default Badge */
+.muscle-badge {
+  background-color: #f1f2f6;
+  color: #747d8c;
+}
+
+/* Specific Colors for Muscle Groups */
+.badge-chest { background-color: #ffefef; color: #d63031; }
+.badge-back { background-color: #e3f2fd; color: #0984e3; }
+.badge-legs { background-color: #e6fffa; color: #00b894; }
+.badge-shoulders { background-color: #fff8e1; color: #f1c40f; }
+
+/* --- Action Button --- */
+.btn-icon {
+  background: none;
+  border: none;
+  color: #b2bec3;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.exercise-card:hover .btn-icon {
+  color: var(--accent-color);
+}
+
+/* ... Keep your :root and body styles from before ... */
+
+/* New Layout Helpers */
+.app-container {
+  max-width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.content-wrap {
+  max-width: 600px; /* Mobile-focused width */
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 80px; /* Important: Space for the fixed Navbar */
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+/* --- Home Page Styles --- */
+.status-card {
+    background: var(--primary-color); /* Dark background */
+    color: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(45, 52, 54, 0.2);
+    margin-bottom: 30px;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-badge {
+    background: rgba(255,255,255,0.2);
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status-routine {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.stat-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ... Keep your exercise-card and badge styles ... */

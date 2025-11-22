@@ -1,0 +1,42 @@
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Standard mobile nav height */
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px); /* The "Frosted Glass" Apple effect */
+  border-top: 1px solid #e1e4e8;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom); /* iPhone X+ safe area */
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #b2bec3;
+  font-size: 0.7rem;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  transition: color 0.2s ease;
+}
+
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+}
+
+.nav-item.active {
+  color: var(--accent-color); /* Uses the blue from App.css */
+}
+
+.nav-item.disabled {
+    opacity: 0.3;
+}

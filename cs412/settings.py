@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-$=zkdn=_p*qf2dia)@8o8w*a@882a!(g^p24lv)qu7hjm&&q%v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cs-webapps.bu.edu', '127.0.0.1']
+ALLOWED_HOSTS = ['cs-webapps.bu.edu', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     "dadjokes",
     #"django_cleanup.apps.CleanupConfig"
     "rest_framework",
-    'corsheaders',
+    "corsheaders",
+    # Final Project
+    "project"
 ]
 
 MIDDLEWARE = [
