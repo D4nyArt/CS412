@@ -258,3 +258,48 @@ body {
 }
 
 /* ... Keep your exercise-card and badge styles ... */
+
+/* --- Status Card Variants --- */
+
+/* Active Day (Blue Gradient) */
+.status-card.active-day {
+    background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+    color: white;
+}
+
+/* Rest Day (Soft Grey) */
+.status-card.rest-day {
+    background-color: #ffffff;
+    border: 1px solid #dfe6e9;
+    color: var(--primary-color);
+    box-shadow: var(--shadow-soft);
+}
+
+.status-card.rest-day h2 {
+    color: var(--primary-color);
+}
+
+.status-badge.rest {
+    background-color: #e3f2fd;
+    color: #0984e3;
+    font-weight: 600;
+}
+
+/* Button Hover Effect */
+.btn-primary {
+    transition: transform 0.2s, background-color 0.2s;
+}
+.btn-primary:hover {
+    transform: scale(1.02);
+    background-color: #0984e3; /* A slightly brighter blue */
+}
+
+/* Loading State */
+.page-content {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
