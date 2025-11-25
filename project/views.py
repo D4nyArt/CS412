@@ -1,13 +1,13 @@
 from rest_framework.generics import *
 from .models import Exercise
-from .serializers import ExerciseSerializer
+from .serializers import ExerciseSerializer,ScheduleSerializer, RoutineSerializer, RoutineItemSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from django.utils import timezone
 from datetime import timedelta
-from .models import TrainingSchedule, Routine, WorkoutSession
+from .models import TrainingSchedule, Routine, WorkoutSession, RoutineItem
 
 # LIST VIEW: Returns all exercises (JSON)
 class ExerciseList(ListAPIView):
@@ -76,3 +76,48 @@ class DashboardView(APIView):
             },
             "current_django_time": server_time
         })
+    
+
+# List all Schedules or Create a new one
+class ScheduleList(ListCreateAPIView):
+    serializer_class = ScheduleSerializer
+
+    def get_queryset(self):
+        # FIX: Check if user is logged in. 
+        # If yes, filter by their ID. 
+        # If no (React dev mode), return ALL schedules so the UI shows something.
+        if self.request.user.is_authenticated:
+            return TrainingSchedule.objects.filter(user=self.request.user)
+        else:
+            return TrainingSchedule.objects.all() # Return everything for testing
+
+    def perform_create(self, serializer):
+        # FIX: Handle creation for anonymous users (assign to the first admin user found)
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
+        else:
+            # Just for testing: assign to the first user in the DB (your admin)
+            from django.contrib.auth.models import User
+            first_user = User.objects.first()
+            serializer.save(user=first_user)
+
+# Get details of ONE Schedule (with calendar data)
+class ScheduleDetail(RetrieveUpdateDestroyAPIView):
+    serializer_class = ScheduleSerializer
+    
+    def get_queryset(self):
+        # Same fix here
+        if self.request.user.is_authenticated:
+            return TrainingSchedule.objects.filter(user=self.request.user)
+        else:
+            return TrainingSchedule.objects.all()
+
+# Create a Routine inside a Schedule
+class RoutineCreate(CreateAPIView):
+    queryset = Routine.objects.all()
+    serializer_class = RoutineSerializer
+
+# Add an Exercise to a Routine
+class RoutineItemCreate(CreateAPIView):
+    queryset = RoutineItem.objects.all()
+    serializer_class = RoutineItemSerializer
