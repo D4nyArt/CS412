@@ -11,14 +11,16 @@ class RoutineItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = RoutineItem
-        fields = ['id', 'exercise', 'exercise_name', 'target_sets', 'target_reps', 'order']
+        # Add 'routine' to the list for creating at the same time routine and routine items
+        fields = ['id', 'routine', 'exercise', 'exercise_name', 'target_sets', 'target_reps', 'order']
 
 class RoutineSerializer(serializers.ModelSerializer):
     items = RoutineItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Routine
-        fields = ['id', 'name', 'day_of_week', 'items']
+        # Add 'schedule' here so we can send it from React
+        fields = ['id', 'schedule', 'name', 'day_of_week', 'items']
 
 class ScheduleSerializer(serializers.ModelSerializer):
     # This fetches the routines linked to this schedule automatically

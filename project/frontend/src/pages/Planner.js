@@ -3,6 +3,7 @@ import '../App.css';
 
 function Planner() {
   const [schedules, setSchedules] = useState([]);
+  const [exercises, setExercises] = useState([]); // Store available exercises
   const [selectedSchedule, setSelectedSchedule] = useState(null); // If null, show list. If set, show detail.
   const [loading, setLoading] = useState(true);
 
@@ -14,19 +15,38 @@ function Planner() {
     end_date: ''
   });
 
-  // API Fetching
-  const apiUrl = process.env.NODE_ENV === 'development' 
-    ? 'http://127.0.0.1:8000/project/api/schedules/' 
-    : '/project/api/schedules/';
+  // Routine Modal State 
+  const [showRoutineModal, setShowRoutineModal] = useState(false);
+  const [newRoutineData, setNewRoutineData] = useState({
+    name: '',
+    day_of_week: 'Monday'
+  });
 
+  // Staging Area for Exercises inside the Modal
+  const [pendingItems, setPendingItems] = useState([]); // List of exercises added to this routine
+  const [currentItem, setCurrentItem] = useState({
+    exerciseId: '', 
+    sets: 3, 
+    reps: 10
+  });
+
+  // API Fetching
+  const apiBaseUrl = process.env.NODE_ENV === 'development' 
+    ? 'http://127.0.0.1:8000/project/api' 
+    : '/project/api';
+
+  // Fetch Schedules AND Exercises 
   useEffect(() => {
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then(data => {
-        setSchedules(data);
-        setLoading(false);
-      });
-  }, [apiUrl]);
+    // We use Promise.all to fetch both lists at once
+    Promise.all([
+      fetch(`${apiBaseUrl}/schedules/`).then(res => res.json()),
+      fetch(`${apiBaseUrl}/exercises/`).then(res => res.json()) // Fetch exercises
+    ]).then(([schedulesData, exercisesData]) => {
+      setSchedules(schedulesData);
+      setExercises(exercisesData); // Store them for the dropdown
+      setLoading(false);
+    });
+  }, [apiBaseUrl]);
 
   // Handle Form Submit 
   const handleCreateSchedule = (e) => {
@@ -36,7 +56,7 @@ function Planner() {
     const today = new Date().toISOString().split('T')[0];
     const isActive = today >= newScheduleData.start_date && today <= newScheduleData.end_date;
 
-    fetch(apiUrl, {
+    fetch(apiBaseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,6 +80,92 @@ function Planner() {
         setNewScheduleData({ name: '', start_date: '', end_date: '' });
     })
     .catch(err => console.error(err));
+  };
+
+  // Helper to add exercise to the temporary list ---
+  const handleAddToStaging = () => {
+    if (!currentItem.exerciseId) return; // Don't add if empty
+
+    // Find the full exercise object to display the name
+    const exerciseObj = exercises.find(ex => ex.id === parseInt(currentItem.exerciseId));
+
+    const newItem = {
+      ...currentItem,
+      name: exerciseObj.name, // Save name for display
+      tempId: Date.now() // Unique ID for React list key
+    };
+
+    setPendingItems([...pendingItems, newItem]);
+    // Reset the "current item" inputs, but keep sets/reps as convenience
+    setCurrentItem({ ...currentItem, exerciseId: '' }); 
+  };
+
+  // Create Routine AND Items ---
+  const handleCreateRoutine = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // Step 1: Create the Routine
+      const routineRes = await fetch(`${apiBaseUrl}/routines/create/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            schedule: selectedSchedule.id,
+            name: newRoutineData.name,
+            day_of_week: newRoutineData.day_of_week
+        })
+      });
+
+      if (!routineRes.ok) throw new Error("Failed to create routine");
+      const newRoutine = await routineRes.json();
+
+      // Step 2: Create all the RoutineItems (Loop)
+      // We use Promise.all to do them all in parallel (Fast!)
+      const itemPromises = pendingItems.map(item => 
+        fetch(`${apiBaseUrl}/items/create/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                routine: newRoutine.id,
+                exercise: item.exerciseId,
+                target_sets: item.sets,
+                target_reps: item.reps,
+                order: 0
+            })
+        }).then(res => res.json())
+      );
+
+      // Wait for all items to be saved
+      await Promise.all(itemPromises);
+
+      // Step 3: Update UI
+      // We need to fetch the fresh routine details to get the nested items properly
+      // Or we can manually construct the object. Let's manually construct for speed.
+      const fullRoutine = {
+        ...newRoutine,
+        items: pendingItems // Attach the items we just saved
+      };
+
+      const updatedSchedule = {
+          ...selectedSchedule,
+          routines: [...selectedSchedule.routines, fullRoutine]
+      };
+      
+      setSelectedSchedule(updatedSchedule);
+      
+      // Update main list
+      const updatedSchedulesList = schedules.map(s => 
+          s.id === selectedSchedule.id ? updatedSchedule : s
+      );
+      setSchedules(updatedSchedulesList);
+
+      // Reset and Close
+      setShowRoutineModal(false);
+      setNewRoutineData({ name: '', day_of_week: 'Monday' });
+      setPendingItems([]); // Clear staging
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // --- Helper: Generate Calendar Days ---
@@ -186,7 +292,7 @@ function Planner() {
       <div className="routine-section">
         <div className="flex-between">
           <h3 className="section-title">Weekly Routines</h3>
-          <button className="btn-text">+ Add Routine</button>
+          <button className="btn-text" onClick={() => setShowRoutineModal(true)}>+ Add Routine</button>
         </div>
 
         {selectedSchedule.routines.map(routine => (
@@ -195,7 +301,6 @@ function Planner() {
               <span className="routine-day">{routine.day_of_week}</span>
               <span className="routine-name">{routine.name}</span>
             </div>
-            <button className="btn-icon small">+</button> 
           </div>
         ))}
         
@@ -203,6 +308,100 @@ function Planner() {
             <div className="empty-state">No routines yet. Add one!</div>
         )}
       </div>
+      {/* Routine Creation Modal */}
+      {showRoutineModal && (
+        <div className="modal-overlay">
+            <div className="modal-content large"> {/* Added 'large' class for more space */}
+                <h3>Design Routine</h3>
+                <form onSubmit={handleCreateRoutine}>
+                    {/* Top Row: Name and Day */}
+                    <div className="form-row">
+                        <div className="form-group half">
+                            <label>Routine Name</label>
+                            <input 
+                                type="text" 
+                                placeholder="e.g. Pull Day"
+                                value={newRoutineData.name} 
+                                onChange={e => setNewRoutineData({...newRoutineData, name: e.target.value})} 
+                                required 
+                            />
+                        </div>
+                        <div className="form-group half">
+                            <label>Day</label>
+                            <select 
+                                className="form-select"
+                                value={newRoutineData.day_of_week}
+                                onChange={e => setNewRoutineData({...newRoutineData, day_of_week: e.target.value})}
+                            >
+                                {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
+                                    <option key={day} value={day}>{day}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="divider"></div>
+
+                    {/* Middle Section: Add Exercises */}
+                    <h4>Add Exercises</h4>
+                    <div className="add-exercise-box">
+                        <select 
+                            className="form-select mb-2"
+                            value={currentItem.exerciseId}
+                            onChange={e => setCurrentItem({...currentItem, exerciseId: e.target.value})}
+                        >
+                            <option value="">Select Exercise...</option>
+                            {exercises.map(ex => (
+                                <option key={ex.id} value={ex.id}>{ex.name}</option>
+                            ))}
+                        </select>
+                        
+                        <div className="flex-gap">
+                            <input 
+                                type="number" 
+                                placeholder="Sets" 
+                                className="input-small"
+                                value={currentItem.sets}
+                                onChange={e => setCurrentItem({...currentItem, sets: parseInt(e.target.value)})}
+                            />
+                            <span className="text-muted">x</span>
+                            <input 
+                                type="number" 
+                                placeholder="Reps" 
+                                className="input-small"
+                                value={currentItem.reps}
+                                onChange={e => setCurrentItem({...currentItem, reps: parseInt(e.target.value)})}
+                            />
+                            <button 
+                                type="button" 
+                                className="btn-secondary"
+                                onClick={handleAddToStaging}
+                                disabled={!currentItem.exerciseId}
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Bottom Section: The Staged List */}
+                    <div className="staged-list">
+                        {pendingItems.length === 0 && <p className="text-muted small">No exercises added yet.</p>}
+                        {pendingItems.map(item => (
+                            <div key={item.tempId} className="staged-item">
+                                <span>{item.name}</span>
+                                <span className="badge-pill">{item.sets} x {item.reps}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="modal-actions">
+                        <button type="button" className="btn-text" onClick={() => setShowRoutineModal(false)}>Cancel</button>
+                        <button type="submit" className="btn-primary">Save Routine</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      )}
 
       <div style={{height: '80px'}}></div>
     </div>
