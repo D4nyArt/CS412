@@ -12,7 +12,7 @@ class RoutineItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoutineItem
         # Add 'routine' to the list for creating at the same time routine and routine items
-        fields = ['id', 'routine', 'exercise', 'exercise_name', 'target_sets', 'target_reps', 'order']
+        fields = ['id', 'routine', 'exercise', 'exercise_name', 'target_sets', 'target_reps', 'target_weight', 'order']
 
 class RoutineSerializer(serializers.ModelSerializer):
     items = RoutineItemSerializer(many=True, read_only=True)

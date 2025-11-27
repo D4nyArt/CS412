@@ -10,4 +10,6 @@ urlpatterns = [
     path('api/schedules/<int:pk>/', ScheduleDetail.as_view()),
     path('api/routines/create/', RoutineCreate.as_view()),
     path('api/items/create/', RoutineItemCreate.as_view()),
+    path('api/active-session/', ActiveSessionView.as_view(), name='active_session'),
+    path('api/submit-workout/', SubmitWorkoutView.as_view(), name='submit_workout'),
 ]

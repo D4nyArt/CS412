@@ -1,191 +1,218 @@
 /* --- Design System Variables --- */
 :root {
-  --bg-color: #F5F7FA;        /* Soft blue-grey background */
-  --card-bg: #FFFFFF;         /* Pure white cards */
-  --primary-color: #2D3436;   /* Dark Charcoal for text */
-  --accent-color: #0984E3;    /* Vibrant Blue for actions */
-  --text-secondary: #636E72;  /* Soft Grey for subtitles */
-  --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.05);
-  --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.08);
-  --radius: 12px;             /* Smooth rounded corners */
-  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    --bg-color: #F5F7FA;
+    /* Soft blue-grey background */
+    --card-bg: #FFFFFF;
+    /* Pure white cards */
+    --primary-color: #2D3436;
+    /* Dark Charcoal for text */
+    --accent-color: #0984E3;
+    /* Vibrant Blue for actions */
+    --text-secondary: #636E72;
+    /* Soft Grey for subtitles */
+    --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+    /* Smooth rounded corners */
+    --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
 /* --- Global Resets --- */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  background-color: var(--bg-color);
-  font-family: var(--font-main);
-  color: var(--primary-color);
-  -webkit-font-smoothing: antialiased; /* Makes text look crisp on Mac */
+    background-color: var(--bg-color);
+    font-family: var(--font-main);
+    color: var(--primary-color);
+    -webkit-font-smoothing: antialiased;
+    /* Makes text look crisp on Mac */
 }
 
 .app-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
 /* --- Header Section --- */
 .app-header {
-  margin-bottom: 30px;
-  text-align: left;
+    margin-bottom: 30px;
+    text-align: left;
 }
 
 .app-header h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: var(--primary-color);
-  margin-bottom: 8px;
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--primary-color);
+    margin-bottom: 8px;
 }
 
 .subtitle {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-  font-weight: 400;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 400;
 }
 
 /* --- Control Bar (Search) --- */
 .control-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 25px;
-  gap: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    gap: 15px;
 }
 
 .search-input {
-  flex-grow: 1;
-  padding: 12px 20px;
-  border: 1px solid #dfe6e9;
-  border-radius: var(--radius);
-  font-size: 1rem;
-  background-color: var(--card-bg);
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-soft);
+    flex-grow: 1;
+    padding: 12px 20px;
+    border: 1px solid #dfe6e9;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    background-color: var(--card-bg);
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
 }
 
 .search-input:focus {
-  outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
 }
 
 .count-badge {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: #dfe6e9;
-  padding: 6px 12px;
-  border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: #dfe6e9;
+    padding: 6px 12px;
+    border-radius: 20px;
 }
 
 /* --- The Grid Layout --- */
 .exercise-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns */
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* Responsive columns */
+    gap: 20px;
 }
 
 /* --- The Exercise Card --- */
 .exercise-card {
-  background-color: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: var(--shadow-soft);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-  border: 1px solid transparent;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
 }
 
 .exercise-card:hover {
-  transform: translateY(-3px); /* Subtle lift effect */
-  box-shadow: var(--shadow-hover);
-  border-color: rgba(9, 132, 227, 0.2);
+    transform: translateY(-3px);
+    /* Subtle lift effect */
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(9, 132, 227, 0.2);
 }
 
 .card-header {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .exercise-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--primary-color);
 }
 
 /* --- Muscle Badges (Dynamic Colors) --- */
 .muscle-badge {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  width: fit-content;
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    width: fit-content;
 }
 
 /* Default Badge */
 .muscle-badge {
-  background-color: #f1f2f6;
-  color: #747d8c;
+    background-color: #f1f2f6;
+    color: #747d8c;
 }
 
 /* Specific Colors for Muscle Groups */
-.badge-chest { background-color: #ffefef; color: #d63031; }
-.badge-back { background-color: #e3f2fd; color: #0984e3; }
-.badge-legs { background-color: #e6fffa; color: #00b894; }
-.badge-shoulders { background-color: #fff8e1; color: #f1c40f; }
+.badge-chest {
+    background-color: #ffefef;
+    color: #d63031;
+}
+
+.badge-back {
+    background-color: #e3f2fd;
+    color: #0984e3;
+}
+
+.badge-legs {
+    background-color: #e6fffa;
+    color: #00b894;
+}
+
+.badge-shoulders {
+    background-color: #fff8e1;
+    color: #f1c40f;
+}
 
 /* --- Action Button --- */
 .btn-icon {
-  background: none;
-  border: none;
-  color: #b2bec3;
-  cursor: pointer;
-  transition: color 0.2s;
+    background: none;
+    border: none;
+    color: #b2bec3;
+    cursor: pointer;
+    transition: color 0.2s;
 }
 
 .exercise-card:hover .btn-icon {
-  color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 /* ... Keep your :root and body styles from before ... */
 
 /* New Layout Helpers */
 .app-container {
-  max-width: 100%;
-  min-height: 100vh;
-  background-color: var(--bg-color);
+    max-width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-color);
 }
 
 .content-wrap {
-  max-width: 600px; /* Mobile-focused width */
-  margin: 0 auto;
-  padding: 20px;
-  padding-bottom: 80px; /* Important: Space for the fixed Navbar */
+    max-width: 600px;
+    /* Mobile-focused width */
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 80px;
+    /* Important: Space for the fixed Navbar */
 }
 
 .page-header {
-  margin-bottom: 25px;
+    margin-bottom: 25px;
 }
 
 /* --- Home Page Styles --- */
 .status-card {
-    background: var(--primary-color); /* Dark background */
+    background: var(--primary-color);
+    /* Dark background */
     color: white;
     padding: 25px;
     border-radius: 16px;
@@ -201,7 +228,7 @@ body {
 }
 
 .status-badge {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     font-size: 0.75rem;
     padding: 4px 8px;
     border-radius: 4px;
@@ -289,9 +316,11 @@ body {
 .btn-primary {
     transition: transform 0.2s, background-color 0.2s;
 }
+
 .btn-primary:hover {
     transform: scale(1.02);
-    background-color: #0984e3; /* A slightly brighter blue */
+    background-color: #0984e3;
+    /* A slightly brighter blue */
 }
 
 /* Loading State */
@@ -300,8 +329,15 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* --- Planner: Schedule List --- */
@@ -325,7 +361,8 @@ body {
 /* --- Planner: Calendar Grid --- */
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 Days a week */
+    grid-template-columns: repeat(7, 1fr);
+    /* 7 Days a week */
     gap: 6px;
     margin-bottom: 30px;
     background: white;
@@ -335,7 +372,8 @@ body {
 }
 
 .calendar-day {
-    aspect-ratio: 1/1; /* Make them perfect squares */
+    aspect-ratio: 1/1;
+    /* Make them perfect squares */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -346,7 +384,8 @@ body {
 }
 
 .calendar-day.has-routine {
-    background-color: #e3f2fd; /* Light Blue for days with workouts */
+    background-color: #e3f2fd;
+    /* Light Blue for days with workouts */
     color: var(--accent-color);
     font-weight: bold;
 }
@@ -419,11 +458,13 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2000; /* Above the navbar */
+    z-index: 2000;
+    /* Above the navbar */
     animation: fadeIn 0.2s ease;
 }
 
@@ -433,7 +474,7 @@ body {
     max-width: 400px;
     padding: 25px;
     border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     animation: slideUp 0.3s ease;
 }
 
@@ -479,15 +520,23 @@ body {
 
 /* Helper Animation */
 @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* --- Updates to existing classes --- */
 .btn-primary.small {
     padding: 8px 16px;
     font-size: 0.9rem;
-    width: auto; /* Override full width */
+    width: auto;
+    /* Override full width */
 }
 
 .flex-between {
@@ -505,7 +554,8 @@ body {
     border-radius: 8px;
     font-size: 1rem;
     background-color: #fcfcfc;
-    appearance: none; /* Removes default OS arrow */
+    appearance: none;
+    /* Removes default OS arrow */
     background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
     background-repeat: no-repeat;
     background-position: right .7em top 50%;
@@ -514,7 +564,8 @@ body {
 
 /* --- New Styles for Complex Modal --- */
 .modal-content.large {
-    max-width: 500px; /* Make it wider */
+    max-width: 500px;
+    /* Make it wider */
 }
 
 .form-row {
@@ -603,4 +654,133 @@ h4 {
     padding: 2px 8px;
     border-radius: 10px;
     font-size: 0.75rem;
+}
+
+/* --- Active Session Styles --- */
+.active-session-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-bottom: 160px;
+    /* Space for fixed button + navbar */
+}
+
+.timer-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 30px;
+    border: 1px solid #f1f2f6;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+}
+
+.timer-btn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.timer-btn.start {
+    background-color: #00b894;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.timer-btn.pause {
+    background-color: #ff7675;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.target-badge {
+    background-color: #f1f2f6;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.input-group {
+    display: flex;
+    gap: 15px;
+}
+
+.input-wrapper {
+    flex: 1;
+}
+
+.input-wrapper label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 2px solid #f1f2f6;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--primary-color);
+    transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: white;
+}
+
+.finish-workout-btn {
+    position: fixed;
+    bottom: 80px;
+    /* Above the 60px Navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    padding: 18px;
+    background: linear-gradient(135deg, #0984e3 0%, #00cec9 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(9, 132, 227, 0.3);
+    cursor: pointer;
+    z-index: 1100;
+    /* Above Navbar */
+    transition: transform 0.2s;
+}
+
+.finish-workout-btn:active {
+    transform: translateX(-50%) scale(0.98);
 }

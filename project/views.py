@@ -4,10 +4,10 @@ from .serializers import ExerciseSerializer,ScheduleSerializer, RoutineSerialize
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework import permissions, status
 from django.utils import timezone
 from datetime import timedelta
-from .models import TrainingSchedule, Routine, WorkoutSession, RoutineItem
+from .models import TrainingSchedule, Routine, WorkoutSession, RoutineItem, WorkoutLog
 
 # LIST VIEW: Returns all exercises (JSON)
 class ExerciseList(ListAPIView):
@@ -121,3 +121,72 @@ class RoutineCreate(CreateAPIView):
 class RoutineItemCreate(CreateAPIView):
     queryset = RoutineItem.objects.all()
     serializer_class = RoutineItemSerializer
+
+class ActiveSessionView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        active_schedule = TrainingSchedule.objects.filter(is_active=True).first()
+        if not active_schedule:
+            return Response({"message": "No active schedule found"}, status=status.HTTP_404_NOT_FOUND)
+
+        today_name = timezone.now().strftime('%A')
+        routine = Routine.objects.filter(schedule=active_schedule, day_of_week=today_name).first()
+
+        if not routine:
+            return Response({"message": "No routine for today"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RoutineSerializer(routine)
+        return Response(serializer.data)
+
+class SubmitWorkoutView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        data = request.data
+        routine_id = data.get('routine_id')
+        duration = data.get('duration')
+        notes = data.get('notes')
+        logs = data.get('logs', [])
+
+        try:
+            routine = Routine.objects.get(id=routine_id)
+        except Routine.DoesNotExist:
+            return Response({"error": "Routine not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Create Session
+        session = WorkoutSession.objects.create(
+            routine=routine,
+            duration_minutes=duration,
+            notes=notes
+        )
+
+        # Create Logs and Update Targets
+        for log_data in logs:
+            exercise_id = log_data.get('exercise_id')
+            weight = log_data.get('weight')
+            reps = log_data.get('reps')
+
+            try:
+                exercise = Exercise.objects.get(id=exercise_id)
+            except Exercise.DoesNotExist:
+                continue
+            
+            WorkoutLog.objects.create(
+                session=session,
+                exercise=exercise,
+                weight_used=weight,
+                reps_achieved=reps
+            )
+
+            # Auto-increment logic
+            routine_item = RoutineItem.objects.filter(routine=routine, exercise=exercise).first()
+            if routine_item:
+                # Check if they met the target
+                # Note: target_weight defaults to 0.0 if not set, so we should check > 0 or just assume valid
+                if float(weight) >= routine_item.target_weight and int(reps) >= routine_item.target_reps:
+                    # Simple progression: Add 5lbs
+                    routine_item.target_weight = float(routine_item.target_weight) + 5.0
+                    routine_item.save()
+
+        return Response({"message": "Workout saved successfully"}, status=status.HTTP_201_CREATED)

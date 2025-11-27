@@ -40,6 +40,7 @@ class RoutineItem(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     target_sets = models.IntegerField()
     target_reps = models.IntegerField()
+    target_weight = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     order = models.IntegerField(default=0) # For sorting
 
     def __str__(self):

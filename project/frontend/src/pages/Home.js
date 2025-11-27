@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../App.css'; // Ensure global styles are imported
 
 function Home() {
@@ -6,15 +7,15 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   // Get today's date in a readable format (e.g., "Tuesday, Nov 21")
-  const todayDisplay = new Date().toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    month: 'short', 
-    day: 'numeric' 
+  const todayDisplay = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric'
   });
 
   useEffect(() => {
-    const apiUrl = process.env.NODE_ENV === 'development' 
-      ? 'http://127.0.0.1:8000/project/api/dashboard/' 
+    const apiUrl = process.env.NODE_ENV === 'development'
+      ? 'http://127.0.0.1:8000/project/api/dashboard/'
       : '/project/api/dashboard/';
 
 
@@ -50,9 +51,9 @@ function Home() {
           </div>
           <div className="card-body">
             <p className="status-routine">{dashboardData.today_routine.name}</p>
-            <button className="btn-primary">
+            <Link to="/active-session" className="btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
               START WORKOUT
-            </button>
+            </Link>
           </div>
         </div>
       ) : (
@@ -63,8 +64,8 @@ function Home() {
             <span className="status-badge rest">Rest & Recover</span>
           </div>
           <div className="card-body">
-             <p className="status-routine">No workouts scheduled.</p>
-             <p className="subtitle" style={{color: '#bdc3c7'}}>Enjoy your day off!</p>
+            <p className="status-routine">No workouts scheduled.</p>
+            <p className="subtitle" style={{ color: '#bdc3c7' }}>Enjoy your day off!</p>
           </div>
         </div>
       )}
@@ -76,17 +77,17 @@ function Home() {
           <span className="stat-number">{dashboardData.stats.completed}</span>
           <span className="stat-label">Completed</span>
         </div>
-        
+
         <div className="stat-box">
           <span className="stat-number">
-             {dashboardData.stats.total - dashboardData.stats.completed}
+            {dashboardData.stats.total - dashboardData.stats.completed}
           </span>
           <span className="stat-label">Remaining</span>
         </div>
       </div>
-      
+
       {/* Spacer for bottom nav */}
-      <div style={{height: '80px'}}></div> 
+      <div style={{ height: '80px' }}></div>
     </div>
   );
 }
