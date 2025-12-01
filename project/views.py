@@ -190,3 +190,55 @@ class SubmitWorkoutView(APIView):
                     routine_item.save()
 
         return Response({"message": "Workout saved successfully"}, status=status.HTTP_201_CREATED)
+
+class ConsistencyStatsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        active_schedule = TrainingSchedule.objects.filter(is_active=True).first()
+        if not active_schedule:
+            return Response({"completed": 0, "remaining": 0})
+
+        # Calculate total weeks in schedule
+        # Assuming schedule has start_date. If end_date is null, assume 12 weeks for calculation or just use current duration
+        start_date = active_schedule.start_date
+        end_date = active_schedule.end_date if active_schedule.end_date else timezone.now().date()
+        
+        # Total days active
+        total_days = (end_date - start_date).days
+        weeks = max(1, total_days // 7)
+        
+        # Routines per week
+        routines_per_week = Routine.objects.filter(schedule=active_schedule).count()
+        total_expected_workouts = weeks * routines_per_week
+
+        # Completed workouts
+        completed_workouts = WorkoutSession.objects.filter(routine__schedule=active_schedule).count()
+        
+        # Remaining (can be negative if they did extra, but let's clamp to 0)
+        remaining = max(0, total_expected_workouts - completed_workouts)
+
+        return Response({
+            "completed": completed_workouts,
+            "remaining": remaining,
+            "schedule_name": active_schedule.name
+        })
+
+class ProgressionStatsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        exercise_id = request.query_params.get('exercise_id')
+        if not exercise_id:
+            return Response({"error": "Exercise ID required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        logs = WorkoutLog.objects.filter(exercise_id=exercise_id).order_by('session__date')
+        
+        data = []
+        for log in logs:
+            data.append({
+                "date": log.session.date.strftime('%Y-%m-%d'),
+                "weight": log.weight_used
+            })
+        
+        return Response(data)

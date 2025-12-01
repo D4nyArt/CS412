@@ -12,4 +12,6 @@ urlpatterns = [
     path('api/items/create/', RoutineItemCreate.as_view()),
     path('api/active-session/', ActiveSessionView.as_view(), name='active_session'),
     path('api/submit-workout/', SubmitWorkoutView.as_view(), name='submit_workout'),
+    path('api/stats/consistency/', ConsistencyStatsView.as_view(), name='stats_consistency'),
+    path('api/stats/progression/', ProgressionStatsView.as_view(), name='stats_progression'),
 ]

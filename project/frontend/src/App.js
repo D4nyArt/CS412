@@ -6,6 +6,7 @@ import Library from './pages/Library';
 import './App.css';
 import Planner from './pages/Planner';
 import ActiveSession from './pages/ActiveSession';
+import Stats from './pages/Stats';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/library" element={<Library />} />
             <Route path="/planner" element={<Planner />} />
             <Route path="/active-session" element={<ActiveSession />} />
+            <Route path="/stats" element={<Stats />} />
           </Routes>
         </div>
         <Navbar />
