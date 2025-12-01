@@ -117,6 +117,12 @@ class RoutineCreate(CreateAPIView):
     queryset = Routine.objects.all()
     serializer_class = RoutineSerializer
 
+# Retrieve, Update, or Delete a Routine
+class RoutineDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Routine.objects.all()
+    serializer_class = RoutineSerializer
+    permission_classes = [permissions.AllowAny]
+
 # Add an Exercise to a Routine
 class RoutineItemCreate(CreateAPIView):
     queryset = RoutineItem.objects.all()

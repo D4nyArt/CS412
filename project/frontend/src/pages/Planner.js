@@ -347,6 +347,34 @@ function Planner() {
                 <p className="text-muted">No exercises in this routine.</p>
               )}
             </div>
+
+            <div className="modal-actions" style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '15px' }}>
+              <button
+                className="btn-text"
+                style={{ color: '#d63031' }}
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete this routine?')) {
+                    // Delete Logic
+                    fetch(`${apiBaseUrl}/routines/${selectedRoutineDetail.id}/`, {
+                      method: 'DELETE'
+                    }).then(res => {
+                      if (res.ok) {
+                        // Remove from UI
+                        const updatedRoutines = selectedSchedule.routines.filter(r => r.id !== selectedRoutineDetail.id);
+                        const updatedSchedule = { ...selectedSchedule, routines: updatedRoutines };
+
+                        setSelectedSchedule(updatedSchedule);
+                        setSchedules(schedules.map(s => s.id === selectedSchedule.id ? updatedSchedule : s));
+
+                        setSelectedRoutineDetail(null);
+                      }
+                    });
+                  }
+                }}
+              >
+                Delete Routine
+              </button>
+            </div>
           </div>
         </div>
       )}
