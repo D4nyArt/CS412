@@ -33,6 +33,14 @@ function Planner() {
   // State for Routine Detail Modal
   const [selectedRoutineDetail, setSelectedRoutineDetail] = useState(null);
 
+  // State for Edit Schedule Modal
+  const [showEditScheduleModal, setShowEditScheduleModal] = useState(false);
+  const [editScheduleData, setEditScheduleData] = useState({
+    id: null,
+    name: '',
+    end_date: ''
+  });
+
   // API Fetching
   const apiBaseUrl = process.env.NODE_ENV === 'development'
     ? 'http://127.0.0.1:8000/project/api'
@@ -171,6 +179,36 @@ function Planner() {
     }
   };
 
+  // Update Schedule ---
+  const handleUpdateSchedule = (e) => {
+    e.preventDefault();
+
+    const scheduleId = editScheduleData.id;
+    if (!scheduleId) return;
+
+    fetch(`${apiBaseUrl}/schedules/${scheduleId}/`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: editScheduleData.name,
+        end_date: editScheduleData.end_date
+      })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to update');
+        return res.json();
+      })
+      .then(updatedSchedule => {
+        // Update State
+        if (selectedSchedule && selectedSchedule.id === updatedSchedule.id) {
+          setSelectedSchedule(updatedSchedule);
+        }
+        setSchedules(schedules.map(s => s.id === updatedSchedule.id ? updatedSchedule : s));
+        setShowEditScheduleModal(false);
+      })
+      .catch(err => console.error(err));
+  };
+
   // --- Helper: Generate Calendar Days ---
   const renderCalendar = (routines) => {
     const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
@@ -220,8 +258,24 @@ function Planner() {
               className={`schedule-card ${schedule.is_active ? 'active-border' : ''}`}
               onClick={() => setSelectedSchedule(schedule)}
             >
-              <div>
-                <h3>{schedule.name}</h3>
+              <div style={{ flex: 1 }}>
+                <div className="flex-between">
+                  <h3>{schedule.name}</h3>
+                  <button
+                    className="btn-text"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditScheduleData({
+                        id: schedule.id,
+                        name: schedule.name,
+                        end_date: schedule.end_date || ''
+                      });
+                      setShowEditScheduleModal(true);
+                    }}
+                  >
+                    ✎ Edit
+                  </button>
+                </div>
                 <p className="subtitle">{schedule.start_date} {schedule.is_active && '(Active)'}</p>
               </div>
               <div className="arrow-icon">→</div>
@@ -273,6 +327,39 @@ function Planner() {
         )}
 
         <div style={{ height: '80px' }}></div>
+
+        {/* Edit Schedule Modal */}
+        {showEditScheduleModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Edit Plan Details</h3>
+              <form onSubmit={handleUpdateSchedule}>
+                <div className="form-group">
+                  <label>Schedule Name</label>
+                  <input
+                    type="text"
+                    value={editScheduleData.name}
+                    onChange={(e) => setEditScheduleData({ ...editScheduleData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>End Date</label>
+                  <input
+                    type="date"
+                    value={editScheduleData.end_date}
+                    onChange={(e) => setEditScheduleData({ ...editScheduleData, end_date: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="modal-actions">
+                  <button type="button" className="btn-text" onClick={() => setShowEditScheduleModal(false)}>Cancel</button>
+                  <button type="submit" className="btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -287,7 +374,9 @@ function Planner() {
     <div className="page-content">
       <header className="page-header">
         <button className="btn-back" onClick={() => setSelectedSchedule(null)}>← Back</button>
-        <h1>{selectedSchedule.name}</h1>
+        <div className="flex-gap">
+          <h1>{selectedSchedule.name}</h1>
+        </div>
       </header>
 
       {/* THE CALENDAR GRID */}
@@ -475,6 +564,39 @@ function Planner() {
       )}
 
       <div style={{ height: '80px' }}></div>
+
+      {/* Edit Schedule Modal */}
+      {showEditScheduleModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Edit Plan Details</h3>
+            <form onSubmit={handleUpdateSchedule}>
+              <div className="form-group">
+                <label>Schedule Name</label>
+                <input
+                  type="text"
+                  value={editScheduleData.name}
+                  onChange={(e) => setEditScheduleData({ ...editScheduleData, name: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>End Date</label>
+                <input
+                  type="date"
+                  value={editScheduleData.end_date}
+                  onChange={(e) => setEditScheduleData({ ...editScheduleData, end_date: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-text" onClick={() => setShowEditScheduleModal(false)}>Cancel</button>
+                <button type="submit" className="btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
