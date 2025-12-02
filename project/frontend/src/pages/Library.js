@@ -5,9 +5,11 @@ function Library() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const apiUrl = process.env.NODE_ENV === 'development' 
-      ? 'http://127.0.0.1:8000/project/api/exercises/' 
-      : '/project/api/exercises/';
+    //const apiUrl = process.env.NODE_ENV === 'development' 
+    //  ? 'http://127.0.0.1:8000/project/api/exercises/' 
+    //  : '/project/api/exercises/';
+
+    const apiUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api/exercises/';
 
     fetch(apiUrl)
       .then(response => response.json())
@@ -25,13 +27,13 @@ function Library() {
       <header className="page-header">
         <h1>Library</h1>
         <div className="control-bar">
-            <input 
-            type="text" 
-            placeholder="Search..." 
+          <input
+            type="text"
+            placeholder="Search..."
             className="search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          />
         </div>
       </header>
 
@@ -48,7 +50,7 @@ function Library() {
         ))}
       </div>
       {/* Spacer for bottom nav */}
-      <div style={{height: '80px'}}></div> 
+      <div style={{ height: '80px' }}></div>
     </div>
   );
 }

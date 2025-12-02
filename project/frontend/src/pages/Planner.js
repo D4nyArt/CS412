@@ -42,9 +42,11 @@ function Planner() {
   });
 
   // API Fetching
-  const apiBaseUrl = process.env.NODE_ENV === 'development'
-    ? 'http://127.0.0.1:8000/project/api'
-    : '/project/api';
+  //const apiBaseUrl = process.env.NODE_ENV === 'development'
+  //  ? 'http://127.0.0.1:8000/project/api'
+  //  : '/project/api';
+
+  const apiBaseUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api';
 
   // Fetch Schedules AND Exercises 
   useEffect(() => {
