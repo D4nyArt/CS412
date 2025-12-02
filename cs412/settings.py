@@ -70,7 +70,9 @@ ROOT_URLCONF = "cs412.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, 'project/frontend/build'),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             #"string_if_invalid": "[INVALID CONTEXT VARIABLE: %s]",
@@ -136,6 +138,7 @@ STATIC_URL = 'static/' # note: no leading slash!
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "project/frontend/build/static"),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, re_path
+from django.views.generic import TemplateView
 from .views import *
 
 urlpatterns = [
@@ -15,4 +16,6 @@ urlpatterns = [
     path('api/submit-workout/', SubmitWorkoutView.as_view(), name='submit_workout'),
     path('api/stats/consistency/', ConsistencyStatsView.as_view(), name='stats_consistency'),
     path('api/stats/progression/', ProgressionStatsView.as_view(), name='stats_progression'),
+
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]
