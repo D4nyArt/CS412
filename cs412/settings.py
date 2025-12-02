@@ -138,7 +138,7 @@ STATIC_URL = 'static/' # note: no leading slash!
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    os.path.join(BASE_DIR, "project/frontend/build/static"),
+    #os.path.join(BASE_DIR, "project/frontend/build"),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/d4nyart/static/static/css/main.a2fd8628.css",
+    "main.js": "/d4nyart/static/static/js/main.f50ec5a1.js",
+    "static/js/453.8701dc61.chunk.js": "/d4nyart/static/static/js/453.8701dc61.chunk.js",
+    "index.html": "/d4nyart/static/index.html",
+    "main.a2fd8628.css.map": "/d4nyart/static/static/css/main.a2fd8628.css.map",
+    "main.f50ec5a1.js.map": "/d4nyart/static/static/js/main.f50ec5a1.js.map",
+    "453.8701dc61.chunk.js.map": "/d4nyart/static/static/js/453.8701dc61.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a2fd8628.css",
+    "static/js/main.f50ec5a1.js"
+  ]
+}
