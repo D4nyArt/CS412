@@ -10,7 +10,7 @@ import Stats from './pages/Stats';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/d4nyart/project">
       <div className="app-container">
         <div className="content-wrap">
           <Routes>
