@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css'; // Ensure global styles are imported
+import API_BASE_URL from '../config';
 
 function Home() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -14,11 +15,7 @@ function Home() {
   });
 
   useEffect(() => {
-    //const apiUrl = process.env.NODE_ENV === 'development'
-    //  ? 'http://127.0.0.1:8000/project/api/dashboard/'
-    //  : '/project/api/dashboard/';
-
-    const apiUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api/dashboard/';
+    const apiUrl = `${API_BASE_URL}/dashboard/`;
 
 
     fetch(apiUrl)
@@ -40,8 +37,6 @@ function Home() {
         <p className="subtitle">Current Trainig Shedule</p>
         <h1>{dashboardData.schedule_name}</h1>
       </header>
-
-      <h1>Current server time: {dashboardData.current_django_time}</h1>
 
       {/* Dynamic Today's Card */}
       {dashboardData.today_routine ? (

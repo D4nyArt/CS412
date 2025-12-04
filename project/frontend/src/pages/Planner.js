@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
+import API_BASE_URL from '../config';
 
 function Planner() {
   const [schedules, setSchedules] = useState([]);
@@ -42,11 +43,7 @@ function Planner() {
   });
 
   // API Fetching
-  //const apiBaseUrl = process.env.NODE_ENV === 'development'
-  //  ? 'http://127.0.0.1:8000/project/api'
-  //  : '/project/api';
-
-  const apiBaseUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api';
+  const apiBaseUrl = API_BASE_URL;
 
   // Fetch Schedules AND Exercises 
   useEffect(() => {

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../config';
 
 function Library() {
   const [exercises, setExercises] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    //const apiUrl = process.env.NODE_ENV === 'development' 
-    //  ? 'http://127.0.0.1:8000/project/api/exercises/' 
-    //  : '/project/api/exercises/';
-
-    const apiUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api/exercises/';
+    const apiUrl = `${API_BASE_URL}/exercises/`;
 
     fetch(apiUrl)
       .then(response => response.json())

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config';
 
 function ActiveSession() {
     const [routine, setRoutine] = useState(null);
@@ -12,11 +13,7 @@ function ActiveSession() {
 
     // Fetch Routine
     useEffect(() => {
-        //const apiUrl = process.env.NODE_ENV === 'development'
-        //    ? 'http://127.0.0.1:8000/project/api/active-session/'
-        //    : '/project/api/active-session/';
-
-        const apiUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api/active-session/';
+        const apiUrl = `${API_BASE_URL}/active-session/`;
 
         fetch(apiUrl)
             .then(res => {
@@ -80,9 +77,7 @@ function ActiveSession() {
             })).filter(log => log.weight && log.reps) // Only send completed logs
         };
 
-        const submitUrl = process.env.NODE_ENV === 'development'
-            ? 'http://127.0.0.1:8000/project/api/submit-workout/'
-            : '/project/api/submit-workout/';
+        const submitUrl = `${API_BASE_URL}/submit-workout/`;
 
         fetch(submitUrl, {
             method: 'POST',

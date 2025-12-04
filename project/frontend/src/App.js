@@ -9,8 +9,14 @@ import ActiveSession from './pages/ActiveSession';
 import Stats from './pages/Stats';
 
 function App() {
+  // If Production (Server) -> Use '/d4nyart/project'
+  // If Development (Local) -> Use '' (empty string)
+  const basename = process.env.NODE_ENV === 'production'
+    ? "/d4nyart/project"
+    : "";
+
   return (
-    <Router basename="/d4nyart/project">
+    <Router basename={basename}>
       <div className="app-container">
         <div className="content-wrap">
           <Routes>

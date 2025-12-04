@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import API_BASE_URL from '../config';
 
 function Stats() {
     const [consistencyData, setConsistencyData] = useState(null);
@@ -11,11 +12,7 @@ function Stats() {
     // Fetch Consistency Data & Exercise List
     useEffect(() => {
         const fetchConsistency = async () => {
-            //const apiUrl = process.env.NODE_ENV === 'development'
-            //    ? 'http://127.0.0.1:8000/project/api/stats/consistency/'
-            //    : '/project/api/stats/consistency/';
-
-            const apiUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api/stats/consistency/';
+            const apiUrl = `${API_BASE_URL}/stats/consistency/`;
 
             try {
                 const res = await fetch(apiUrl);
@@ -30,11 +27,7 @@ function Stats() {
         };
 
         const fetchExercises = async () => {
-            //const apiUrl = process.env.NODE_ENV === 'development'
-            //    ? 'http://127.0.0.1:8000/project/api/exercises/'
-            //    : '/project/api/exercises/';
-
-            const apiUrl = 'https://cs-webapps.bu.edu/d4nyart/project/api/exercises/';
+            const apiUrl = `${API_BASE_URL}/exercises/`;
 
             try {
                 const res = await fetch(apiUrl);
@@ -54,11 +47,7 @@ function Stats() {
         if (!selectedExercise) return;
 
         const fetchProgression = async () => {
-            //const apiUrl = process.env.NODE_ENV === 'development'
-            //    ? `http://127.0.0.1:8000/project/api/stats/progression/?exercise_id=${selectedExercise}`
-            //    : `/project/api/stats/progression/?exercise_id=${selectedExercise}`;
-
-            const apiUrl = `https://cs-webapps.bu.edu/d4nyart/project/api/stats/progression/?exercise_id=${selectedExercise}`;
+            const apiUrl = `${API_BASE_URL}/stats/progression/?exercise_id=${selectedExercise}`;
 
             try {
                 const res = await fetch(apiUrl);
