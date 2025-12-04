@@ -66,7 +66,7 @@ function Planner() {
     const today = new Date().toISOString().split('T')[0];
     const isActive = today >= newScheduleData.start_date && today <= newScheduleData.end_date;
 
-    fetch(apiBaseUrl, {
+    fetch(`${apiBaseUrl}/schedules/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

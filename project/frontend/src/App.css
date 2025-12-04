@@ -664,6 +664,13 @@ h4 {
     /* Space for fixed button + navbar */
 }
 
+.active-session-container .exercise-card {
+    margin-bottom: 15px;
+    display: block;
+    /* Ensure vertical stacking of header and inputs */
+    cursor: default;
+}
+
 .timer-card {
     background: var(--card-bg);
     padding: 30px;

@@ -41,16 +41,25 @@ function Home() {
       {/* Dynamic Today's Card */}
       {dashboardData.today_routine ? (
         // CASE 1: It is a Workout Day
-        <div className="status-card active-day">
+        <div className={`status-card ${dashboardData.today_routine.is_completed ? 'completed-day' : 'active-day'}`}>
           <div className="status-header">
             <h2>{todayDisplay}</h2>
-            <span className="status-badge">Scheduled</span>
+            <span className="status-badge">
+              {dashboardData.today_routine.is_completed ? 'Completed' : 'Scheduled'}
+            </span>
           </div>
           <div className="card-body">
             <p className="status-routine">{dashboardData.today_routine.name}</p>
-            <Link to="/active-session" className="btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
-              START WORKOUT
-            </Link>
+
+            {dashboardData.today_routine.is_completed ? (
+              <div className="completion-message">
+                <p>Great job! You've finished your workout for today.</p>
+              </div>
+            ) : (
+              <Link to="/active-session" className="btn-primary" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+                START WORKOUT
+              </Link>
+            )}
           </div>
         </div>
       ) : (
@@ -80,6 +89,29 @@ function Home() {
             {dashboardData.stats.total - dashboardData.stats.completed}
           </span>
           <span className="stat-label">Remaining</span>
+        </div>
+      </div>
+
+      {/* Highlights Section */}
+      <h3 className="section-title" style={{ marginTop: '15px' }}>Highlights</h3>
+      <div className="stats-grid">
+        <div className="stat-box">
+          <span className="stat-number">{dashboardData.stats.weekly_minutes}m</span>
+          <span className="stat-label">Time Trained this week</span>
+        </div>
+
+        <div className="stat-box">
+          {dashboardData.pr_spotlight ? (
+            <>
+              <span className="stat-number">{dashboardData.pr_spotlight.weight}lbs</span>
+              <span className="stat-label">Best: {dashboardData.pr_spotlight.exercise}</span>
+            </>
+          ) : (
+            <>
+              <span className="stat-number">-</span>
+              <span className="stat-label">No PRs yet</span>
+            </>
+          )}
         </div>
       </div>
 

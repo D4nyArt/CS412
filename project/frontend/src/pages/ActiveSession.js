@@ -16,8 +16,12 @@ function ActiveSession() {
         const apiUrl = `${API_BASE_URL}/active-session/`;
 
         fetch(apiUrl)
-            .then(res => {
-                if (!res.ok) throw new Error('No active session found for today');
+        fetch(apiUrl)
+            .then(async res => {
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.message || 'No active session found for today');
+                }
                 return res.json();
             })
             .then(data => {
@@ -56,6 +60,9 @@ function ActiveSession() {
     };
 
     const handleInputChange = (exerciseId, field, value) => {
+        // Prevent negative values
+        if (value < 0) return;
+
         setLogs(prev => ({
             ...prev,
             [exerciseId]: {
@@ -95,7 +102,13 @@ function ActiveSession() {
     };
 
     if (loading) return <div className="loading">Loading...</div>;
-    if (error) return <div className="error">{error}</div>;
+    if (loading) return <div className="loading">Loading...</div>;
+    if (error) return (
+        <div className="page-content" style={{ textAlign: 'center', marginTop: '50px' }}>
+            <div className="error" style={{ color: 'red', marginBottom: '20px' }}>{error}</div>
+            <button onClick={() => navigate('/')} className="btn-primary">Back to Home</button>
+        </div>
+    );
 
     return (
         <div className="active-session-container">
@@ -125,6 +138,7 @@ function ActiveSession() {
                                 <label>Weight (lbs)</label>
                                 <input
                                     type="number"
+                                    min="0"
                                     value={logs[item.exercise]?.weight || ''}
                                     onChange={(e) => handleInputChange(item.exercise, 'weight', e.target.value)}
                                 />
@@ -133,6 +147,7 @@ function ActiveSession() {
                                 <label>Reps</label>
                                 <input
                                     type="number"
+                                    min="0"
                                     value={logs[item.exercise]?.reps || ''}
                                     onChange={(e) => handleInputChange(item.exercise, 'reps', e.target.value)}
                                 />

@@ -1,4 +1,6 @@
 from rest_framework.generics import *
+from rest_framework.generics import *
+from django.db.models import Sum, Max, Count
 from .models import Exercise
 from .serializers import ExerciseSerializer,ScheduleSerializer, RoutineSerializer, RoutineItemSerializer
 
@@ -10,12 +12,12 @@ from datetime import timedelta
 from .models import TrainingSchedule, Routine, WorkoutSession, RoutineItem, WorkoutLog
 
 # LIST VIEW: Returns all exercises (JSON)
-class ExerciseList(ListAPIView):
+class ExerciseList(ListCreateAPIView):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
 
 # DETAIL VIEW: Returns one specific exercise (JSON)
-class ExerciseDetail(RetrieveAPIView):
+class ExerciseDetail(RetrieveUpdateDestroyAPIView):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
 
@@ -45,9 +47,16 @@ class DashboardView(APIView):
 
         today_data = None
         if routine_today:
+            # Check if this routine has already been completed today
+            is_completed = WorkoutSession.objects.filter(
+                routine=routine_today,
+                date=timezone.now().date()
+            ).exists()
+
             today_data = {
                 "id": routine_today.id,
-                "name": routine_today.name
+                "name": routine_today.name,
+                "is_completed": is_completed
             }
 
         # Calculate Quick Stats (Workouts this week)
@@ -60,10 +69,25 @@ class DashboardView(APIView):
         sessions_this_week = WorkoutSession.objects.filter(
             routine__schedule=active_schedule,
             date__range=[start_of_week, end_of_week]
-        ).count()
+        ).values('routine').distinct().count()
 
         # Total routines planned per week (Assuming 1 per routine)
         total_routines = Routine.objects.filter(schedule=active_schedule).count()
+
+        # Weekly Time Spent
+        total_minutes = WorkoutSession.objects.filter(
+            routine__schedule=active_schedule,
+            date__range=[start_of_week, end_of_week]
+        ).aggregate(Sum('duration_minutes'))['duration_minutes__sum'] or 0
+
+        # PR Spotlight (All-time best lift)
+        pr_log = WorkoutLog.objects.order_by('-weight_used').first()
+        pr_data = None
+        if pr_log:
+            pr_data = {
+                "exercise": pr_log.exercise.name,
+                "weight": pr_log.weight_used
+            }
 
         server_time = timezone.now().isoformat()
 
@@ -72,8 +96,10 @@ class DashboardView(APIView):
             "today_routine": today_data,
             "stats": {
                 "completed": sessions_this_week,
-                "total": total_routines
+                "total": total_routines,
+                "weekly_minutes": total_minutes
             },
+            "pr_spotlight": pr_data,
             "current_django_time": server_time
         })
     
@@ -141,6 +167,10 @@ class ActiveSessionView(APIView):
 
         if not routine:
             return Response({"message": "No routine for today"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if already completed
+        if WorkoutSession.objects.filter(routine=routine, date=timezone.now().date()).exists():
+             return Response({"message": "Workout already completed today"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = RoutineSerializer(routine)
         return Response(serializer.data)
@@ -247,4 +277,50 @@ class ProgressionStatsView(APIView):
                 "weight": log.weight_used
             })
         
+        return Response(data)
+
+class MuscleGroupStatsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        # Count logs per muscle group
+        # We want all muscle groups, even if 0, but for simplicity let's just count what's logged
+        stats = WorkoutLog.objects.values('exercise__muscle_group').annotate(count=Count('id'))
+        
+        # Format for Recharts Radar: { subject: 'Chest', A: 10, fullMark: 150 }
+        data = []
+        max_val = 0
+        for entry in stats:
+            count = entry['count']
+            if count > max_val: max_val = count
+            data.append({
+                "subject": entry['exercise__muscle_group'],
+                "A": count,
+                "fullMark": 0 # Will update
+            })
+        
+        # Set fullMark slightly higher than max for better visual
+        full_mark = max_val * 1.2 if max_val > 0 else 10
+        for d in data:
+            d['fullMark'] = full_mark
+            
+        return Response(data)
+
+class ExerciseScatterView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        exercise_id = request.query_params.get('exercise_id')
+        if not exercise_id:
+            return Response([], status=400)
+            
+        logs = WorkoutLog.objects.filter(exercise_id=exercise_id)
+        data = []
+        for log in logs:
+            data.append({
+                "x": log.reps_achieved,
+                "y": float(log.weight_used),
+                "z": 1 # Size of bubble, could be set count or RPE
+            })
+            
         return Response(data)
