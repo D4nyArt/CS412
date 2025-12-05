@@ -260,24 +260,26 @@ function Planner() {
               <div style={{ flex: 1 }}>
                 <div className="flex-between">
                   <h3>{schedule.name}</h3>
-                  <button
-                    className="btn-text"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEditScheduleData({
-                        id: schedule.id,
-                        name: schedule.name,
-                        end_date: schedule.end_date || ''
-                      });
-                      setShowEditScheduleModal(true);
-                    }}
-                  >
-                    ✎ Edit
-                  </button>
+                  <div className="flex-gap">
+                    <button
+                      className="btn-secondary small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditScheduleData({
+                          id: schedule.id,
+                          name: schedule.name,
+                          end_date: schedule.end_date || ''
+                        });
+                        setShowEditScheduleModal(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button className="btn-primary small">See Details</button>
+                  </div>
                 </div>
                 <p className="subtitle">{schedule.start_date} {schedule.is_active && '(Active)'}</p>
               </div>
-              <div className="arrow-icon">→</div>
             </div>
           ))}
         </div>
