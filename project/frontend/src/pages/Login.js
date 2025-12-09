@@ -31,8 +31,6 @@ const Login = () => {
 
                 // Redirect to home or dashboard
                 navigate('/');
-                // Optional: Force reload to update Navbar state
-                window.location.reload();
             } else {
                 setError(data.non_field_errors ? data.non_field_errors[0] : 'Login failed');
             }
