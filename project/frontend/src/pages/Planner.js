@@ -48,9 +48,10 @@ function Planner() {
   // Fetch Schedules AND Exercises 
   useEffect(() => {
     // We use Promise.all to fetch both lists at once
+    const headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
     Promise.all([
-      fetch(`${apiBaseUrl}/schedules/`).then(res => res.json()),
-      fetch(`${apiBaseUrl}/exercises/`).then(res => res.json()) // Fetch exercises
+      fetch(`${apiBaseUrl}/schedules/`, { headers }).then(res => res.json()),
+      fetch(`${apiBaseUrl}/exercises/`, { headers }).then(res => res.json()) // Fetch exercises
     ]).then(([schedulesData, exercisesData]) => {
       setSchedules(schedulesData);
       setExercises(exercisesData); // Store them for the dropdown
@@ -70,6 +71,7 @@ function Planner() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         name: newScheduleData.name,
@@ -118,7 +120,10 @@ function Planner() {
       // Step 1: Create the Routine
       const routineRes = await fetch(`${apiBaseUrl}/routines/create/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify({
           schedule: selectedSchedule.id,
           name: newRoutineData.name,
@@ -134,7 +139,10 @@ function Planner() {
       const itemPromises = pendingItems.map(item =>
         fetch(`${apiBaseUrl}/items/create/`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${localStorage.getItem('token')}`
+          },
           body: JSON.stringify({
             routine: newRoutine.id,
             exercise: item.exerciseId,
@@ -187,7 +195,10 @@ function Planner() {
 
     fetch(`${apiBaseUrl}/schedules/${scheduleId}/`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('token')}`
+      },
       body: JSON.stringify({
         name: editScheduleData.name,
         end_date: editScheduleData.end_date
@@ -446,7 +457,10 @@ function Planner() {
                   if (window.confirm('Are you sure you want to delete this routine?')) {
                     // Delete Logic
                     fetch(`${apiBaseUrl}/routines/${selectedRoutineDetail.id}/`, {
-                      method: 'DELETE'
+                      method: 'DELETE',
+                      headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`
+                      }
                     }).then(res => {
                       if (res.ok) {
                         // Remove from UI

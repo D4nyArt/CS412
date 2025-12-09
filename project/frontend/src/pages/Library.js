@@ -12,7 +12,9 @@ function Library() {
   }, []);
 
   const fetchExercises = () => {
-    fetch(`${API_BASE_URL}/exercises/`)
+    fetch(`${API_BASE_URL}/exercises/`, {
+      headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+    })
       .then(response => response.json())
       .then(data => setExercises(data))
       .catch(error => console.error('Error fetching data:', error));
@@ -22,7 +24,10 @@ function Library() {
     e.preventDefault();
     fetch(`${API_BASE_URL}/exercises/`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('token')}`
+      },
       body: JSON.stringify(newExercise)
     })
       .then(res => {
@@ -37,7 +42,8 @@ function Library() {
   const handleDelete = (id) => {
     if (window.confirm('Delete this exercise?')) {
       fetch(`${API_BASE_URL}/exercises/${id}/`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
       }).then(res => {
         if (res.ok) fetchExercises();
       });

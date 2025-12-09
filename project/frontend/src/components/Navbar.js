@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Home, Dumbbell, Calendar, PlayCircle, BarChart2 } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Home, Dumbbell, Calendar, PlayCircle, BarChart2, LogIn, LogOut } from 'lucide-react';
 import './Navbar.css';
 
 function Navbar() {
@@ -30,6 +30,21 @@ function Navbar() {
         <BarChart2 size={24} />
         <span className="nav-label">Stats</span>
       </NavLink>
+
+      {localStorage.getItem('token') ? (
+        <div className="nav-item" onClick={() => {
+          localStorage.clear();
+          window.location.href = '/'; // Hard reload to clear state
+        }} style={{ cursor: 'pointer' }}>
+          <LogOut size={24} />
+          <span className="nav-label">Logout</span>
+        </div>
+      ) : (
+        <NavLink to="/login" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+          <LogIn size={24} />
+          <span className="nav-label">Login</span>
+        </NavLink>
+      )}
     </nav>
   );
 }

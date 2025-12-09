@@ -18,8 +18,22 @@ function Home() {
     const apiUrl = `${API_BASE_URL}/dashboard/`;
 
 
-    fetch(apiUrl)
-      .then(response => response.json())
+    fetch(apiUrl, {
+      headers: {
+        'Authorization': `Token ${localStorage.getItem('token')}`
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            // Token might be invalid or expired
+            localStorage.clear();
+            window.location.href = '/login';
+          }
+          throw new Error('Failed to fetch');
+        }
+        return response.json();
+      })
       .then(data => {
         setDashboardData(data);
         setLoading(false);
@@ -29,6 +43,7 @@ function Home() {
   }, []);
 
   if (loading) return <div className="page-content">Loading...</div>;
+  if (!dashboardData || !dashboardData.stats) return <div className="page-content">Initializing Dashboard...</div>;
 
   return (
     <div className="page-content">

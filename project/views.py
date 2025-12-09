@@ -10,6 +10,9 @@ from rest_framework import permissions, status
 from django.utils import timezone
 from datetime import timedelta
 from .models import TrainingSchedule, Routine, WorkoutSession, RoutineItem, WorkoutLog
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 # LIST VIEW: Returns all exercises (JSON)
 class ExerciseList(ListCreateAPIView):
@@ -22,12 +25,11 @@ class ExerciseDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = ExerciseSerializer
 
 class DashboardView(APIView):
-    # For now, allowing any access so  test easily without login setup
-    permission_classes = [permissions.AllowAny] 
+    permission_classes = [permissions.IsAuthenticated] 
 
     def get(self, request):
-        #Find the Active Schedule (just getting the first active one found)
-        active_schedule = TrainingSchedule.objects.filter(is_active=True).first()
+        #Find the Active Schedule for the logged in user
+        active_schedule = TrainingSchedule.objects.filter(user=request.user, is_active=True).first()
 
         if not active_schedule:
             return Response({
@@ -109,34 +111,17 @@ class ScheduleList(ListCreateAPIView):
     serializer_class = ScheduleSerializer
 
     def get_queryset(self):
-        # FIX: Check if user is logged in. 
-        # If yes, filter by their ID. 
-        # If no (React dev mode), return ALL schedules so the UI shows something.
-        if self.request.user.is_authenticated:
-            return TrainingSchedule.objects.filter(user=self.request.user)
-        else:
-            return TrainingSchedule.objects.all() # Return everything for testing
+        return TrainingSchedule.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        # FIX: Handle creation for anonymous users (assign to the first admin user found)
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)
-        else:
-            # Just for testing: assign to the first user in the DB (your admin)
-            from django.contrib.auth.models import User
-            first_user = User.objects.first()
-            serializer.save(user=first_user)
+        serializer.save(user=self.request.user)
 
 # Get details of ONE Schedule (with calendar data)
 class ScheduleDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = ScheduleSerializer
     
     def get_queryset(self):
-        # Same fix here
-        if self.request.user.is_authenticated:
-            return TrainingSchedule.objects.filter(user=self.request.user)
-        else:
-            return TrainingSchedule.objects.all()
+        return TrainingSchedule.objects.filter(user=self.request.user)
 
 # Create a Routine inside a Schedule
 class RoutineCreate(CreateAPIView):
@@ -147,7 +132,7 @@ class RoutineCreate(CreateAPIView):
 class RoutineDetail(RetrieveUpdateDestroyAPIView):
     queryset = Routine.objects.all()
     serializer_class = RoutineSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
 # Add an Exercise to a Routine
 class RoutineItemCreate(CreateAPIView):
@@ -155,10 +140,10 @@ class RoutineItemCreate(CreateAPIView):
     serializer_class = RoutineItemSerializer
 
 class ActiveSessionView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        active_schedule = TrainingSchedule.objects.filter(is_active=True).first()
+        active_schedule = TrainingSchedule.objects.filter(user=request.user, is_active=True).first()
         if not active_schedule:
             return Response({"message": "No active schedule found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -176,7 +161,7 @@ class ActiveSessionView(APIView):
         return Response(serializer.data)
 
 class SubmitWorkoutView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         data = request.data
@@ -228,10 +213,10 @@ class SubmitWorkoutView(APIView):
         return Response({"message": "Workout saved successfully"}, status=status.HTTP_201_CREATED)
 
 class ConsistencyStatsView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        active_schedule = TrainingSchedule.objects.filter(is_active=True).first()
+        active_schedule = TrainingSchedule.objects.filter(user=request.user, is_active=True).first()
         if not active_schedule:
             return Response({"completed": 0, "remaining": 0})
 
@@ -261,7 +246,7 @@ class ConsistencyStatsView(APIView):
         })
 
 class ProgressionStatsView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         exercise_id = request.query_params.get('exercise_id')
@@ -280,7 +265,7 @@ class ProgressionStatsView(APIView):
         return Response(data)
 
 class MuscleGroupStatsView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         # Count logs per muscle group
@@ -307,7 +292,7 @@ class MuscleGroupStatsView(APIView):
         return Response(data)
 
 class ExerciseScatterView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         exercise_id = request.query_params.get('exercise_id')
@@ -323,4 +308,42 @@ class ExerciseScatterView(APIView):
                 "z": 1 # Size of bubble, could be set count or RPE
             })
             
+            
         return Response(data)
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.username,
+            'email': user.email
+        })
+
+class RegisterView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        email = request.data.get('email', '')
+
+        if not username or not password:
+            return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.create_user(username=username, password=password, email=email)
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.username
+        }, status=status.HTTP_201_CREATED)

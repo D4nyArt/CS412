@@ -19,7 +19,9 @@ function Stats() {
     useEffect(() => {
         const fetchConsistency = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/stats/consistency/`);
+                const res = await fetch(`${API_BASE_URL}/stats/consistency/`, {
+                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                });
                 const data = await res.json();
                 setConsistencyData([
                     { name: 'Completed', value: data.completed },
@@ -30,7 +32,9 @@ function Stats() {
 
         const fetchMuscleGroups = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/stats/muscle-groups/`);
+                const res = await fetch(`${API_BASE_URL}/stats/muscle-groups/`, {
+                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                });
                 const data = await res.json();
                 setMuscleGroupData(data);
             } catch (err) { console.error(err); }
@@ -38,7 +42,9 @@ function Stats() {
 
         const fetchExercises = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/exercises/`);
+                const res = await fetch(`${API_BASE_URL}/exercises/`, {
+                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                });
                 const data = await res.json();
                 setExercises(data);
                 if (data.length > 0) setSelectedExercise(data[0].id);
@@ -54,7 +60,9 @@ function Stats() {
 
         const fetchProgression = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/stats/progression/?exercise_id=${selectedExercise}`);
+                const res = await fetch(`${API_BASE_URL}/stats/progression/?exercise_id=${selectedExercise}`, {
+                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                });
                 const data = await res.json();
                 setProgressionData(data);
             } catch (err) { console.error(err); }
@@ -62,7 +70,9 @@ function Stats() {
 
         const fetchScatter = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/stats/scatter/?exercise_id=${selectedExercise}`);
+                const res = await fetch(`${API_BASE_URL}/stats/scatter/?exercise_id=${selectedExercise}`, {
+                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                });
                 const data = await res.json();
                 setScatterData(data);
             } catch (err) { console.error(err); }

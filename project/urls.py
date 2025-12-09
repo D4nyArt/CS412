@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 from .views import *
 
 urlpatterns = [
+    path('api/register/', RegisterView.as_view(), name='register'),
+    path('api/api-token-auth/', CustomAuthToken.as_view(), name='api_token_auth'),
     path('api/exercises/', ExerciseList.as_view(), name='exercise_list'),
     path('api/exercises/<int:pk>/', ExerciseDetail.as_view(), name='exercise_detail'),
     path('api/dashboard/', DashboardView.as_view(), name='dashboard'),

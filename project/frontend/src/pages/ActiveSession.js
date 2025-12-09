@@ -16,7 +16,11 @@ function ActiveSession() {
         const apiUrl = `${API_BASE_URL}/active-session/`;
 
         fetch(apiUrl)
-        fetch(apiUrl)
+        fetch(apiUrl, {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            }
+        })
             .then(async res => {
                 if (!res.ok) {
                     const data = await res.json().catch(() => ({}));
@@ -88,7 +92,10 @@ function ActiveSession() {
 
         fetch(submitUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`
+            },
             body: JSON.stringify(payload)
         })
             .then(res => {
