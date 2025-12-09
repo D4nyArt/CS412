@@ -21,7 +21,8 @@ function Home() {
 
     fetch(apiUrl, {
       headers: {
-        'Authorization': `Token ${localStorage.getItem('token')}`
+        'Authorization': `Token ${localStorage.getItem('token')}`,
+        'X-Authorization': `Token ${localStorage.getItem('token')}`
       }
     })
       .then(response => {

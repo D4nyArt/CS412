@@ -18,7 +18,8 @@ function ActiveSession() {
         fetch(apiUrl)
         fetch(apiUrl, {
             headers: {
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'X-Authorization': `Token ${localStorage.getItem('token')}`
             }
         })
             .then(async res => {
@@ -94,7 +95,8 @@ function ActiveSession() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+                'X-Authorization': `Token ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(payload)
         })

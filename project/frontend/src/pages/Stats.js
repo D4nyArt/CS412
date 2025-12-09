@@ -20,7 +20,10 @@ function Stats() {
         const fetchConsistency = async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/stats/consistency/`, {
-                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                    headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'X-Authorization': `Token ${localStorage.getItem('token')}`
+                    }
                 });
                 const data = await res.json();
                 setConsistencyData([
@@ -33,7 +36,10 @@ function Stats() {
         const fetchMuscleGroups = async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/stats/muscle-groups/`, {
-                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                    headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'X-Authorization': `Token ${localStorage.getItem('token')}`
+                    }
                 });
                 const data = await res.json();
                 setMuscleGroupData(data);
@@ -43,7 +49,10 @@ function Stats() {
         const fetchExercises = async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/exercises/`, {
-                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                    headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'X-Authorization': `Token ${localStorage.getItem('token')}`
+                    }
                 });
                 const data = await res.json();
                 setExercises(data);
@@ -61,7 +70,10 @@ function Stats() {
         const fetchProgression = async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/stats/progression/?exercise_id=${selectedExercise}`, {
-                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                    headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'X-Authorization': `Token ${localStorage.getItem('token')}`
+                    }
                 });
                 const data = await res.json();
                 setProgressionData(data);
@@ -71,7 +83,10 @@ function Stats() {
         const fetchScatter = async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/stats/scatter/?exercise_id=${selectedExercise}`, {
-                    headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+                    headers: {
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'X-Authorization': `Token ${localStorage.getItem('token')}`
+                    }
                 });
                 const data = await res.json();
                 setScatterData(data);

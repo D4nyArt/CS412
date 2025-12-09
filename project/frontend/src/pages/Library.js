@@ -13,7 +13,10 @@ function Library() {
 
   const fetchExercises = () => {
     fetch(`${API_BASE_URL}/exercises/`, {
-      headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+      headers: {
+        'Authorization': `Token ${localStorage.getItem('token')}`,
+        'X-Authorization': `Token ${localStorage.getItem('token')}`
+      }
     })
       .then(response => response.json())
       .then(data => setExercises(data))
@@ -26,7 +29,8 @@ function Library() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token ${localStorage.getItem('token')}`
+        'Authorization': `Token ${localStorage.getItem('token')}`,
+        'X-Authorization': `Token ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(newExercise)
     })
@@ -43,7 +47,10 @@ function Library() {
     if (window.confirm('Delete this exercise?')) {
       fetch(`${API_BASE_URL}/exercises/${id}/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }
+        headers: {
+          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'X-Authorization': `Token ${localStorage.getItem('token')}`
+        }
       }).then(res => {
         if (res.ok) fetchExercises();
       });

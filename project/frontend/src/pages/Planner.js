@@ -48,7 +48,10 @@ function Planner() {
   // Fetch Schedules AND Exercises 
   useEffect(() => {
     // We use Promise.all to fetch both lists at once
-    const headers = { 'Authorization': `Token ${localStorage.getItem('token')}` };
+    const headers = {
+      'Authorization': `Token ${localStorage.getItem('token')}`,
+      'X-Authorization': `Token ${localStorage.getItem('token')}`
+    };
     Promise.all([
       fetch(`${apiBaseUrl}/schedules/`, { headers }).then(res => res.json()),
       fetch(`${apiBaseUrl}/exercises/`, { headers }).then(res => res.json()) // Fetch exercises
@@ -71,7 +74,8 @@ function Planner() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token ${localStorage.getItem('token')}`
+        'Authorization': `Token ${localStorage.getItem('token')}`,
+        'X-Authorization': `Token ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         name: newScheduleData.name,
@@ -122,7 +126,8 @@ function Planner() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'X-Authorization': `Token ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
           schedule: selectedSchedule.id,
@@ -141,7 +146,8 @@ function Planner() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Token ${localStorage.getItem('token')}`
+            'Authorization': `Token ${localStorage.getItem('token')}`,
+            'X-Authorization': `Token ${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
             routine: newRoutine.id,
@@ -197,7 +203,8 @@ function Planner() {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token ${localStorage.getItem('token')}`
+        'Authorization': `Token ${localStorage.getItem('token')}`,
+        'X-Authorization': `Token ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         name: editScheduleData.name,
@@ -459,7 +466,8 @@ function Planner() {
                     fetch(`${apiBaseUrl}/routines/${selectedRoutineDetail.id}/`, {
                       method: 'DELETE',
                       headers: {
-                        'Authorization': `Token ${localStorage.getItem('token')}`
+                        'Authorization': `Token ${localStorage.getItem('token')}`,
+                        'X-Authorization': `Token ${localStorage.getItem('token')}`
                       }
                     }).then(res => {
                       if (res.ok) {
