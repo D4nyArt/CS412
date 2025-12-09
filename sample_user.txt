@@ -1,2 +1,2 @@
-User: salt
-Password: saltpassword
+User:demo
+Password:demo123
