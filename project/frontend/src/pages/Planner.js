@@ -39,6 +39,7 @@ function Planner() {
   const [editScheduleData, setEditScheduleData] = useState({
     id: null,
     name: '',
+    start_date: '',
     end_date: ''
   });
 
@@ -199,6 +200,10 @@ function Planner() {
     const scheduleId = editScheduleData.id;
     if (!scheduleId) return;
 
+    // Recalculate is_active
+    const today = new Date().toISOString().split('T')[0];
+    const isActive = today >= editScheduleData.start_date && today <= editScheduleData.end_date;
+
     fetch(`${apiBaseUrl}/schedules/${scheduleId}/`, {
       method: 'PATCH',
       headers: {
@@ -208,7 +213,8 @@ function Planner() {
       },
       body: JSON.stringify({
         name: editScheduleData.name,
-        end_date: editScheduleData.end_date
+        end_date: editScheduleData.end_date,
+        is_active: isActive
       })
     })
       .then(res => {
@@ -286,6 +292,7 @@ function Planner() {
                         setEditScheduleData({
                           id: schedule.id,
                           name: schedule.name,
+                          start_date: schedule.start_date,
                           end_date: schedule.end_date || ''
                         });
                         setShowEditScheduleModal(true);
@@ -296,7 +303,10 @@ function Planner() {
                     <button className="btn-primary small">See Details</button>
                   </div>
                 </div>
-                <p className="subtitle">{schedule.start_date} {schedule.is_active && '(Active)'}</p>
+                <p className="subtitle">
+                  {schedule.start_date} to  {schedule.end_date || 'Ongoing'}
+                  {schedule.is_active && <span style={{ color: 'var(--primary-color)', marginLeft: '10px', fontWeight: 'bold' }}> (Active)</span>}
+                </p>
               </div>
             </div>
           ))}

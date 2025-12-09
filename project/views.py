@@ -253,7 +253,7 @@ class ProgressionStatsView(APIView):
         if not exercise_id:
             return Response({"error": "Exercise ID required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        logs = WorkoutLog.objects.filter(exercise_id=exercise_id).order_by('session__date')
+        logs = WorkoutLog.objects.filter(exercise_id=exercise_id, session__routine__schedule__user=request.user).order_by('session__date')
         
         data = []
         for log in logs:
@@ -270,7 +270,7 @@ class MuscleGroupStatsView(APIView):
     def get(self, request):
         # Count logs per muscle group
         # We want all muscle groups, even if 0, but for simplicity let's just count what's logged
-        stats = WorkoutLog.objects.values('exercise__muscle_group').annotate(count=Count('id'))
+        stats = WorkoutLog.objects.filter(session__routine__schedule__user=request.user).values('exercise__muscle_group').annotate(count=Count('id'))
         
         # Format for Recharts Radar: { subject: 'Chest', A: 10, fullMark: 150 }
         data = []
@@ -288,26 +288,6 @@ class MuscleGroupStatsView(APIView):
         full_mark = max_val * 1.2 if max_val > 0 else 10
         for d in data:
             d['fullMark'] = full_mark
-            
-        return Response(data)
-
-class ExerciseScatterView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        exercise_id = request.query_params.get('exercise_id')
-        if not exercise_id:
-            return Response([], status=400)
-            
-        logs = WorkoutLog.objects.filter(exercise_id=exercise_id)
-        data = []
-        for log in logs:
-            data.append({
-                "x": log.reps_achieved,
-                "y": float(log.weight_used),
-                "z": 1 # Size of bubble, could be set count or RPE
-            })
-            
             
         return Response(data)
 

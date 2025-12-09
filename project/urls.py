@@ -19,7 +19,6 @@ urlpatterns = [
     path('api/stats/consistency/', ConsistencyStatsView.as_view(), name='stats_consistency'),
     path('api/stats/progression/', ProgressionStatsView.as_view(), name='stats_progression'),
     path('api/stats/muscle-groups/', MuscleGroupStatsView.as_view()),
-    path('api/stats/scatter/', ExerciseScatterView.as_view()),
 
     re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]

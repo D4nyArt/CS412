@@ -11,15 +11,17 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write("--- STARTING SEED PROCESS ---")
 
-        # 1. GET THE ADMIN USER
-        # We grab the first superuser found.
-        user = User.objects.filter(is_superuser=True).first()
+        # 1. GET OR CREATE THE DEMO USER
+        # We target a specific 'demo' user for this seeding script.
+        user, created = User.objects.get_or_create(username='demo')
+        if created:
+            user.set_password('demo123')
+            user.save()
+            self.stdout.write(self.style.SUCCESS("Created new user 'demo' with password 'demo123'."))
+        else:
+            self.stdout.write("Found existing user 'demo'.")
         
-        if not user:
-            self.stdout.write(self.style.ERROR("Error: No Admin user found. Please run 'python manage.py createsuperuser' first."))
-            return
-        
-        self.stdout.write(f"- Assigning data to Admin: {user.username}")
+        self.stdout.write(f"- Assigning data to User: {user.username}")
 
         # 2. CLEANUP (RESET)
         # Deleting the Schedule cascades and deletes Routines, Sessions, and Logs.
@@ -157,7 +159,7 @@ class Command(BaseCommand):
                             )
                     total_sessions += 1
 
-        self.stdout.write(self.style.SUCCESS(f"Done! Cleaned old data and generated {total_sessions} sessions for Admin."))
+        self.stdout.write(self.style.SUCCESS(f"Done! Cleaned old data and generated {total_sessions} sessions for User: {user.username}."))
 
     def create_items(self, routine, exercise_tuples, ex_map):
         for name, sets, reps in exercise_tuples:

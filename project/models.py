@@ -46,9 +46,11 @@ class RoutineItem(models.Model):
     def __str__(self):
         return f"{self.exercise.name} in {self.routine.name}"
 
+from django.utils import timezone
+
 class WorkoutSession(models.Model):
     routine = models.ForeignKey(Routine, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(default=timezone.now)
     duration_minutes = models.IntegerField(null=True, blank=True)
     notes = models.TextField(blank=True)
 

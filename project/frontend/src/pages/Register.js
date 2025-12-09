@@ -43,6 +43,7 @@ const Register = ({ setIsAuthenticated }) => {
 
     return (
         <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <h1 style={{ textAlign: 'center', marginBottom: '1rem' }}>FitTrack</h1>
             <h2>Register</h2>
             {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
             <form onSubmit={handleSubmit}>

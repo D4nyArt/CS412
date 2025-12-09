@@ -188,26 +188,6 @@ function Stats() {
                     ) : <div className="no-data">No data yet.</div>}
                 </div>
             </div>
-
-            {/* Reps vs Weight Scatter */}
-            <div className="stats-card">
-                <h3 className="section-title">Intensity Zones (Reps vs Weight)</h3>
-                <div style={{ width: '100%', height: 300 }}>
-                    {scatterData.length > 0 ? (
-                        <ResponsiveContainer>
-                            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                                <CartesianGrid />
-                                <XAxis type="number" dataKey="x" name="Reps" unit="" />
-                                <YAxis type="number" dataKey="y" name="Weight" unit="lbs" />
-                                <ZAxis type="number" dataKey="z" range={[60, 400]} />
-                                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                                <Scatter name="Sets" data={scatterData} fill="#e17055" />
-                            </ScatterChart>
-                        </ResponsiveContainer>
-                    ) : <div className="no-data">No data yet.</div>}
-                </div>
-            </div>
-
             <div style={{ height: '80px' }}></div>
         </div>
     );

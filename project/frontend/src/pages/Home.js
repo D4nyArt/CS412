@@ -49,6 +49,8 @@ function Home() {
 
   return (
     <div className="page-content">
+      <h1 style={{ marginBottom: '1rem' }}>Hello {localStorage.getItem('username') || 'User'}!</h1>
+
       {/* Header Section */}
       <header className="page-header">
         <p className="subtitle">Current Trainig Shedule</p>
