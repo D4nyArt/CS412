@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import API_BASE_URL from '../config';
 
 const Login = () => {
@@ -71,7 +71,7 @@ const Login = () => {
                 </button>
             </form>
             <p style={{ marginTop: '1rem', textAlign: 'center' }}>
-                Don't have an account? <a href="/register">Register here</a>
+                Don't have an account? <Link to="/register">Register here</Link>
             </p>
         </div>
     );

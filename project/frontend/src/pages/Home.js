@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../App.css'; // Ensure global styles are imported
 import API_BASE_URL from '../config';
 
 function Home() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Get today's date in a readable format (e.g., "Tuesday, Nov 21")
   const todayDisplay = new Date().toLocaleDateString('en-US', {
@@ -28,7 +29,7 @@ function Home() {
           if (response.status === 401 || response.status === 403) {
             // Token might be invalid or expired
             localStorage.clear();
-            window.location.href = '/login';
+            navigate('/login');
           }
           throw new Error('Failed to fetch');
         }
@@ -40,7 +41,7 @@ function Home() {
       })
       .catch(error => console.error('Error fetching dashboard:', error));
 
-  }, []);
+  }, [navigate]);
 
   if (loading) return <div className="page-content">Loading...</div>;
   if (!dashboardData || !dashboardData.stats) return <div className="page-content">Initializing Dashboard...</div>;
