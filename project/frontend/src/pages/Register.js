@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API_BASE_URL from '../config';
 
-const Register = () => {
+const Register = ({ setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,8 +30,9 @@ const Register = () => {
                 localStorage.setItem('user_id', data.user_id);
                 localStorage.setItem('username', data.username);
 
+                setIsAuthenticated(true);
+
                 navigate('/');
-                window.location.reload();
             } else {
                 setError(data.error || 'Registration failed');
             }
