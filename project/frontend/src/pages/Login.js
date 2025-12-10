@@ -1,18 +1,26 @@
+// File: Login.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Login Page.
+// Authenticates user via API and stores the token in localStorage.
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API_BASE_URL from '../config';
 
 const Login = ({ setIsAuthenticated }) => {
+    // State for form inputs and error handling
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // Handler for form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
+            // API call to get auth token
             const response = await fetch(`${API_BASE_URL}/api-token-auth/`, {
                 method: 'POST',
                 headers: {
@@ -24,16 +32,15 @@ const Login = ({ setIsAuthenticated }) => {
             const data = await response.json();
 
             if (response.ok) {
-                // Store token and user info
+                // Store token and user info in localStorage for session persistence
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user_id', data.user_id);
                 localStorage.setItem('username', data.username);
 
+                // Update app state
                 setIsAuthenticated(true);
 
-                // Redirect to home or dashboard
-
-                // Redirect to home or dashboard
+                // Redirect to home dashboard
                 navigate('/');
             } else {
                 setError(data.non_field_errors ? data.non_field_errors[0] : 'Login failed');

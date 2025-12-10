@@ -3,15 +3,15 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60px; /* Standard mobile nav height */
+  height: 60px;
   background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px); /* The "Frosted Glass" Apple effect */
+  backdrop-filter: blur(10px);
   border-top: 1px solid #e1e4e8;
   display: flex;
   justify-content: space-around;
   align-items: center;
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom); /* iPhone X+ safe area */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .nav-item {
@@ -34,9 +34,9 @@
 }
 
 .nav-item.active {
-  color: var(--accent-color); /* Uses the blue from App.css */
+  color: var(--accent-color);
 }
 
 .nav-item.disabled {
-    opacity: 0.3;
+  opacity: 0.3;
 }

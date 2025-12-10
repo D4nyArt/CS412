@@ -1,23 +1,16 @@
 /* --- Design System Variables --- */
 :root {
     --bg-color: #F5F7FA;
-    /* Soft blue-grey background */
     --card-bg: #FFFFFF;
-    /* Pure white cards */
     --primary-color: #2D3436;
-    /* Dark Charcoal for text */
     --accent-color: #0984E3;
-    /* Vibrant Blue for actions */
     --text-secondary: #636E72;
-    /* Soft Grey for subtitles */
     --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.05);
     --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.08);
     --radius: 12px;
-    /* Smooth rounded corners */
     --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
-/* --- Global Resets --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -29,7 +22,6 @@ body {
     font-family: var(--font-main);
     color: var(--primary-color);
     -webkit-font-smoothing: antialiased;
-    /* Makes text look crisp on Mac */
 }
 
 .app-container {
@@ -38,7 +30,6 @@ body {
     padding: 40px 20px;
 }
 
-/* --- Header Section --- */
 .app-header {
     margin-bottom: 30px;
     text-align: left;
@@ -58,7 +49,6 @@ body {
     font-weight: 400;
 }
 
-/* --- Control Bar (Search) --- */
 .control-bar {
     display: flex;
     align-items: center;
@@ -93,15 +83,12 @@ body {
     border-radius: 20px;
 }
 
-/* --- The Grid Layout --- */
 .exercise-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    /* Responsive columns */
     gap: 20px;
 }
 
-/* --- The Exercise Card --- */
 .exercise-card {
     background-color: var(--card-bg);
     border-radius: var(--radius);
@@ -135,7 +122,6 @@ body {
     color: var(--primary-color);
 }
 
-/* --- Muscle Badges (Dynamic Colors) --- */
 .muscle-badge {
     display: inline-block;
     font-size: 0.75rem;
@@ -147,13 +133,11 @@ body {
     width: fit-content;
 }
 
-/* Default Badge */
 .muscle-badge {
     background-color: #f1f2f6;
     color: #747d8c;
 }
 
-/* Specific Colors for Muscle Groups */
 .badge-chest {
     background-color: #ffefef;
     color: #d63031;
@@ -174,7 +158,6 @@ body {
     color: #f1c40f;
 }
 
-/* --- Action Button --- */
 .btn-icon {
     background: none;
     border: none;
@@ -187,9 +170,6 @@ body {
     color: var(--accent-color);
 }
 
-/* ... Keep your :root and body styles from before ... */
-
-/* New Layout Helpers */
 .app-container {
     max-width: 100%;
     min-height: 100vh;
@@ -209,10 +189,8 @@ body {
     margin-bottom: 25px;
 }
 
-/* --- Home Page Styles --- */
 .status-card {
     background: var(--primary-color);
-    /* Dark background */
     color: white;
     padding: 25px;
     border-radius: 16px;
@@ -312,7 +290,6 @@ body {
     font-weight: 600;
 }
 
-/* Button Hover Effect */
 .btn-primary {
     transition: transform 0.2s, background-color 0.2s;
 }
@@ -320,10 +297,8 @@ body {
 .btn-primary:hover {
     transform: scale(1.02);
     background-color: #0984e3;
-    /* A slightly brighter blue */
 }
 
-/* Loading State */
 .page-content {
     animation: fadeIn 0.5s ease;
 }
@@ -340,7 +315,6 @@ body {
     }
 }
 
-/* --- Planner: Schedule List --- */
 .schedule-card {
     background: var(--card-bg);
     padding: 20px;
@@ -358,11 +332,9 @@ body {
     border-left-color: var(--accent-color);
 }
 
-/* --- Planner: Calendar Grid --- */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    /* 7 Days a week */
     gap: 6px;
     margin-bottom: 30px;
     background: white;
@@ -373,7 +345,6 @@ body {
 
 .calendar-day {
     aspect-ratio: 1/1;
-    /* Make them perfect squares */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -385,7 +356,6 @@ body {
 
 .calendar-day.has-routine {
     background-color: #e3f2fd;
-    /* Light Blue for days with workouts */
     color: var(--accent-color);
     font-weight: bold;
 }
@@ -408,7 +378,6 @@ body {
     margin-top: 4px;
 }
 
-/* --- Routine Builder Rows --- */
 .routine-row {
     background: white;
     padding: 15px;
@@ -451,7 +420,6 @@ body {
     cursor: pointer;
 }
 
-/* --- Modal System --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -518,7 +486,6 @@ body {
     margin-top: 10px;
 }
 
-/* Helper Animation */
 @keyframes slideUp {
     from {
         transform: translateY(20px);
@@ -531,12 +498,10 @@ body {
     }
 }
 
-/* --- Updates to existing classes --- */
 .btn-primary.small {
     padding: 8px 16px;
     font-size: 0.9rem;
     width: auto;
-    /* Override full width */
 }
 
 .flex-between {
@@ -562,10 +527,8 @@ body {
     background-size: .65em auto;
 }
 
-/* --- New Styles for Complex Modal --- */
 .modal-content.large {
     max-width: 500px;
-    /* Make it wider */
 }
 
 .form-row {

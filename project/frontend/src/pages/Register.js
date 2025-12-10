@@ -1,19 +1,27 @@
+// File: Register.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Registration Page.
+// Allows new users to sign up for an account.
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API_BASE_URL from '../config';
 
 const Register = ({ setIsAuthenticated }) => {
+    // State management
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // Handler for form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
+            // API Call to create a new user
             const response = await fetch(`${API_BASE_URL}/register/`, {
                 method: 'POST',
                 headers: {
@@ -25,15 +33,19 @@ const Register = ({ setIsAuthenticated }) => {
             const data = await response.json();
 
             if (response.ok) {
-                // Auto-login on success
+                // Auto-login on successful registration
+                // Store auth token and user detials
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user_id', data.user_id);
                 localStorage.setItem('username', data.username);
 
+                // Update global auth state
                 setIsAuthenticated(true);
 
+                // Redirect to home
                 navigate('/');
             } else {
+                // Display error message from backend
                 setError(data.error || 'Registration failed');
             }
         } catch (err) {

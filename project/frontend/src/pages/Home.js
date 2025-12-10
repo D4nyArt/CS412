@@ -1,9 +1,15 @@
+// File: Home.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Home Dashboard Page.
+// Displays the user's active schedule, today's workout status, and weekly summary stats.
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../App.css'; // Ensure global styles are imported
 import API_BASE_URL from '../config';
 
 function Home() {
+  // State for dashboard data
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -15,10 +21,11 @@ function Home() {
     day: 'numeric'
   });
 
+  // Fetch Dashboard Data on mount
   useEffect(() => {
     const apiUrl = `${API_BASE_URL}/dashboard/`;
 
-
+    // API Call to get dashboard info
     fetch(apiUrl, {
       headers: {
         'Authorization': `Token ${localStorage.getItem('token')}`,
@@ -28,7 +35,7 @@ function Home() {
       .then(response => {
         if (!response.ok) {
           if (response.status === 401 || response.status === 403) {
-            // Token might be invalid or expired
+            // Token might be invalid or expired, redirect to login
             localStorage.clear();
             navigate('/login');
           }
@@ -51,13 +58,16 @@ function Home() {
     <div className="page-content">
       <h1 style={{ marginBottom: '1rem' }}>Hello {localStorage.getItem('username') || 'User'}!</h1>
 
-      {/* Header Section */}
+      {/* Header Section: Displays Active Schedule Name */}
       <header className="page-header">
         <p className="subtitle">Current Trainig Shedule</p>
         <h1>{dashboardData.schedule_name}</h1>
       </header>
 
-      {/* Dynamic Today's Card */}
+      {/* 
+        Dynamic Today's Card Logic:
+        Check if there is a routine assigned for today.
+       */}
       {dashboardData.today_routine ? (
         // CASE 1: It is a Workout Day
         <div className={`status-card ${dashboardData.today_routine.is_completed ? 'completed-day' : 'active-day'}`}>
@@ -70,6 +80,7 @@ function Home() {
           <div className="card-body">
             <p className="status-routine">{dashboardData.today_routine.name}</p>
 
+            {/* Show different UI based on completion status */}
             {dashboardData.today_routine.is_completed ? (
               <div className="completion-message">
                 <p>Great job! You've finished your workout for today.</p>

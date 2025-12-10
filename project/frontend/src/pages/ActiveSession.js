@@ -1,21 +1,26 @@
+// File: ActiveSession.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Active Workou Session Page.
+// Handles the real-time tracking of a workout, including timer and input logging (weight/reps).
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../config';
 
 function ActiveSession() {
+    // State management
     const [routine, setRoutine] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [timer, setTimer] = useState(0);
-    const [isActive, setIsActive] = useState(false);
-    const [logs, setLogs] = useState({}); // { exercise_id: { weight: '', reps: '' } }
+    const [timer, setTimer] = useState(0); // Duration in seconds
+    const [isActive, setIsActive] = useState(false); // Timer status
+    const [logs, setLogs] = useState({}); // Stores user input: { exercise_id: { weight: '', reps: '' } }
     const navigate = useNavigate();
 
-    // Fetch Routine
+    // Fetch Routine on Component Mount
     useEffect(() => {
         const apiUrl = `${API_BASE_URL}/active-session/`;
 
-        fetch(apiUrl)
         fetch(apiUrl, {
             headers: {
                 'Authorization': `Token ${localStorage.getItem('token')}`,
@@ -32,7 +37,7 @@ function ActiveSession() {
             .then(data => {
                 setRoutine(data);
                 setLoading(false);
-                // Initialize logs state
+                // Initialize logs state based on exercises in the routine
                 const initialLogs = {};
                 data.items.forEach(item => {
                     initialLogs[item.exercise] = { weight: '', reps: '' };
@@ -45,7 +50,7 @@ function ActiveSession() {
             });
     }, []);
 
-    // Timer Logic
+    // Timer Logic: Increments every second if active
     useEffect(() => {
         let interval = null;
         if (isActive) {
@@ -53,17 +58,20 @@ function ActiveSession() {
                 setTimer(seconds => seconds + 1);
             }, 1000);
         } else if (!isActive && timer !== 0) {
+            // Timer paused
             clearInterval(interval);
         }
         return () => clearInterval(interval);
     }, [isActive, timer]);
 
+    // Helper to format seconds into MM:SS
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
+    // Handler for input changes (Weight/Reps)
     const handleInputChange = (exerciseId, field, value) => {
         // Prevent negative values
         if (value < 0) return;
@@ -77,11 +85,13 @@ function ActiveSession() {
         }));
     };
 
+    // Submit Handler: Sends completed workout data to backend
     const handleSubmit = () => {
         const payload = {
             routine_id: routine.id,
-            duration: Math.ceil(timer / 60),
+            duration: Math.ceil(timer / 60), // Convert to minutes
             notes: "Completed via Active Session",
+            // Transform logs state into array for API
             logs: Object.entries(logs).map(([exerciseId, data]) => ({
                 exercise_id: exerciseId,
                 weight: data.weight,
@@ -103,15 +113,17 @@ function ActiveSession() {
             .then(res => {
                 if (res.ok) {
                     alert('Workout Saved!');
-                    navigate('/');
+                    navigate('/'); // Redirect to Home
                 } else {
                     alert('Error saving workout');
                 }
             });
     };
 
+    // Loading State
     if (loading) return <div className="loading">Loading...</div>;
-    if (loading) return <div className="loading">Loading...</div>;
+
+    // Error State (e.g., no routine for today)
     if (error) return (
         <div className="page-content" style={{ textAlign: 'center', marginTop: '50px' }}>
             <div className="error" style={{ color: 'red', marginBottom: '20px' }}>{error}</div>
@@ -123,6 +135,7 @@ function ActiveSession() {
         <div className="active-session-container">
             <h1 className="page-title">{routine.name}</h1>
 
+            {/* Timer Display */}
             <div className="timer-card">
                 <h2 className="timer-display">{formatTime(timer)}</h2>
                 <button
@@ -133,6 +146,7 @@ function ActiveSession() {
                 </button>
             </div>
 
+            {/* List of Exercises */}
             <div className="exercise-list">
                 {routine.items.map(item => (
                     <div key={item.id} className="exercise-card">
@@ -142,6 +156,7 @@ function ActiveSession() {
                                 Goal: {item.target_sets} x {item.target_reps} @ {item.target_weight}lbs
                             </span>
                         </div>
+                        {/* Input Fields */}
                         <div className="input-group">
                             <div className="input-wrapper">
                                 <label>Weight (lbs)</label>

@@ -1,3 +1,7 @@
+// File: App.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Main React component that sets up routing, authentication state, and global layout.
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -19,28 +23,36 @@ function App() {
     : "";
 
 
+  // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Use Effect to check for authentication token on component mount
   useEffect(() => {
-    // Check token on mount
+    // Check token on mount to persist login state on refresh
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
 
+  // Handler for user logout
   const handleLogout = () => {
+    // Clear local storage to remove token
     localStorage.clear();
     setIsAuthenticated(false);
-    window.location.href = basename + '/login'; // Or use navigate if inside Router context, but we are outside Routes here.
-    // Actually, we are inside Router, but outside Routes. To use navigate we need a wrapper or hook. 
+    // Redirect to login page
+    window.location.href = basename + '/login';
     // Hard redirect is safe for logout to clear memory.
   };
+
   return (
     <Router basename={basename}>
       <div className="app-container">
         <div className="content-wrap">
           <Routes>
+            {/* Public Routes */}
             <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+
+            {/* Protected Routes - require authentication */}
             <Route path="/" element={
               <ProtectedRoute>
                 <Home />
@@ -68,6 +80,8 @@ function App() {
             } />
           </Routes>
         </div>
+
+        {/* Navigation Bar - rendered on all pages */}
         <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
       </div>
     </Router>

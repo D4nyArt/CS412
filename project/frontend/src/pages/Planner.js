@@ -1,14 +1,21 @@
+// File: Planner.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Workout Planner Page.
+// Allows users to create training schedules, add routines to schedules, and edit plan details.
+// Features a calendar view and a drag-and-drop style builder interface.
+
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import API_BASE_URL from '../config';
 
 function Planner() {
+  // State Management
   const [schedules, setSchedules] = useState([]);
-  const [exercises, setExercises] = useState([]); // Store available exercises
+  const [exercises, setExercises] = useState([]); // Store available exercises for dropdowns
   const [selectedSchedule, setSelectedSchedule] = useState(null); // If null, show list. If set, show detail.
   const [loading, setLoading] = useState(true);
 
-  // State for Create Modal
+  // State for Create Schedule Modal
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newScheduleData, setNewScheduleData] = useState({
     name: '',
@@ -16,22 +23,22 @@ function Planner() {
     end_date: ''
   });
 
-  // Routine Modal State 
+  // State for Create Routine Modal
   const [showRoutineModal, setShowRoutineModal] = useState(false);
   const [newRoutineData, setNewRoutineData] = useState({
     name: '',
     day_of_week: 'Monday'
   });
 
-  // Staging Area for Exercises inside the Modal
-  const [pendingItems, setPendingItems] = useState([]); // List of exercises added to this routine
+  // Staging Area for Exercises inside the Create Routine Modal
+  const [pendingItems, setPendingItems] = useState([]); // List of exercises temporarily added to this routine
   const [currentItem, setCurrentItem] = useState({
     exerciseId: '',
     sets: 3,
     reps: 10
   });
 
-  // State for Routine Detail Modal
+  // State for Routine Detail Modal (Viewing a routine)
   const [selectedRoutineDetail, setSelectedRoutineDetail] = useState(null);
 
   // State for Edit Schedule Modal
@@ -43,12 +50,12 @@ function Planner() {
     end_date: ''
   });
 
-  // API Fetching
+  // API Fetching Configuration
   const apiBaseUrl = API_BASE_URL;
 
-  // Fetch Schedules AND Exercises 
+  // Effect: Fetch Initial Data
   useEffect(() => {
-    // We use Promise.all to fetch both lists at once
+    // We use Promise.all to fetch both schedules and exercises in parallel
     const headers = {
       'Authorization': `Token ${localStorage.getItem('token')}`,
       'X-Authorization': `Token ${localStorage.getItem('token')}`
@@ -63,7 +70,9 @@ function Planner() {
     });
   }, [apiBaseUrl]);
 
-  // Handle Form Submit 
+  // Handlers: Schedule Management
+
+  // Handle Form Submit to Create a new Schedule
   const handleCreateSchedule = (e) => {
     e.preventDefault(); // Stop page reload
 
@@ -71,6 +80,7 @@ function Planner() {
     const today = new Date().toISOString().split('T')[0];
     const isActive = today >= newScheduleData.start_date && today <= newScheduleData.end_date;
 
+    // API Call to create schedule
     fetch(`${apiBaseUrl}/schedules/`, {
       method: 'POST',
       headers: {
@@ -99,7 +109,7 @@ function Planner() {
       .catch(err => console.error(err));
   };
 
-  // Helper to add exercise to the temporary list ---
+  // Helper to add exercise to the temporary list in the modal
   const handleAddToStaging = () => {
     if (!currentItem.exerciseId) return; // Don't add if empty
 
@@ -117,12 +127,14 @@ function Planner() {
     setCurrentItem({ ...currentItem, exerciseId: '' });
   };
 
-  // Create Routine AND Items ---
+  // Handlers: Routine Management
+
+  // Create Routine AND its Items in one go
   const handleCreateRoutine = async (e) => {
     e.preventDefault();
 
     try {
-      // Step 1: Create the Routine
+      // Step 1: Create the Routine Object
       const routineRes = await fetch(`${apiBaseUrl}/routines/create/`, {
         method: 'POST',
         headers: {
@@ -140,7 +152,7 @@ function Planner() {
       if (!routineRes.ok) throw new Error("Failed to create routine");
       const newRoutine = await routineRes.json();
 
-      // Step 2: Create all the RoutineItems (Loop)
+      // Step 2: Create all the RoutineItems (Exercises)
       // We use Promise.all to do them all in parallel (Fast!)
       const itemPromises = pendingItems.map(item =>
         fetch(`${apiBaseUrl}/items/create/`, {
@@ -163,9 +175,8 @@ function Planner() {
       // Wait for all items to be saved
       await Promise.all(itemPromises);
 
-      // Step 3: Update UI
-      // We need to fetch the fresh routine details to get the nested items properly
-      // Or we can manually construct the object. Let's manually construct for speed.
+      // Step 3: Update UI state
+      // We manually construct the full object to avoid another fetch
       const fullRoutine = {
         ...newRoutine,
         items: pendingItems // Attach the items we just saved
@@ -184,7 +195,7 @@ function Planner() {
       );
       setSchedules(updatedSchedulesList);
 
-      // Reset and Close
+      // Reset and Close Modal
       setShowRoutineModal(false);
       setNewRoutineData({ name: '', day_of_week: 'Monday' });
       setPendingItems([]); // Clear staging
@@ -193,7 +204,7 @@ function Planner() {
     }
   };
 
-  // Update Schedule ---
+  // Update Schedule Details
   const handleUpdateSchedule = (e) => {
     e.preventDefault();
 
@@ -232,7 +243,8 @@ function Planner() {
       .catch(err => console.error(err));
   };
 
-  // --- Helper: Generate Calendar Days ---
+  // Helper: Generate Calendar Days
+  // Renders the visual calendar grid based on the current month
   const renderCalendar = (routines) => {
     const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
     const calendarDays = [];
@@ -259,7 +271,7 @@ function Planner() {
     return calendarDays;
   };
 
-  // --- VIEW 1: List of Schedules ---
+  // VIEW 1: List of Schedules
   if (!selectedSchedule) {
     return (
       <div className="page-content">
@@ -312,7 +324,7 @@ function Planner() {
           ))}
         </div>
 
-        {/* --- NEW: The Modal Overlay --- */}
+        {/* Modal to Create New Schedule */}
         {showCreateModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -357,7 +369,7 @@ function Planner() {
 
         <div style={{ height: '80px' }}></div>
 
-        {/* Edit Schedule Modal */}
+        {/* Modal to Edit Schedule */}
         {showEditScheduleModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -393,7 +405,7 @@ function Planner() {
     );
   }
 
-  // --- VIEW 2: Schedule Detail (Calendar & Builder) ---
+  // VIEW 2: Schedule Detail (Calendar and Builder)
 
   const handleRoutineClick = (routine) => {
     setSelectedRoutineDetail(routine);
@@ -441,7 +453,7 @@ function Planner() {
         )}
       </div>
 
-      {/* Routine Detail Modal */}
+      {/* Routine Detail Modal (Viewing Staged Items) */}
       {selectedRoutineDetail && (
         <div className="modal-overlay" onClick={() => setSelectedRoutineDetail(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -502,6 +514,7 @@ function Planner() {
       )}
 
       {/* Routine Creation Modal */}
+      {/* Allows users to add multiple exercises to a routine before saving */}
       {showRoutineModal && (
         <div className="modal-overlay">
           <div className="modal-content large"> {/* Added 'large' class for more space */}
@@ -598,7 +611,7 @@ function Planner() {
 
       <div style={{ height: '80px' }}></div>
 
-      {/* Edit Schedule Modal */}
+      {/* Edit Schedule Logic Modal */}
       {showEditScheduleModal && (
         <div className="modal-overlay">
           <div className="modal-content">

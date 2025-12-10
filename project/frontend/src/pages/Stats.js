@@ -1,21 +1,25 @@
+// File: Stats.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Analytics and Statistics Page.
+// Visualizes user progress, consistency, and training balance using charts (Pie, Radar, Line).
+
 import React, { useState, useEffect } from 'react';
 import {
     PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-    ScatterChart, Scatter, ZAxis
+    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 import API_BASE_URL from '../config';
 
 function Stats() {
+    // State for various chart data
     const [consistencyData, setConsistencyData] = useState(null);
     const [exercises, setExercises] = useState([]);
     const [selectedExercise, setSelectedExercise] = useState('');
     const [progressionData, setProgressionData] = useState([]);
     const [muscleGroupData, setMuscleGroupData] = useState([]);
-    const [scatterData, setScatterData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch Initial Data
+    // Initial Data Fetch (Consistency, Muscle Groups, Exercises List)
     useEffect(() => {
         const fetchConsistency = async () => {
             try {
@@ -56,14 +60,16 @@ function Stats() {
                 });
                 const data = await res.json();
                 setExercises(data);
+                // Default to first exercise if available
                 if (data.length > 0) setSelectedExercise(data[0].id);
             } catch (err) { console.error(err); }
         };
 
+        // Wait for all initial fetches to complete
         Promise.all([fetchConsistency(), fetchMuscleGroups(), fetchExercises()]).then(() => setLoading(false));
     }, []);
 
-    // Fetch Exercise Specific Data
+    // Fetch Progression Data when selected exercise changes
     useEffect(() => {
         if (!selectedExercise) return;
 
@@ -80,21 +86,7 @@ function Stats() {
             } catch (err) { console.error(err); }
         };
 
-        const fetchScatter = async () => {
-            try {
-                const res = await fetch(`${API_BASE_URL}/stats/scatter/?exercise_id=${selectedExercise}`, {
-                    headers: {
-                        'Authorization': `Token ${localStorage.getItem('token')}`,
-                        'X-Authorization': `Token ${localStorage.getItem('token')}`
-                    }
-                });
-                const data = await res.json();
-                setScatterData(data);
-            } catch (err) { console.error(err); }
-        };
-
         fetchProgression();
-        fetchScatter();
     }, [selectedExercise]);
 
     const COLORS = ['#00b894', '#dfe6e9'];
@@ -109,7 +101,7 @@ function Stats() {
             </header>
 
             <div className="stats-grid-2col">
-                {/* Consistency Section */}
+                {/* Consistency Section - Pie Chart */}
                 <div className="stats-card">
                     <h3 className="section-title">Schedule Consistency</h3>
                     <div style={{ width: '100%', height: 250 }}>
@@ -139,7 +131,7 @@ function Stats() {
                     </div>
                 </div>
 
-                {/* Muscle Group Radar */}
+                {/* Muscle Group Focus - Radar Chart */}
                 <div className="stats-card">
                     <h3 className="section-title">Training Balance</h3>
                     <div style={{ width: '100%', height: 250 }}>

@@ -1,16 +1,24 @@
+// File: Library.js
+// Author: Daniel Arteaga (d4nyart@bu.edu), 12/9/2025
+// Description: Exercise Library Page.
+// Allows users to view, search, add, and delete exercises.
+
 import React, { useState, useEffect } from 'react';
 import API_BASE_URL from '../config';
 
 function Library() {
+  // State for exercises and UI controls
   const [exercises, setExercises] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [newExercise, setNewExercise] = useState({ name: '', muscle_group: '' });
 
+  // Fetch exercises on component mount
   useEffect(() => {
     fetchExercises();
   }, []);
 
+  // API Call to get all exercises
   const fetchExercises = () => {
     fetch(`${API_BASE_URL}/exercises/`, {
       headers: {
@@ -23,6 +31,7 @@ function Library() {
       .catch(error => console.error('Error fetching data:', error));
   };
 
+  // Handler to create a new exercise
   const handleCreate = (e) => {
     e.preventDefault();
     fetch(`${API_BASE_URL}/exercises/`, {
@@ -36,6 +45,7 @@ function Library() {
     })
       .then(res => {
         if (res.ok) {
+          // Refresh list and close modal on success
           fetchExercises();
           setShowModal(false);
           setNewExercise({ name: '', muscle_group: 'Chest' });
@@ -43,6 +53,7 @@ function Library() {
       });
   };
 
+  // Handler to delete an exercise
   const handleDelete = (id) => {
     if (window.confirm('Delete this exercise?')) {
       fetch(`${API_BASE_URL}/exercises/${id}/`, {
@@ -57,6 +68,7 @@ function Library() {
     }
   };
 
+  // Filter exercises based on search term (name or muscle group)
   const filteredExercises = exercises.filter(exercise =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     exercise.muscle_group.toLowerCase().includes(searchTerm.toLowerCase())
@@ -70,6 +82,7 @@ function Library() {
           <button className="btn-primary small" onClick={() => setShowModal(true)}>+ New Exercise</button>
         </div>
 
+        {/* Search Bar */}
         <div className="control-bar">
           <input
             type="text"
@@ -81,6 +94,7 @@ function Library() {
         </div>
       </header>
 
+      {/* Grid of Exercise Cards */}
       <div className="exercise-grid">
         {filteredExercises.map(exercise => (
           <div key={exercise.id} className="exercise-card">
@@ -95,6 +109,7 @@ function Library() {
         ))}
       </div>
 
+      {/* Modal for adding new exercise */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
